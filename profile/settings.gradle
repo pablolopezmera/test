@@ -1,0 +1,1 @@
+include "profile-api", "profile-service", "profile-portlet"

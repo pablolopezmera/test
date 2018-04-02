@@ -5,3 +5,9 @@ MyCustomLoginPortlet
 aws
 build
 gradle/wrapper/gradle-wrapper.jar
+**/.classpath
+**/.project
+**/.settings
+**/gradle
+**/gradlew
+
