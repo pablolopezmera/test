@@ -7,8 +7,6 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
@@ -18,13 +16,10 @@ import org.slf4j.LoggerFactory;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PropsUtil;
-import com.liferay.portal.kernel.util.WebKeys;
 
 import profile.model.DocumentsProfile;
 import profile.service.DocumentsProfileLocalServiceUtil;
@@ -67,21 +62,18 @@ public class ProfilePortlet extends MVCPortlet {
     @Override
     public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
             throws IOException, PortletException {
-        User user;
-        try {
-            _logger.info("Do viewwwwwwwwwwwwwwwwwwwww");
-            user = PortalUtil.getUser(renderRequest);
-            sessionManager.initProfileInSession(renderRequest);
-            super.doView(renderRequest, renderResponse);
-        } catch (PortalException e) {
-            e.printStackTrace();
-        }
+        _logger.info("Do viewwwwwwwwwwwwwwwwwwwww");
+        super.doView(renderRequest, renderResponse);
     }
     
     @Override
     public void render(RenderRequest renderRequest, RenderResponse arg1) throws IOException, PortletException {
         _logger.info("Entra a render");
-        _logger.info(renderRequest.getParameter("img"));
+        try {
+            sessionManager.initProfileInSession(renderRequest);
+        } catch (PortalException e) {
+            e.printStackTrace();
+        }
         setRequestAttributes(renderRequest);
         if (renderRequest.getParameter("img") != null) {
             imageType = ImageType.valueOf(renderRequest.getParameter("img"));
@@ -111,16 +103,17 @@ public class ProfilePortlet extends MVCPortlet {
         createOrUpdate(request);
     }
 
-    public void uploadFile(ActionRequest request, ActionResponse response)
+    public void upload(ActionRequest request, ActionResponse response)
             throws Exception {
         
         _logger.info("Subir archivo para: " + imageType);
  
         UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(request);
- 
+        
         long sizeInBytes = uploadRequest.getSize(fileInputName);
         _logger.info("File size: " + sizeInBytes);
-
+        _logger.info("File name: " + uploadRequest.getFileName(fileInputName));
+ 
         if (uploadRequest.getSize(fileInputName) == 0) {
             throw new Exception("Received file is 0 bytes!");
         }
@@ -136,6 +129,7 @@ public class ProfilePortlet extends MVCPortlet {
         String screenName = PortalUtil.getUser(request).getScreenName();
         String extension = fileUtil.getFileExtension(uploadedFile.getName());
         String targetFilePath = fileUtil.generateRoute(screenName, imageType, dafultFolder, extension);
+        fileUtil.createPendingFolders(targetFilePath);
         fileUtil.copyFile(uploadedFile.getAbsolutePath(), targetFilePath);
         sessionManager.setDocumentFilePath(imageType.name().concat(extension), imageType, request);
         

@@ -80,6 +80,10 @@ public class ImageServlet extends HttpServlet {
             String pathToWeb = fileUtil.generateRoute(screenName, imageType, profileFolderLocation, fileUtil.getFileExtension(fileName));
             _log.info(pathToWeb);
             File f = new File(pathToWeb);
+            if (!f.exists()) {
+                _log.info("Archivo no existe: ".concat(pathToWeb));
+                f = new File(PropsUtil.get(Constants.PROFILE_DEFAULT_IMAGE.getPropertyName()));
+            }
             BufferedImage bi = ImageIO.read(f);
             OutputStream out = response.getOutputStream();
             ImageIO.write(bi, "jpg", out);
@@ -88,9 +92,6 @@ public class ImageServlet extends HttpServlet {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-		_log.info("doGet");
-
 	}
 
 	private static final long serialVersionUID = 1L;

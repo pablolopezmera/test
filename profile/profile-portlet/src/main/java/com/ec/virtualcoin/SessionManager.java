@@ -21,6 +21,7 @@ public class SessionManager {
 
     public void initProfileInSession(RenderRequest renderRequest) throws PortalException {
 
+        _logger.info("Inicia profile in session");
         User user = PortalUtil.getUser(renderRequest);
         if (getDocumentsProfile(renderRequest) == null) {
             DocumentsProfile documentsProfile = DocumentsProfileLocalServiceUtil.fetchDocumentsProfile(user.getScreenName());
@@ -29,6 +30,7 @@ public class SessionManager {
                 getSession(renderRequest).setAttribute("documentsProfileIsNew", true);
             }
             getSession(renderRequest).setAttribute("documentsProfile", documentsProfile);
+            _logger.info("puestooooo");
         }
 
 

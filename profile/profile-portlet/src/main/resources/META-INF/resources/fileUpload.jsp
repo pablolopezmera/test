@@ -2,20 +2,10 @@
 
 <portlet:defineObjects />
 
-<%
-    Object uploaded = request.getAttribute("fileUploaded");
-    boolean fileUploaded = false;
-    if (uploaded != null){
-        fileUploaded = (Boolean) uploaded; 
-    }
-%>
+<portlet:actionURL name="upload" var="uploadFileURL"></portlet:actionURL>
  
-<portlet:actionURL name="uploadFile" var="uploadFile"></portlet:actionURL>
- 
-<aui:form action="<%= uploadFile %>" enctype="multipart/form-data" method="post" name="uploadFile">
+<aui:form action="<%= uploadFileURL %>" enctype="multipart/form-data" method="post">
 
-    ${fileUploaded }
- 
     <aui:input type="file" name="fileupload" />
     
     <aui:button name="Save" value="Save" type="submit" />
@@ -33,7 +23,7 @@
 	<aui:script use="aui-base,aui-io-request">
 	    A.one('#<portlet:namespace/>Save').on('click', function(event) {
 	        var A = AUI();
-	        var url = '<%=uploadFile.toString()%>';
+	        var url = '<%=uploadFileURL.toString()%>';
 	        A.io.request(
 	            url,
 	            {

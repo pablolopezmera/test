@@ -33,7 +33,8 @@ public class FileUtil {
     }
     
     public String getFileExtension(String source) {
-        return source.substring(source.lastIndexOf("."));
+        int lastIndexOf = source.lastIndexOf(".");
+        return lastIndexOf > 0?source.substring(lastIndexOf):"";
     }
 
     public void createPendingFolders(String fullPath) {

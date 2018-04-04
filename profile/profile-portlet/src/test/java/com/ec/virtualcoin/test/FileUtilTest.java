@@ -21,7 +21,7 @@ public class FileUtilTest {
     @Test
     public void shouldCreateFolders() {
         FileUtil fileUtil = new FileUtil();
-        fileUtil.createPendingFolders("/home/pablo/profile/test/ANVERSO.jpg");
+        fileUtil.createPendingFolders("/home/pablo/profile/tenga/ANVERSO.jpg");
     }
 
     @Test
