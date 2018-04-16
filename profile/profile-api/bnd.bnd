@@ -1,9 +1,0 @@
-Bundle-Name: profile-api
-Bundle-SymbolicName: profile.api
-Bundle-Version: 1.0.0
-Export-Package:\
-	profile.exception,\
-	profile.model,\
-	profile.service,\
-	profile.service.persistence
--includeresource: META-INF/service.xml=../profile-service/service.xml

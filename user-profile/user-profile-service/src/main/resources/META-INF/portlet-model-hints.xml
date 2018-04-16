@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="user.profile.model.UserProfile">
+		<field name="uuid" type="String" />
+		<field name="userId" type="String" />
+		<field name="anversoId" type="String">
+			<hint name="max-length">255</hint>
+		</field>
+		<field name="reversoId" type="String">
+			<hint name="max-length">255</hint>
+		</field>
+		<field name="selfie" type="String">
+			<hint name="max-length">255</hint>
+		</field>
+		<field name="proofAddress" type="String">
+			<hint name="max-length">255</hint>
+		</field>
+		<field name="idType" type="String">
+			<hint name="max-length">10</hint>
+		</field>
+		<field name="idNumber" type="String">
+			<hint name="max-length">20</hint>
+		</field>
+		<field name="country" type="String">
+			<hint name="max-length">25</hint>
+		</field>
+		<field name="prov" type="String" />
+		<field name="city" type="String">
+			<hint name="max-length">25</hint>
+		</field>
+		<field name="street1" type="String">
+			<hint name="max-length">30</hint>
+		</field>
+		<field name="street2" type="String">
+			<hint name="max-length">30</hint>
+		</field>
+		<field name="homeNumber" type="String">
+			<hint name="max-length">10</hint>
+		</field>
+		<field name="postalCode" type="String">
+			<hint name="max-length">10</hint>
+		</field>
+		<field name="approved" type="Boolean" />
+	</model>
+</model-hints>
