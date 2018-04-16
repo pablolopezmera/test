@@ -5,7 +5,6 @@
     String users = (String) renderRequest.getAttribute("users");
 %>
 <p>
-	<b><liferay-ui:message key="users-admin.caption"/></b>
     <div id="usersDataTable"></div>
 </p>
 <portlet:renderURL var="showjspURL">
