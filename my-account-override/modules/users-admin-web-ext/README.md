@@ -24,3 +24,6 @@ my.account.sms.visible=false
 my.account.social.network.visible=false  
 my.account.user.groups.visible=false  
 my.account.websites.visible=false  
+
+## Dependencia
+- Se deben desplegar los 2 bundles: users-admin-web-ext, users-admin-web-my-account

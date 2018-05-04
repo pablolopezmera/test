@@ -27,47 +27,63 @@
 
 <portlet:actionURL name="saveProfile" var="saveProfile" />
 
-<aui:form action="<%= saveProfile %>" method="post">
-<table>
-	<tr>
-		<td valign="top">
-			<table>
-				<tr>
-					<td colspan="2"><img id="RESIDENCIAImg"
-						src="/o/address/image?imageType=RESIDENCIA" width="250"
-						height="150" /></td>
-				</tr>
-				<tr>
-					<td align="center"><aui:button name="btnResidencia"
-							type="button" value="change" /></td>
-					<td align="center"><aui:button name="delResidencia"
-							type="button" value="borrar" /></td>
-				</tr>
-			</table>
-		</td>
-		<td>
-		  <aui:select name="country" label="user.country">
-			    <%for(int i = 0; i < countries.size(); i++){ 
-			        Country c = countries.get(i);
-			        boolean selected = false;
-			        if(country.equals(c.getNameCurrentValue())){
-			            selected = true;
-			        } %>
-			        <aui:option label="<%=c.getNameCurrentValue() %>" value="<%=c.getNameCurrentValue() %>" selected="<%=selected %>" />
-			    <%} %>
-			</aui:select>
-			<aui:input label="user.prov" name="prov" value="${prov}" type="String" />
-			<aui:input label="user.city" name="city" value="${city}" type="String" />
-			<aui:input label="user.homeNumber" name="homeNumber" value="${homeNumber}" type="String" />
-			<aui:input label="user.street1" name="street1" value="${street1}" type="String" />
-			<aui:input label="user.street2" name="street2" value="${street2}" type="String" />
-			<aui:input label="user.postalCode" name="postalCode" value="${postalCode}" type="String" />
-		</td>
-	</tr>
-</table>
+<aui:form action="<%= saveProfile %>" method="post" name="addresForm">
+
+<div class="container">
+    <div class="row">
+        <div id="no-more-tables">
+            <table class="col-md-12 table-bordered table-striped table-condensed cf">
+                <tbody>
+                    <tr>
+                      <td>
+				          <aui:select name="country" label="user.country">
+				                <%for(int i = 0; i < countries.size(); i++){ 
+				                    Country c = countries.get(i);
+				                    boolean selected = false;
+				                    if(country.equals(c.getNameCurrentValue())){
+				                        selected = true;
+				                    } %>
+				                    <aui:option label="<%=c.getNameCurrentValue() %>" value="<%=c.getNameCurrentValue() %>" selected="<%=selected %>" />
+				                <%} %>
+				            </aui:select>
+				            <aui:input label="user.prov" name="prov" value="${prov}" type="String" />
+				            <aui:input label="user.city" name="city" value="${city}" type="String" />
+				            <aui:input label="user.homeNumber" name="homeNumber" value="${homeNumber}" type="String" />
+				            <aui:input label="user.street1" name="street1" value="${street1}" type="String" />
+				            <aui:input label="user.street2" name="street2" value="${street2}" type="String" />
+				            <aui:input label="user.postalCode" name="postalCode" value="${postalCode}" type="String" />
+                      </td>
+                      <td valign="top">
+			            <table>
+			                <tr>
+			                    <td colspan="2"><img id="RESIDENCIAImg"
+			                        src="/o/address/image?imageType=RESIDENCIA" width="250"
+			                        height="150" /></td>
+			                </tr>
+			                <tr>
+			                    <td align="center"><aui:button name="btnResidencia"
+			                            type="button" value="change" /></td>
+			                    <td align="center"><aui:button name="delResidencia"
+			                            type="button" value="borrar" /></td>
+			                </tr>
+			            </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 
 <br />
-<aui:button name="Save" value="Save" type="submit" />
+<aui:button name="Save" value="Save" />
 	
 </aui:form>
 
@@ -91,7 +107,7 @@
             url,
             {
                 method: 'POST',
-                form: {id: '<portlet:namespace/>uploadFile'},
+                form: {id: '<portlet:namespace/>addresForm'},
                 on: { success: function() { refeshImage(imageName);}
                 }
             }
@@ -105,10 +121,11 @@
             url,
             {
                 method: 'POST',
-                form: {id: '<portlet:namespace/>uploadFile'},
+                form: {id: '<portlet:namespace/>addresForm'},
                 on: { success: function() { refreshPortlet();}}
             }
        );
+
     });
     
     function openDialog(dialogType, title, uri){

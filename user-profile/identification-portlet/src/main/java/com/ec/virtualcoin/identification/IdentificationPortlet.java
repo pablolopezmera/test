@@ -20,6 +20,7 @@ import com.liferay.mail.kernel.model.MailMessage;
 import com.liferay.mail.kernel.service.MailServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
@@ -150,13 +151,15 @@ public class IdentificationPortlet extends MVCPortlet {
         sessionManager.setDocumentFilePath("", imageType, request);
     }
 
-   private void createOrUpdate(ActionRequest request) {
-        if (sessionManager.userHasProfile(request)) {
+    private void createOrUpdate(ActionRequest actionRequest) throws PortalException {
+        User user = PortalUtil.getUser(actionRequest);
+        UserProfile existingProfile = UserProfileLocalServiceUtil.fetchUserProfile(user.getScreenName());
+        if (existingProfile == null) {
             _logger.info("El cliente no existe, se va a crear uno");
-            createDocumentProfile(request);
+            createDocumentProfile(actionRequest);
         } else {
             _logger.info("El cliente ya existe, se debe modificar");
-            updateDocumentProfile(request);
+            updateDocumentProfile(actionRequest);
         }
     }
 

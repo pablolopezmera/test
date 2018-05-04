@@ -1,3 +1,17 @@
+create table UserProfile_Purchase (
+	uuid_ VARCHAR(75) null,
+	screenname VARCHAR(75) not null,
+	hash VARCHAR(75) not null,
+	date_time DATE null,
+	curr_from VARCHAR(75) null,
+	value_from VARCHAR(75) null,
+	curr_to VARCHAR(75) null,
+	value_to VARCHAR(75) null,
+	status VARCHAR(75) null,
+	ewallet VARCHAR(75) null,
+	primary key (screenname, hash)
+);
+
 create table UserProfile_UserProfile (
 	uuid_ VARCHAR(75) null,
 	userId VARCHAR(75) not null primary key,

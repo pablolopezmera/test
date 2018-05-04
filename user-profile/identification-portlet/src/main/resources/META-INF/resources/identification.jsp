@@ -32,62 +32,66 @@
 
 <portlet:actionURL name="saveProfile" var="saveProfile" />
 
-<aui:form action="<%= saveProfile %>" method="post">
-	<table>
-        <tr>
-          <td>
-              <table>
-                  <tr><td colspan="2" class="control-label" align="center"><liferay-ui:message key="anverso"/></td></tr>
-                  <tr><td colspan="2"><img name="anversoImg" id="ANVERSOImg"
-                src="/o/profile/image?imageType=ANVERSO"
-                width="250" height="150" /></td></tr>
-                  <tr><td>&nbsp;</td></tr>
-                  <tr><td align="center"><aui:button name="btnAnverso" type="button" value="cambiar" /></td>
-                      <td align="center"><aui:button name="delAnverso" type="button" value="borrar" /></td></tr>
-              </table>
-          </td>
-          <td>&nbsp;</td>
-          <td>
-              <table>
-                  <tr><td colspan="2" class="control-label" align="center"><liferay-ui:message key="reverso"/></td></tr>
-                  <tr><td colspan="2"><img id="REVERSOImg"
-                src="/o/profile/image?imageType=REVERSO"
-                width="250" height="150" /></td></tr>
-                  <tr><td>&nbsp;</td></tr>
-                  <tr><td align="center"><aui:button name="btnReverso" type="button" value="cambiar" /></td>
-                    <td align="center"><aui:button name="delReverso" type="button" value="borrar" /></td></tr>
-              </table>
-          </td>
-         </tr>
-         <tr><td> &nbsp;</td></tr>
-        <tr>
-          <td>
-              <table>
-                  <tr><td colspan="2" class="control-label" align="center"><liferay-ui:message key="selfie"/></td></tr>
-                  <tr><td colspan="2"><img id="SELFIEImg"
-                src="/o/profile/image?imageType=SELFIE"
-                width="250" height="150" /></td></tr>
-                  <tr><td>&nbsp;</td></tr>
-                  <tr><td align="center"><aui:button name="btnSelfie" type="button" value="change" /></td>
-                    <td align="center"><aui:button name="delSelfie" type="button" value="borrar" /></td></tr>
-              </table>
-          </td>
-          <td>&nbsp;</td>
-          <td>
-	         <aui:select name="idType" label="id.type">
-               <aui:option label="select..." value="" />
-               <aui:option label="id.type.passport" value="Passport" selected="<%=idType.equals("Passport") %>" />
-               <aui:option label="id.type.id" value="Id" selected="<%=idType.equals("Id") %>" />
-               <aui:option label="id.type.driverlicense" value="License" selected="<%=idType.equals("License") %>" />
-	         </aui:select>
-             <aui:input label="id.number" name="idNumber" value="${idNumber}" type="String" />
-          
-          </td>
-        </tr>
-	</table>
+<aui:form action="<%= saveProfile %>" method="post" name="identificationForm">
+<div class="container">
+    <div class="row">
+        <div id="no-more-tables">
+            <table class="col-md-12 table-bordered table-striped table-condensed cf">
+                <tbody>
+                    <tr>
+                      <td>
+			              <table>
+			                  <tr><td colspan="2" class="control-label" align="center"><liferay-ui:message key="anverso"/></td></tr>
+			                  <tr><td colspan="2"><img name="anversoImg" id="ANVERSOImg"
+			                src="/o/profile/image?imageType=ANVERSO"
+			                width="250" height="150" /></td></tr>
+			                  <tr><td>&nbsp;</td></tr>
+			                  <tr><td align="center"><aui:button name="btnAnverso" type="button" value="cambiar" /></td>
+			                      <td align="center"><aui:button name="delAnverso" type="button" value="borrar" /></td></tr>
+			              </table>
+                      </td>
+                      <td>
+			              <table>
+			                  <tr><td colspan="2" class="control-label" align="center"><liferay-ui:message key="reverso"/></td></tr>
+			                  <tr><td colspan="2"><img id="REVERSOImg"
+			                src="/o/profile/image?imageType=REVERSO"
+			                width="250" height="150" /></td></tr>
+			                  <tr><td>&nbsp;</td></tr>
+			                  <tr><td align="center"><aui:button name="btnReverso" type="button" value="cambiar" /></td>
+			                    <td align="center"><aui:button name="delReverso" type="button" value="borrar" /></td></tr>
+			              </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+			              <table>
+			                  <tr><td colspan="2" class="control-label" align="center"><liferay-ui:message key="selfie"/></td></tr>
+			                  <tr><td colspan="2"><img id="SELFIEImg"
+			                src="/o/profile/image?imageType=SELFIE"
+			                width="250" height="150" /></td></tr>
+			                  <tr><td>&nbsp;</td></tr>
+			                  <tr><td align="center"><aui:button name="btnSelfie" type="button" value="change" /></td>
+			                    <td align="center"><aui:button name="delSelfie" type="button" value="borrar" /></td></tr>
+			              </table>
+                      </td>
+                      <td>
+			             <aui:select name="idType" label="id.type">
+			               <aui:option label="select..." value="" />
+			               <aui:option label="id.type.passport" value="Passport" selected="<%=idType.equals("Passport") %>" />
+			               <aui:option label="id.type.id" value="Id" selected="<%=idType.equals("Id") %>" />
+			               <aui:option label="id.type.driverlicense" value="License" selected="<%=idType.equals("License") %>" />
+			             </aui:select>
+			             <aui:input label="id.number" name="idNumber" value="${idNumber}" type="String" />
+                      </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 	
 <br /><br />
-<aui:button name="Save" value="Save" type="submit" />
+<aui:button name="Save" value="Save" />
 	
 </aui:form>
 <aui:script use="aui-base,liferay-util-window,aui-io-request">
@@ -129,7 +133,7 @@
             url,
             {
                 method: 'POST',
-                form: {id: '<portlet:namespace/>uploadFile'},
+                form: {id: '<portlet:namespace/>identificationForm'},
                 on: { success: function() { refeshImage(imageName);}
                 }
             }
@@ -143,7 +147,7 @@
             url,
             {
                 method: 'POST',
-                form: {id: '<portlet:namespace/>uploadFile'},
+                form: {id: '<portlet:namespace/>identificationForm'},
                 on: { success: function() { refreshPortlet();}}
             }
        );
@@ -169,13 +173,13 @@
     Liferay.provide(window, 'refreshPortlet', function() {
         var curPortlet = '#p_p_id<portlet:namespace/>';
         console.log(curPortlet);
-        // Liferay.Portlet.refresh(curPortlet);
-        // setTimeout(function(){ 
+        Liferay.Portlet.refresh(curPortlet);
+        setTimeout(function(){ 
             refeshImage(actualDialog + 'Img'); 
             refeshImage('ANVERSOImg'); 
             refeshImage('REVERSOImg'); 
             refeshImage('SELFIEImg'); 
-        //    }, 500);
+        }, 500);
         
     },
     ['aui-dialog','aui-dialog-iframe']

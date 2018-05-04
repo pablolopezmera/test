@@ -33,6 +33,7 @@ import com.liferay.portal.spring.extender.service.ServiceReference;
 import user.profile.model.UserProfile;
 
 import user.profile.service.UserProfileService;
+import user.profile.service.persistence.PurchasePersistence;
 import user.profile.service.persistence.UserProfilePersistence;
 
 import javax.sql.DataSource;
@@ -56,6 +57,62 @@ public abstract class UserProfileServiceBaseImpl extends BaseServiceImpl
 	 *
 	 * Never modify or reference this class directly. Always use {@link user.profile.service.UserProfileServiceUtil} to access the user profile remote service.
 	 */
+
+	/**
+	 * Returns the purchase local service.
+	 *
+	 * @return the purchase local service
+	 */
+	public user.profile.service.PurchaseLocalService getPurchaseLocalService() {
+		return purchaseLocalService;
+	}
+
+	/**
+	 * Sets the purchase local service.
+	 *
+	 * @param purchaseLocalService the purchase local service
+	 */
+	public void setPurchaseLocalService(
+		user.profile.service.PurchaseLocalService purchaseLocalService) {
+		this.purchaseLocalService = purchaseLocalService;
+	}
+
+	/**
+	 * Returns the purchase remote service.
+	 *
+	 * @return the purchase remote service
+	 */
+	public user.profile.service.PurchaseService getPurchaseService() {
+		return purchaseService;
+	}
+
+	/**
+	 * Sets the purchase remote service.
+	 *
+	 * @param purchaseService the purchase remote service
+	 */
+	public void setPurchaseService(
+		user.profile.service.PurchaseService purchaseService) {
+		this.purchaseService = purchaseService;
+	}
+
+	/**
+	 * Returns the purchase persistence.
+	 *
+	 * @return the purchase persistence
+	 */
+	public PurchasePersistence getPurchasePersistence() {
+		return purchasePersistence;
+	}
+
+	/**
+	 * Sets the purchase persistence.
+	 *
+	 * @param purchasePersistence the purchase persistence
+	 */
+	public void setPurchasePersistence(PurchasePersistence purchasePersistence) {
+		this.purchasePersistence = purchasePersistence;
+	}
 
 	/**
 	 * Returns the user profile local service.
@@ -425,6 +482,12 @@ public abstract class UserProfileServiceBaseImpl extends BaseServiceImpl
 		}
 	}
 
+	@BeanReference(type = user.profile.service.PurchaseLocalService.class)
+	protected user.profile.service.PurchaseLocalService purchaseLocalService;
+	@BeanReference(type = user.profile.service.PurchaseService.class)
+	protected user.profile.service.PurchaseService purchaseService;
+	@BeanReference(type = PurchasePersistence.class)
+	protected PurchasePersistence purchasePersistence;
 	@BeanReference(type = user.profile.service.UserProfileLocalService.class)
 	protected user.profile.service.UserProfileLocalService userProfileLocalService;
 	@BeanReference(type = UserProfileService.class)

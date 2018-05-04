@@ -1,1 +1,1 @@
-include "user-profile-api", "user-profile-service", "addres-portlet", "identification-portlet", "users-admin"
+include "user-profile-api", "user-profile-service", "addres-portlet", "identification-portlet", "users-admin", "buy"

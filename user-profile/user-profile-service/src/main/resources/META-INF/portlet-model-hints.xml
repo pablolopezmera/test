@@ -1,6 +1,18 @@
 <?xml version="1.0"?>
 
 <model-hints>
+	<model name="user.profile.model.Purchase">
+		<field name="uuid" type="String" />
+		<field name="screenname" type="String" />
+		<field name="hash" type="String" />
+		<field name="date_time" type="Date" />
+		<field name="curr_from" type="String" />
+		<field name="value_from" type="String" />
+		<field name="curr_to" type="String" />
+		<field name="value_to" type="String" />
+		<field name="status" type="String" />
+		<field name="ewallet" type="String" />
+	</model>
 	<model name="user.profile.model.UserProfile">
 		<field name="uuid" type="String" />
 		<field name="userId" type="String" />

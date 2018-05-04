@@ -38,4 +38,33 @@
 		<reference entity="AssetEntry" package-path="com.liferay.portlet.asset" />
 		<reference entity="AssetTag" package-path="com.liferay.portlet.asset" />
 	</entity>
+
+    <entity local-service="true" name="Purchase" remote-service="true" uuid="true">
+
+        <!-- PK fields -->
+
+        <column name="screenname" primary="true" type="String" />
+        <column name="hash" primary="true" type="String" />
+
+        <!-- Group instance -->
+
+        <column name="date_time" type="Date" />
+        <column name="curr_from" type="String" />
+        <column name="value_from" type="String" />
+        <column name="curr_to" type="String" />
+        <column name="value_to" type="String" />
+        <column name="status" type="String" />
+        <column name="ewallet" type="String" />
+
+        <!-- Finder methods -->
+
+        <finder name="screenname" return-type="Entity">
+            <finder-column name="screenname" />
+        </finder>
+
+        <!-- References -->
+
+        <reference entity="AssetEntry" package-path="com.liferay.portlet.asset" />
+        <reference entity="AssetTag" package-path="com.liferay.portlet.asset" />
+    </entity>
 </service-builder>

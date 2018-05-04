@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean class="user.profile.service.impl.PurchaseLocalServiceImpl" id="user.profile.service.PurchaseLocalService" />
+	<bean class="user.profile.service.impl.PurchaseServiceImpl" id="user.profile.service.PurchaseService" />
+	<bean class="user.profile.service.persistence.impl.PurchasePersistenceImpl" id="user.profile.service.persistence.PurchasePersistence" parent="basePersistence" />
 	<bean class="user.profile.service.impl.UserProfileLocalServiceImpl" id="user.profile.service.UserProfileLocalService" />
 	<bean class="user.profile.service.impl.UserProfileServiceImpl" id="user.profile.service.UserProfileService" />
 	<bean class="user.profile.service.persistence.impl.UserProfilePersistenceImpl" id="user.profile.service.persistence.UserProfilePersistence" parent="basePersistence" />

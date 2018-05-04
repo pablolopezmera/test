@@ -24,6 +24,7 @@ import com.liferay.mail.kernel.service.MailServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Country;
 import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.service.CountryServiceUtil;
 import com.liferay.portal.kernel.servlet.SessionMessages;
@@ -60,8 +61,6 @@ public class AddressPortlet extends MVCPortlet {
     private final static String fileInputName = "fileupload";
     
     private ImageType imageType;
-    
-    private String residenciaUrl;
     
     private SessionManager sessionManager = new SessionManager();
 
@@ -176,24 +175,26 @@ public class AddressPortlet extends MVCPortlet {
         sessionManager.setDocumentFilePath("", imageType, request);
     }
 
-   private void createOrUpdate(ActionRequest request) {
-        if (sessionManager.userHasProfile(request)) {
+    private void createOrUpdate(ActionRequest actionRequest) throws PortalException {
+        User user = PortalUtil.getUser(actionRequest);
+        UserProfile existingProfile = UserProfileLocalServiceUtil.fetchUserProfile(user.getScreenName());
+        if (existingProfile == null) {
             _logger.info("El cliente no existe, se va a crear uno");
-            createDocumentProfile(request);
+            createDocumentProfile(actionRequest);
         } else {
             _logger.info("El cliente ya existe, se debe modificar");
-            updateDocumentProfile(request);
+            updateDocumentProfile(actionRequest);
         }
     }
 
     private void updateDocumentProfile(ActionRequest request) {
-        UserProfile documentsProfile = sessionManager.getUserProfile(request);
-        UserProfileLocalServiceUtil.updateUserProfile(documentsProfile);
+        UserProfile userProfile = sessionManager.getUserProfile(request);
+        UserProfileLocalServiceUtil.updateUserProfile(userProfile);
         _logger.info("Datos a guardar");
-        _logger.info(documentsProfile.getAnversoId());
-        _logger.info(documentsProfile.getReversoId());
-        _logger.info(documentsProfile.getSelfie());
-        _logger.info(documentsProfile.getProofAddress());
+        _logger.info(userProfile.getAnversoId());
+        _logger.info(userProfile.getReversoId());
+        _logger.info(userProfile.getSelfie());
+        _logger.info(userProfile.getProofAddress());
     }
 
     private void createDocumentProfile(ActionRequest request) {
@@ -211,12 +212,17 @@ public class AddressPortlet extends MVCPortlet {
     }
     
     public void sendNotification(ActionRequest actionRequest) {
-        ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-        Group siteGroup = themeDisplay.getSiteGroup();
-        String mailFrom = (String) siteGroup.getExpandoBridge().getAttribute("notification.address.from");
-        String mailTo = (String) siteGroup.getExpandoBridge().getAttribute("notification.address.to");
-        _logger.info("mailFrom: " + mailFrom);
-        _logger.info("mailTo: " + mailTo);
+        String mailFrom = null;
+        String mailTo = null;
+        try {
+            mailFrom = getSiteAttribute(actionRequest, "notification.address.from");
+            mailTo = getSiteAttribute(actionRequest, "notification.address.to");
+            _logger.info("mailFrom: " + mailFrom);
+            _logger.info("mailTo: " + mailTo);
+        } catch (AttributeNotFoundException e) {
+            _logger.error(e.getMessage());
+            return;
+        }
 
         try {
             InternetAddress from = new InternetAddress(mailFrom);
@@ -229,6 +235,16 @@ public class AddressPortlet extends MVCPortlet {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+    
+    private String getSiteAttribute(ActionRequest actionRequest, String attributeName) throws AttributeNotFoundException {
+        ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+        Group siteGroup = themeDisplay.getSiteGroup();
+        String attribute = (String) siteGroup.getExpandoBridge().getAttribute(attributeName);
+        if (attribute == null) {
+            throw new AttributeNotFoundException("Please verify attribute notification.address.from and permissions.");
+        }
+        return attribute;
     }
     
 }

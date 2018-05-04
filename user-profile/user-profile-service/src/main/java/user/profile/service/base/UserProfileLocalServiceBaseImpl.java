@@ -44,6 +44,7 @@ import com.liferay.portal.spring.extender.service.ServiceReference;
 import user.profile.model.UserProfile;
 
 import user.profile.service.UserProfileLocalService;
+import user.profile.service.persistence.PurchasePersistence;
 import user.profile.service.persistence.UserProfilePersistence;
 
 import java.io.Serializable;
@@ -276,6 +277,43 @@ public abstract class UserProfileLocalServiceBaseImpl
 	@Override
 	public UserProfile updateUserProfile(UserProfile userProfile) {
 		return userProfilePersistence.update(userProfile);
+	}
+
+	/**
+	 * Returns the purchase local service.
+	 *
+	 * @return the purchase local service
+	 */
+	public user.profile.service.PurchaseLocalService getPurchaseLocalService() {
+		return purchaseLocalService;
+	}
+
+	/**
+	 * Sets the purchase local service.
+	 *
+	 * @param purchaseLocalService the purchase local service
+	 */
+	public void setPurchaseLocalService(
+		user.profile.service.PurchaseLocalService purchaseLocalService) {
+		this.purchaseLocalService = purchaseLocalService;
+	}
+
+	/**
+	 * Returns the purchase persistence.
+	 *
+	 * @return the purchase persistence
+	 */
+	public PurchasePersistence getPurchasePersistence() {
+		return purchasePersistence;
+	}
+
+	/**
+	 * Sets the purchase persistence.
+	 *
+	 * @param purchasePersistence the purchase persistence
+	 */
+	public void setPurchasePersistence(PurchasePersistence purchasePersistence) {
+		this.purchasePersistence = purchasePersistence;
 	}
 
 	/**
@@ -556,6 +594,10 @@ public abstract class UserProfileLocalServiceBaseImpl
 		}
 	}
 
+	@BeanReference(type = user.profile.service.PurchaseLocalService.class)
+	protected user.profile.service.PurchaseLocalService purchaseLocalService;
+	@BeanReference(type = PurchasePersistence.class)
+	protected PurchasePersistence purchasePersistence;
 	@BeanReference(type = UserProfileLocalService.class)
 	protected UserProfileLocalService userProfileLocalService;
 	@BeanReference(type = UserProfilePersistence.class)
