@@ -24,6 +24,12 @@ import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ec.virtualcoin.buy.payment.client.AuthorizeCaptureRequest;
+import com.ec.virtualcoin.buy.payment.client.AuthorizeCaptureTransactionRequest;
+import com.ec.virtualcoin.buy.payment.client.EcorePayClient;
+import com.ec.virtualcoin.buy.payment.client.RequestType;
+import com.ec.virtualcoin.buy.payment.client.ShipTo;
+import com.ec.virtualcoin.buy.payment.jaxb.Response;
 import com.liferay.mail.kernel.model.MailMessage;
 import com.liferay.mail.kernel.service.MailServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -128,6 +134,57 @@ public class BuyPortlet extends MVCPortlet {
         PurchaseLocalServiceUtil.updatePurchase(purchase);
         _logger.info("orden confirmada");
         response.setRenderParameter("jspPage","/payment.jsp"); 
+    }
+
+    public void makePayment(ActionRequest actionRequest, ActionResponse response) throws Exception {
+        _logger.info("Va a realizar el pago:");
+        EcorePayClient cpc = new EcorePayClient();
+        ShipTo shipTo = new ShipTo.Builder()
+            .FirstName("Jane")
+            .LastName("Doe")
+            .Address("345 Boring Road")
+            .City("Dullsville")
+            .State("CA")
+            .PostCode((short) 12345)
+            .Country("US").build();
+
+        AuthorizeCaptureTransactionRequest transaction = new AuthorizeCaptureTransactionRequest.Builder()
+                .Reference("X53222389-20")
+                .Amount(2.40f)
+                .Currency("USD")
+                .Email("john_doe@example.com")
+                .IPAddress("192.168.1.1")
+                .Phone("+1 206 555 1212")
+                .FirstName("John")
+                .LastName("Doe")
+                .DOB(19810530)
+                .SSN((short) 3231)
+                .Address("123 Boring Road")
+                .City("Dullsville")
+                .State("CA")
+                .PostCode((short) 12345)
+                .Country("US")
+                .CardNumber(4111111111111111l)
+                .CardExpMonth((byte) 06)
+                .CardExpYear((short) 2018)
+                .CardCVV((byte) 123)
+                .ShipTo(shipTo).build();
+
+        AuthorizeCaptureRequest acr = new AuthorizeCaptureRequest(RequestType.AuthorizeCapture, 97709852, "TyawONMkSoidmMBV", transaction);
+        
+        Response authorizeResponse = cpc.authorizeCapture(acr);
+        
+        _logger.info(String.valueOf(authorizeResponse.getResponseCode()));
+        if (authorizeResponse.getResponseCode() == 100) {
+            actionRequest.setAttribute("success", true);
+            _logger.info("pago exitoso, manda true");
+        } else {
+            actionRequest.setAttribute("success", false);
+            actionRequest.setAttribute("errorMessage", authorizeResponse.getDescription());
+            _logger.info("pago errado, manda false");
+        }
+
+        response.setRenderParameter("jspPage","/payment_result.jsp"); 
     }
 
     private Purchase registerPurchaseOrder(ActionRequest actionRequest) {

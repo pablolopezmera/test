@@ -1,0 +1,36 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container-fluid{
+    padding:0;
+    margin:0;
+}
+
+header .limiter{
+    max-width: 1000px;
+    margin: 0px auto;
+}
+
+header h3{
+    font: normal 24px/1.5 'Open Sans', sans-serif;
+    float: left;
+    color: #fff;
+    margin:0;
+}
+
+@media (max-width: 850px) {
+
+    header h3{
+        float: none;
+        text-align: center;
+    }
+
+    header a{
+        margin-top: 20px;
+        float: none;
+    }
+
+}

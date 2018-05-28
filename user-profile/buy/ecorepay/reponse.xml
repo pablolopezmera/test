@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Response type="ACK">
+	<ResponseCode>100</ResponseCode>
+	<Description>Transaction approved.</Description>
+	<Reference>X53222389-20</Reference>
+	<TransactionID>2454936997244416504</TransactionID>
+	<ProcessingTime>0.004835</ProcessingTime>
+	<StatusCode>2</StatusCode>
+	<StatusDescription>Transaction has been approved by the issuing
+		bank.</StatusDescription>
+	<AuthCode>10004001A</AuthCode>
+	<ScrubResult />
+	<AVSResult>0</AVSResult>
+	<CVVResult>0</CVVResult>
+</Response>

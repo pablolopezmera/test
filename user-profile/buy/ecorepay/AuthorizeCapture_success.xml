@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Request type="AuthorizeCapture">
+	<AccountID>97709852</AccountID>
+	<AccountAuth>TyawONMkSoidmMBV</AccountAuth>
+	<Transaction>
+		<Reference>X53222389-20</Reference>
+		<Amount>39.90</Amount>
+		<Currency>USD</Currency>
+		<Email>john_doe@example.com</Email>
+		<IPAddress>192.168.1.1</IPAddress>
+		<Phone>+1 206 555 1212</Phone>
+		<FirstName>John</FirstName>
+		<LastName>Doe</LastName>
+		<DOB>19810530</DOB>
+		<SSN>3231</SSN>
+		<Address>123 Boring Road</Address>
+		<City>Dullsville</City>
+		<State>CA</State>
+		<PostCode>12345</PostCode>
+		<Country>US</Country>
+		<CardNumber>4111111111111111</CardNumber>
+		<CardExpMonth>06</CardExpMonth>
+		<CardExpYear>2018</CardExpYear>
+		<CardCVV>123</CardCVV>
+		<ShipTo>
+			<FirstName>Jane</FirstName>
+			<LastName>Doe</LastName>
+			<Address>345 Boring Road</Address>
+			<City>Dullsville</City>
+			<State>CA</State>
+			<PostCode>12345</PostCode>
+			<Country>US</Country>
+		</ShipTo>
+		<field1>http://examplecallbackurl.com/example.html</field1>
+	</Transaction>
+</Request>
