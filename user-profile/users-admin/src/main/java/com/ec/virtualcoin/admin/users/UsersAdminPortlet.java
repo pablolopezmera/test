@@ -24,7 +24,6 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
 
 import user.profile.model.UserProfile;
 import user.profile.service.UserProfileLocalServiceUtil;
@@ -124,14 +123,6 @@ public class UsersAdminPortlet extends MVCPortlet {
             }
         }
         return resultsArray;
-    }
-
-    private void initProfileInSession(RenderRequest renderRequest) throws PortalException {
-        _logger.info("Inicia profile in session");
-        User user = PortalUtil.getUser(renderRequest);
-        _logger.info(user.getScreenName());
-        UserProfile userProfile = UserProfileLocalServiceUtil.fetchUserProfile(user.getScreenName());
-        renderRequest.setAttribute("userProfile", userProfile);
     }
 
 }
