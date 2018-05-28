@@ -58,7 +58,7 @@
 
         <!-- Finder methods -->
 
-        <finder name="screenname" return-type="Entity">
+        <finder name="screenname" return-type="Collection">
             <finder-column name="screenname" />
         </finder>
 

@@ -30,7 +30,6 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.spring.extender.service.ServiceReference;
@@ -629,9 +628,20 @@ public class PurchasePersistenceImpl extends BasePersistenceImpl<Purchase>
 	private static final String _FINDER_COLUMN_UUID_UUID_1 = "purchase.uuid IS NULL";
 	private static final String _FINDER_COLUMN_UUID_UUID_2 = "purchase.uuid = ?";
 	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(purchase.uuid IS NULL OR purchase.uuid = '')";
-	public static final FinderPath FINDER_PATH_FETCH_BY_SCREENNAME = new FinderPath(PurchaseModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_SCREENNAME =
+		new FinderPath(PurchaseModelImpl.ENTITY_CACHE_ENABLED,
 			PurchaseModelImpl.FINDER_CACHE_ENABLED, PurchaseImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByscreenname",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByscreenname",
+			new String[] {
+				String.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SCREENNAME =
+		new FinderPath(PurchaseModelImpl.ENTITY_CACHE_ENABLED,
+			PurchaseModelImpl.FINDER_CACHE_ENABLED, PurchaseImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByscreenname",
 			new String[] { String.class.getName() },
 			PurchaseModelImpl.SCREENNAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_SCREENNAME = new FinderPath(PurchaseModelImpl.ENTITY_CACHE_ENABLED,
@@ -640,77 +650,113 @@ public class PurchasePersistenceImpl extends BasePersistenceImpl<Purchase>
 			new String[] { String.class.getName() });
 
 	/**
-	 * Returns the purchase where screenname = &#63; or throws a {@link NoSuchPurchaseException} if it could not be found.
+	 * Returns all the purchases where screenname = &#63;.
 	 *
 	 * @param screenname the screenname
-	 * @return the matching purchase
-	 * @throws NoSuchPurchaseException if a matching purchase could not be found
+	 * @return the matching purchases
 	 */
 	@Override
-	public Purchase findByscreenname(String screenname)
-		throws NoSuchPurchaseException {
-		Purchase purchase = fetchByscreenname(screenname);
+	public List<Purchase> findByscreenname(String screenname) {
+		return findByscreenname(screenname, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
 
-		if (purchase == null) {
-			StringBundler msg = new StringBundler(4);
+	/**
+	 * Returns a range of all the purchases where screenname = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link PurchaseModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param screenname the screenname
+	 * @param start the lower bound of the range of purchases
+	 * @param end the upper bound of the range of purchases (not inclusive)
+	 * @return the range of matching purchases
+	 */
+	@Override
+	public List<Purchase> findByscreenname(String screenname, int start, int end) {
+		return findByscreenname(screenname, start, end, null);
+	}
 
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+	/**
+	 * Returns an ordered range of all the purchases where screenname = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link PurchaseModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param screenname the screenname
+	 * @param start the lower bound of the range of purchases
+	 * @param end the upper bound of the range of purchases (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching purchases
+	 */
+	@Override
+	public List<Purchase> findByscreenname(String screenname, int start,
+		int end, OrderByComparator<Purchase> orderByComparator) {
+		return findByscreenname(screenname, start, end, orderByComparator, true);
+	}
 
-			msg.append("screenname=");
-			msg.append(screenname);
+	/**
+	 * Returns an ordered range of all the purchases where screenname = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link PurchaseModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param screenname the screenname
+	 * @param start the lower bound of the range of purchases
+	 * @param end the upper bound of the range of purchases (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @return the ordered range of matching purchases
+	 */
+	@Override
+	public List<Purchase> findByscreenname(String screenname, int start,
+		int end, OrderByComparator<Purchase> orderByComparator,
+		boolean retrieveFromCache) {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
 
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isDebugEnabled()) {
-				_log.debug(msg.toString());
-			}
-
-			throw new NoSuchPurchaseException(msg.toString());
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SCREENNAME;
+			finderArgs = new Object[] { screenname };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_SCREENNAME;
+			finderArgs = new Object[] { screenname, start, end, orderByComparator };
 		}
 
-		return purchase;
-	}
-
-	/**
-	 * Returns the purchase where screenname = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param screenname the screenname
-	 * @return the matching purchase, or <code>null</code> if a matching purchase could not be found
-	 */
-	@Override
-	public Purchase fetchByscreenname(String screenname) {
-		return fetchByscreenname(screenname, true);
-	}
-
-	/**
-	 * Returns the purchase where screenname = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param screenname the screenname
-	 * @param retrieveFromCache whether to retrieve from the finder cache
-	 * @return the matching purchase, or <code>null</code> if a matching purchase could not be found
-	 */
-	@Override
-	public Purchase fetchByscreenname(String screenname,
-		boolean retrieveFromCache) {
-		Object[] finderArgs = new Object[] { screenname };
-
-		Object result = null;
+		List<Purchase> list = null;
 
 		if (retrieveFromCache) {
-			result = finderCache.getResult(FINDER_PATH_FETCH_BY_SCREENNAME,
+			list = (List<Purchase>)finderCache.getResult(finderPath,
 					finderArgs, this);
-		}
 
-		if (result instanceof Purchase) {
-			Purchase purchase = (Purchase)result;
+			if ((list != null) && !list.isEmpty()) {
+				for (Purchase purchase : list) {
+					if (!Objects.equals(screenname, purchase.getScreenname())) {
+						list = null;
 
-			if (!Objects.equals(screenname, purchase.getScreenname())) {
-				result = null;
+						break;
+					}
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler query = new StringBundler(3);
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				query = new StringBundler(3);
+			}
 
 			query.append(_SQL_SELECT_PURCHASE_WHERE);
 
@@ -728,6 +774,15 @@ public class PurchasePersistenceImpl extends BasePersistenceImpl<Purchase>
 				query.append(_FINDER_COLUMN_SCREENNAME_SCREENNAME_2);
 			}
 
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(PurchaseModelImpl.ORDER_BY_JPQL);
+			}
+
 			String sql = query.toString();
 
 			Session session = null;
@@ -743,40 +798,25 @@ public class PurchasePersistenceImpl extends BasePersistenceImpl<Purchase>
 					qPos.add(screenname);
 				}
 
-				List<Purchase> list = q.list();
+				if (!pagination) {
+					list = (List<Purchase>)QueryUtil.list(q, getDialect(),
+							start, end, false);
 
-				if (list.isEmpty()) {
-					finderCache.putResult(FINDER_PATH_FETCH_BY_SCREENNAME,
-						finderArgs, list);
+					Collections.sort(list);
+
+					list = Collections.unmodifiableList(list);
 				}
 				else {
-					if (list.size() > 1) {
-						Collections.sort(list, Collections.reverseOrder());
-
-						if (_log.isWarnEnabled()) {
-							_log.warn(
-								"PurchasePersistenceImpl.fetchByscreenname(String, boolean) with parameters (" +
-								StringUtil.merge(finderArgs) +
-								") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
-						}
-					}
-
-					Purchase purchase = list.get(0);
-
-					result = purchase;
-
-					cacheResult(purchase);
-
-					if ((purchase.getScreenname() == null) ||
-							!purchase.getScreenname().equals(screenname)) {
-						finderCache.putResult(FINDER_PATH_FETCH_BY_SCREENNAME,
-							finderArgs, purchase);
-					}
+					list = (List<Purchase>)QueryUtil.list(q, getDialect(),
+							start, end);
 				}
+
+				cacheResult(list);
+
+				finderCache.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				finderCache.removeResult(FINDER_PATH_FETCH_BY_SCREENNAME,
-					finderArgs);
+				finderCache.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -785,26 +825,287 @@ public class PurchasePersistenceImpl extends BasePersistenceImpl<Purchase>
 			}
 		}
 
-		if (result instanceof List<?>) {
+		return list;
+	}
+
+	/**
+	 * Returns the first purchase in the ordered set where screenname = &#63;.
+	 *
+	 * @param screenname the screenname
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching purchase
+	 * @throws NoSuchPurchaseException if a matching purchase could not be found
+	 */
+	@Override
+	public Purchase findByscreenname_First(String screenname,
+		OrderByComparator<Purchase> orderByComparator)
+		throws NoSuchPurchaseException {
+		Purchase purchase = fetchByscreenname_First(screenname,
+				orderByComparator);
+
+		if (purchase != null) {
+			return purchase;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("screenname=");
+		msg.append(screenname);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPurchaseException(msg.toString());
+	}
+
+	/**
+	 * Returns the first purchase in the ordered set where screenname = &#63;.
+	 *
+	 * @param screenname the screenname
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching purchase, or <code>null</code> if a matching purchase could not be found
+	 */
+	@Override
+	public Purchase fetchByscreenname_First(String screenname,
+		OrderByComparator<Purchase> orderByComparator) {
+		List<Purchase> list = findByscreenname(screenname, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last purchase in the ordered set where screenname = &#63;.
+	 *
+	 * @param screenname the screenname
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching purchase
+	 * @throws NoSuchPurchaseException if a matching purchase could not be found
+	 */
+	@Override
+	public Purchase findByscreenname_Last(String screenname,
+		OrderByComparator<Purchase> orderByComparator)
+		throws NoSuchPurchaseException {
+		Purchase purchase = fetchByscreenname_Last(screenname, orderByComparator);
+
+		if (purchase != null) {
+			return purchase;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("screenname=");
+		msg.append(screenname);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPurchaseException(msg.toString());
+	}
+
+	/**
+	 * Returns the last purchase in the ordered set where screenname = &#63;.
+	 *
+	 * @param screenname the screenname
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching purchase, or <code>null</code> if a matching purchase could not be found
+	 */
+	@Override
+	public Purchase fetchByscreenname_Last(String screenname,
+		OrderByComparator<Purchase> orderByComparator) {
+		int count = countByscreenname(screenname);
+
+		if (count == 0) {
 			return null;
 		}
+
+		List<Purchase> list = findByscreenname(screenname, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the purchases before and after the current purchase in the ordered set where screenname = &#63;.
+	 *
+	 * @param purchasePK the primary key of the current purchase
+	 * @param screenname the screenname
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next purchase
+	 * @throws NoSuchPurchaseException if a purchase with the primary key could not be found
+	 */
+	@Override
+	public Purchase[] findByscreenname_PrevAndNext(PurchasePK purchasePK,
+		String screenname, OrderByComparator<Purchase> orderByComparator)
+		throws NoSuchPurchaseException {
+		Purchase purchase = findByPrimaryKey(purchasePK);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Purchase[] array = new PurchaseImpl[3];
+
+			array[0] = getByscreenname_PrevAndNext(session, purchase,
+					screenname, orderByComparator, true);
+
+			array[1] = purchase;
+
+			array[2] = getByscreenname_PrevAndNext(session, purchase,
+					screenname, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected Purchase getByscreenname_PrevAndNext(Session session,
+		Purchase purchase, String screenname,
+		OrderByComparator<Purchase> orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(4 +
+					(orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
 		else {
-			return (Purchase)result;
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_PURCHASE_WHERE);
+
+		boolean bindScreenname = false;
+
+		if (screenname == null) {
+			query.append(_FINDER_COLUMN_SCREENNAME_SCREENNAME_1);
+		}
+		else if (screenname.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_SCREENNAME_SCREENNAME_3);
+		}
+		else {
+			bindScreenname = true;
+
+			query.append(_FINDER_COLUMN_SCREENNAME_SCREENNAME_2);
+		}
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(PurchaseModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		if (bindScreenname) {
+			qPos.add(screenname);
+		}
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(purchase);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<Purchase> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
 		}
 	}
 
 	/**
-	 * Removes the purchase where screenname = &#63; from the database.
+	 * Removes all the purchases where screenname = &#63; from the database.
 	 *
 	 * @param screenname the screenname
-	 * @return the purchase that was removed
 	 */
 	@Override
-	public Purchase removeByscreenname(String screenname)
-		throws NoSuchPurchaseException {
-		Purchase purchase = findByscreenname(screenname);
-
-		return remove(purchase);
+	public void removeByscreenname(String screenname) {
+		for (Purchase purchase : findByscreenname(screenname,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(purchase);
+		}
 	}
 
 	/**
@@ -890,9 +1191,6 @@ public class PurchasePersistenceImpl extends BasePersistenceImpl<Purchase>
 		entityCache.putResult(PurchaseModelImpl.ENTITY_CACHE_ENABLED,
 			PurchaseImpl.class, purchase.getPrimaryKey(), purchase);
 
-		finderCache.putResult(FINDER_PATH_FETCH_BY_SCREENNAME,
-			new Object[] { purchase.getScreenname() }, purchase);
-
 		purchase.resetOriginalValues();
 	}
 
@@ -944,8 +1242,6 @@ public class PurchasePersistenceImpl extends BasePersistenceImpl<Purchase>
 
 		finderCache.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		finderCache.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache((PurchaseModelImpl)purchase);
 	}
 
 	@Override
@@ -956,46 +1252,6 @@ public class PurchasePersistenceImpl extends BasePersistenceImpl<Purchase>
 		for (Purchase purchase : purchases) {
 			entityCache.removeResult(PurchaseModelImpl.ENTITY_CACHE_ENABLED,
 				PurchaseImpl.class, purchase.getPrimaryKey());
-
-			clearUniqueFindersCache((PurchaseModelImpl)purchase);
-		}
-	}
-
-	protected void cacheUniqueFindersCache(
-		PurchaseModelImpl purchaseModelImpl, boolean isNew) {
-		if (isNew) {
-			Object[] args = new Object[] { purchaseModelImpl.getScreenname() };
-
-			finderCache.putResult(FINDER_PATH_COUNT_BY_SCREENNAME, args,
-				Long.valueOf(1));
-			finderCache.putResult(FINDER_PATH_FETCH_BY_SCREENNAME, args,
-				purchaseModelImpl);
-		}
-		else {
-			if ((purchaseModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_SCREENNAME.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] { purchaseModelImpl.getScreenname() };
-
-				finderCache.putResult(FINDER_PATH_COUNT_BY_SCREENNAME, args,
-					Long.valueOf(1));
-				finderCache.putResult(FINDER_PATH_FETCH_BY_SCREENNAME, args,
-					purchaseModelImpl);
-			}
-		}
-	}
-
-	protected void clearUniqueFindersCache(PurchaseModelImpl purchaseModelImpl) {
-		Object[] args = new Object[] { purchaseModelImpl.getScreenname() };
-
-		finderCache.removeResult(FINDER_PATH_COUNT_BY_SCREENNAME, args);
-		finderCache.removeResult(FINDER_PATH_FETCH_BY_SCREENNAME, args);
-
-		if ((purchaseModelImpl.getColumnBitmask() &
-				FINDER_PATH_FETCH_BY_SCREENNAME.getColumnBitmask()) != 0) {
-			args = new Object[] { purchaseModelImpl.getOriginalScreenname() };
-
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_SCREENNAME, args);
-			finderCache.removeResult(FINDER_PATH_FETCH_BY_SCREENNAME, args);
 		}
 	}
 
@@ -1160,13 +1416,27 @@ public class PurchasePersistenceImpl extends BasePersistenceImpl<Purchase>
 				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
 					args);
 			}
+
+			if ((purchaseModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SCREENNAME.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						purchaseModelImpl.getOriginalScreenname()
+					};
+
+				finderCache.removeResult(FINDER_PATH_COUNT_BY_SCREENNAME, args);
+				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SCREENNAME,
+					args);
+
+				args = new Object[] { purchaseModelImpl.getScreenname() };
+
+				finderCache.removeResult(FINDER_PATH_COUNT_BY_SCREENNAME, args);
+				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SCREENNAME,
+					args);
+			}
 		}
 
 		entityCache.putResult(PurchaseModelImpl.ENTITY_CACHE_ENABLED,
 			PurchaseImpl.class, purchase.getPrimaryKey(), purchase, false);
-
-		clearUniqueFindersCache(purchaseModelImpl);
-		cacheUniqueFindersCache(purchaseModelImpl, isNew);
 
 		purchase.resetOriginalValues();
 

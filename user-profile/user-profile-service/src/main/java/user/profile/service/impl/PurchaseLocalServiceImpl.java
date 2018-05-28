@@ -14,8 +14,10 @@
 
 package user.profile.service.impl;
 
-import aQute.bnd.annotation.ProviderType;
+import java.util.List;
 
+import aQute.bnd.annotation.ProviderType;
+import user.profile.model.Purchase;
 import user.profile.service.base.PurchaseLocalServiceBaseImpl;
 
 /**
@@ -39,4 +41,8 @@ public class PurchaseLocalServiceImpl extends PurchaseLocalServiceBaseImpl {
 	 *
 	 * Never reference this class directly. Always use {@link user.profile.service.PurchaseLocalServiceUtil} to access the purchase local service.
 	 */
+    
+    public List<Purchase> findByscreenname(String screenname) {
+        return getPurchasePersistence().findByscreenname(screenname);
+    }
 }
