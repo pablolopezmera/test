@@ -128,6 +128,11 @@ public class PurchaseLocalServiceUtil {
 				   .dynamicQuery(dynamicQuery, start, end, orderByComparator);
 	}
 
+	public static java.util.List<user.profile.model.Purchase> findByscreenname(
+		java.lang.String screenname) {
+		return getService().findByscreenname(screenname);
+	}
+
 	/**
 	* Returns a range of all the purchases.
 	*

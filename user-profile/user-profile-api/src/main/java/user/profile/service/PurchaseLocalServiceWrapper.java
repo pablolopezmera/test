@@ -128,6 +128,12 @@ public class PurchaseLocalServiceWrapper implements PurchaseLocalService,
 			orderByComparator);
 	}
 
+	@Override
+	public java.util.List<user.profile.model.Purchase> findByscreenname(
+		java.lang.String screenname) {
+		return _purchaseLocalService.findByscreenname(screenname);
+	}
+
 	/**
 	* Returns a range of all the purchases.
 	*

@@ -176,41 +176,130 @@ public interface PurchasePersistence extends BasePersistence<Purchase> {
 	public int countByUuid(java.lang.String uuid);
 
 	/**
-	* Returns the purchase where screenname = &#63; or throws a {@link NoSuchPurchaseException} if it could not be found.
+	* Returns all the purchases where screenname = &#63;.
 	*
 	* @param screenname the screenname
-	* @return the matching purchase
-	* @throws NoSuchPurchaseException if a matching purchase could not be found
+	* @return the matching purchases
 	*/
-	public Purchase findByscreenname(java.lang.String screenname)
-		throws NoSuchPurchaseException;
+	public java.util.List<Purchase> findByscreenname(
+		java.lang.String screenname);
 
 	/**
-	* Returns the purchase where screenname = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	* Returns a range of all the purchases where screenname = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link PurchaseModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
 	*
 	* @param screenname the screenname
-	* @return the matching purchase, or <code>null</code> if a matching purchase could not be found
+	* @param start the lower bound of the range of purchases
+	* @param end the upper bound of the range of purchases (not inclusive)
+	* @return the range of matching purchases
 	*/
-	public Purchase fetchByscreenname(java.lang.String screenname);
+	public java.util.List<Purchase> findByscreenname(
+		java.lang.String screenname, int start, int end);
 
 	/**
-	* Returns the purchase where screenname = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	* Returns an ordered range of all the purchases where screenname = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link PurchaseModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
 	*
 	* @param screenname the screenname
+	* @param start the lower bound of the range of purchases
+	* @param end the upper bound of the range of purchases (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching purchases
+	*/
+	public java.util.List<Purchase> findByscreenname(
+		java.lang.String screenname, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<Purchase> orderByComparator);
+
+	/**
+	* Returns an ordered range of all the purchases where screenname = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link PurchaseModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param screenname the screenname
+	* @param start the lower bound of the range of purchases
+	* @param end the upper bound of the range of purchases (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	* @param retrieveFromCache whether to retrieve from the finder cache
-	* @return the matching purchase, or <code>null</code> if a matching purchase could not be found
+	* @return the ordered range of matching purchases
 	*/
-	public Purchase fetchByscreenname(java.lang.String screenname,
+	public java.util.List<Purchase> findByscreenname(
+		java.lang.String screenname, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<Purchase> orderByComparator,
 		boolean retrieveFromCache);
 
 	/**
-	* Removes the purchase where screenname = &#63; from the database.
+	* Returns the first purchase in the ordered set where screenname = &#63;.
 	*
 	* @param screenname the screenname
-	* @return the purchase that was removed
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching purchase
+	* @throws NoSuchPurchaseException if a matching purchase could not be found
 	*/
-	public Purchase removeByscreenname(java.lang.String screenname)
+	public Purchase findByscreenname_First(java.lang.String screenname,
+		com.liferay.portal.kernel.util.OrderByComparator<Purchase> orderByComparator)
 		throws NoSuchPurchaseException;
+
+	/**
+	* Returns the first purchase in the ordered set where screenname = &#63;.
+	*
+	* @param screenname the screenname
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching purchase, or <code>null</code> if a matching purchase could not be found
+	*/
+	public Purchase fetchByscreenname_First(java.lang.String screenname,
+		com.liferay.portal.kernel.util.OrderByComparator<Purchase> orderByComparator);
+
+	/**
+	* Returns the last purchase in the ordered set where screenname = &#63;.
+	*
+	* @param screenname the screenname
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching purchase
+	* @throws NoSuchPurchaseException if a matching purchase could not be found
+	*/
+	public Purchase findByscreenname_Last(java.lang.String screenname,
+		com.liferay.portal.kernel.util.OrderByComparator<Purchase> orderByComparator)
+		throws NoSuchPurchaseException;
+
+	/**
+	* Returns the last purchase in the ordered set where screenname = &#63;.
+	*
+	* @param screenname the screenname
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching purchase, or <code>null</code> if a matching purchase could not be found
+	*/
+	public Purchase fetchByscreenname_Last(java.lang.String screenname,
+		com.liferay.portal.kernel.util.OrderByComparator<Purchase> orderByComparator);
+
+	/**
+	* Returns the purchases before and after the current purchase in the ordered set where screenname = &#63;.
+	*
+	* @param purchasePK the primary key of the current purchase
+	* @param screenname the screenname
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next purchase
+	* @throws NoSuchPurchaseException if a purchase with the primary key could not be found
+	*/
+	public Purchase[] findByscreenname_PrevAndNext(
+		user.profile.service.persistence.PurchasePK purchasePK,
+		java.lang.String screenname,
+		com.liferay.portal.kernel.util.OrderByComparator<Purchase> orderByComparator)
+		throws NoSuchPurchaseException;
+
+	/**
+	* Removes all the purchases where screenname = &#63; from the database.
+	*
+	* @param screenname the screenname
+	*/
+	public void removeByscreenname(java.lang.String screenname);
 
 	/**
 	* Returns the number of purchases where screenname = &#63;.

@@ -128,6 +128,8 @@ public interface PurchaseLocalService extends BaseLocalService,
 	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
 		int end, OrderByComparator<T> orderByComparator);
 
+	public List<Purchase> findByscreenname(java.lang.String screenname);
+
 	/**
 	* Returns a range of all the purchases.
 	*
