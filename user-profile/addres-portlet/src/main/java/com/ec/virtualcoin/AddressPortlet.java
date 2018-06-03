@@ -86,6 +86,7 @@ public class AddressPortlet extends MVCPortlet {
             renderRequest.setAttribute("prov", up.getProv());
             renderRequest.setAttribute("street1", up.getStreet1());
             renderRequest.setAttribute("street2", up.getStreet2());
+            renderRequest.setAttribute("phoneNumber", up.getPhoneNumber());
         } catch (PortalException e) {
             e.printStackTrace();
         }
@@ -99,13 +100,6 @@ public class AddressPortlet extends MVCPortlet {
             throws Exception {
         _logger.info("Guardar la direccion:");
         UserProfile up = sessionManager.getUserProfile(request);
-        _logger.info(request.getParameter("city"));
-        _logger.info(request.getParameter("country"));
-        _logger.info(request.getParameter("homeNumber"));
-        _logger.info(request.getParameter("postalCode"));
-        _logger.info(request.getParameter("prov"));
-        _logger.info(request.getParameter("street1"));
-        _logger.info(request.getParameter("street2"));
         up.setCity(request.getParameter("city"));
         up.setCountry(request.getParameter("country"));
         up.setHomeNumber(request.getParameter("homeNumber"));
@@ -113,6 +107,7 @@ public class AddressPortlet extends MVCPortlet {
         up.setProv(request.getParameter("prov"));
         up.setStreet1(request.getParameter("street1"));
         up.setStreet2(request.getParameter("street2"));
+        up.setPhoneNumber(request.getParameter("phoneNumber"));
         up.setApproved(Boolean.FALSE);
         createOrUpdate(request);
         sendNotification(request);
