@@ -1,8 +1,20 @@
 <%@ include file="/init.jsp" %>
 
+<script type="text/javascript">
+<!--
+var portletNamespace = '<portlet:namespace/>';
+//-->
+</script>
+
+<%
+    String pid = (String) renderRequest.getAttribute("pid");
+%>
+
 <portlet:actionURL name="makePayment" var="makePayment" />
 
 <aui:form name="confirmForm" id="confirmForm" action="<%= makePayment %>" method="post">
+
+    <aui:input type="hidden" name="pid" value="${pid}" />
 
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/assets/css/styles.css">
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/assets/css/demo.css">
@@ -13,43 +25,47 @@
                 <h1>Confirm Purchase</h1>
             </div>
             <div class="payment">
-                <form>
+
                     <div class="form-group owner">
-                        <label for="owner">Owner</label>
-                        <input type="text" class="form-control" id="owner">
+                        <aui:input type="text" class="form-control" id="owner" name="owner">
+                            <aui:validator name="required" />
+                            <aui:validator name="minLength">5</aui:validator>
+                        </aui:input>
                     </div>
                     <div class="form-group CVV">
-                        <label for="cvv">CVV</label>
-                        <input type="text" class="form-control" id="cvv">
+                        <aui:input type="text" class="form-control" name="cvv" id="cvv">
+                            <aui:validator name="required" />
+                            <aui:validator name="number" />
+                            <aui:validator name="minLength">3</aui:validator>
+                            <aui:validator name="maxLength">4</aui:validator>
+                        </aui:input>
                     </div>
                     <div class="form-group" id="card-number-field">
-                        <label for="cardNumber">Card Number</label>
-                        <input type="text" class="form-control" id="cardNumber">
+                        <aui:input type="text" class="form-control" name="cardNumber" id="cardNumber">
+                            <aui:validator name="required" />
+                        </aui:input>
                     </div>
                     <div class="form-group" id="expiration-date">
-                        <label>Expiration Date</label>
-                        <select>
-                            <option value="01">January</option>
-                            <option value="02">February </option>
-                            <option value="03">March</option>
-                            <option value="04">April</option>
-                            <option value="05">May</option>
-                            <option value="06">June</option>
-                            <option value="07">July</option>
-                            <option value="08">August</option>
-                            <option value="09">September</option>
-                            <option value="10">October</option>
-                            <option value="11">November</option>
-                            <option value="12">December</option>
-                        </select>
-                        <select>
-                            <option value="16"> 2016</option>
-                            <option value="17"> 2017</option>
-                            <option value="18"> 2018</option>
-                            <option value="19"> 2019</option>
-                            <option value="20"> 2020</option>
-                            <option value="21"> 2021</option>
-                        </select>
+                         <aui:select name="monthExpiration" label="expiration.date">
+                            <aui:option value="01">January</aui:option>
+                            <aui:option value="02">February </aui:option>
+                            <aui:option value="03">March</aui:option>
+                            <aui:option value="04">April</aui:option>
+                            <aui:option value="05">May</aui:option>
+                            <aui:option value="06">June</aui:option>
+                            <aui:option value="07">July</aui:option>
+                            <aui:option value="08">August</aui:option>
+                            <aui:option value="09">September</aui:option>
+                            <aui:option value="10">October</aui:option>
+                            <aui:option value="11">November</aui:option>
+                            <aui:option value="12">December</aui:option>
+                        </aui:select>
+                         <aui:select name="yearExpiration" label="expiration.date">
+                            <aui:option value="2018">2018</aui:option>
+                            <aui:option value="2019">2019</aui:option>
+                            <aui:option value="2020">2020</aui:option>
+                            <aui:option value="2021">2021</aui:option>
+                        </aui:select>
                     </div>
                     <div class="form-group" id="credit_cards">
                         <img src="<%=request.getContextPath()%>/assets/images/visa.jpg" id="visa">
@@ -62,7 +78,7 @@
                         <button type="submit" class="btn btn-default" id="confirm-purchase">Confirm</button>
                     </div>
  -->
-                </form>
+
             </div>
         </div>
 
