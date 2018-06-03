@@ -28,5 +28,6 @@ create table UserProfile_UserProfile (
 	street2 VARCHAR(30) null,
 	homeNumber VARCHAR(10) null,
 	postalCode VARCHAR(10) null,
-	approved BOOLEAN
+	approved BOOLEAN,
+	phoneNumber VARCHAR(75) null
 );

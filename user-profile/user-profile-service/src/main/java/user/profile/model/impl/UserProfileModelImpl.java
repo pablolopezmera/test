@@ -77,7 +77,8 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 			{ "street2", Types.VARCHAR },
 			{ "homeNumber", Types.VARCHAR },
 			{ "postalCode", Types.VARCHAR },
-			{ "approved", Types.BOOLEAN }
+			{ "approved", Types.BOOLEAN },
+			{ "phoneNumber", Types.VARCHAR }
 		};
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP = new HashMap<String, Integer>();
 
@@ -98,9 +99,10 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 		TABLE_COLUMNS_MAP.put("homeNumber", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("postalCode", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("approved", Types.BOOLEAN);
+		TABLE_COLUMNS_MAP.put("phoneNumber", Types.VARCHAR);
 	}
 
-	public static final String TABLE_SQL_CREATE = "create table UserProfile_UserProfile (uuid_ VARCHAR(75) null,userId VARCHAR(75) not null primary key,anversoId VARCHAR(255) null,reversoId VARCHAR(255) null,selfie VARCHAR(255) null,proofAddress VARCHAR(255) null,idType VARCHAR(10) null,idNumber VARCHAR(20) null,country VARCHAR(25) null,prov VARCHAR(75) null,city VARCHAR(25) null,street1 VARCHAR(30) null,street2 VARCHAR(30) null,homeNumber VARCHAR(10) null,postalCode VARCHAR(10) null,approved BOOLEAN)";
+	public static final String TABLE_SQL_CREATE = "create table UserProfile_UserProfile (uuid_ VARCHAR(75) null,userId VARCHAR(75) not null primary key,anversoId VARCHAR(255) null,reversoId VARCHAR(255) null,selfie VARCHAR(255) null,proofAddress VARCHAR(255) null,idType VARCHAR(10) null,idNumber VARCHAR(20) null,country VARCHAR(25) null,prov VARCHAR(75) null,city VARCHAR(25) null,street1 VARCHAR(30) null,street2 VARCHAR(30) null,homeNumber VARCHAR(10) null,postalCode VARCHAR(10) null,approved BOOLEAN,phoneNumber VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table UserProfile_UserProfile";
 	public static final String ORDER_BY_JPQL = " ORDER BY userProfile.userId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY UserProfile_UserProfile.userId ASC";
@@ -148,6 +150,7 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 		model.setHomeNumber(soapModel.getHomeNumber());
 		model.setPostalCode(soapModel.getPostalCode());
 		model.setApproved(soapModel.getApproved());
+		model.setPhoneNumber(soapModel.getPhoneNumber());
 
 		return model;
 	}
@@ -228,6 +231,7 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 		attributes.put("homeNumber", getHomeNumber());
 		attributes.put("postalCode", getPostalCode());
 		attributes.put("approved", getApproved());
+		attributes.put("phoneNumber", getPhoneNumber());
 
 		attributes.put("entityCacheEnabled", isEntityCacheEnabled());
 		attributes.put("finderCacheEnabled", isFinderCacheEnabled());
@@ -331,6 +335,12 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 
 		if (approved != null) {
 			setApproved(approved);
+		}
+
+		String phoneNumber = (String)attributes.get("phoneNumber");
+
+		if (phoneNumber != null) {
+			setPhoneNumber(phoneNumber);
 		}
 	}
 
@@ -603,6 +613,22 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 		_approved = approved;
 	}
 
+	@JSON
+	@Override
+	public String getPhoneNumber() {
+		if (_phoneNumber == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _phoneNumber;
+		}
+	}
+
+	@Override
+	public void setPhoneNumber(String phoneNumber) {
+		_phoneNumber = phoneNumber;
+	}
+
 	public long getColumnBitmask() {
 		return _columnBitmask;
 	}
@@ -637,6 +663,7 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 		userProfileImpl.setHomeNumber(getHomeNumber());
 		userProfileImpl.setPostalCode(getPostalCode());
 		userProfileImpl.setApproved(getApproved());
+		userProfileImpl.setPhoneNumber(getPhoneNumber());
 
 		userProfileImpl.resetOriginalValues();
 
@@ -824,12 +851,20 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 
 		userProfileCacheModel.approved = getApproved();
 
+		userProfileCacheModel.phoneNumber = getPhoneNumber();
+
+		String phoneNumber = userProfileCacheModel.phoneNumber;
+
+		if ((phoneNumber != null) && (phoneNumber.length() == 0)) {
+			userProfileCacheModel.phoneNumber = null;
+		}
+
 		return userProfileCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(33);
+		StringBundler sb = new StringBundler(35);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -863,6 +898,8 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 		sb.append(getPostalCode());
 		sb.append(", approved=");
 		sb.append(getApproved());
+		sb.append(", phoneNumber=");
+		sb.append(getPhoneNumber());
 		sb.append("}");
 
 		return sb.toString();
@@ -870,7 +907,7 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(52);
+		StringBundler sb = new StringBundler(55);
 
 		sb.append("<model><model-name>");
 		sb.append("user.profile.model.UserProfile");
@@ -940,6 +977,10 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 			"<column><column-name>approved</column-name><column-value><![CDATA[");
 		sb.append(getApproved());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>phoneNumber</column-name><column-value><![CDATA[");
+		sb.append(getPhoneNumber());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -968,6 +1009,7 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 	private String _homeNumber;
 	private String _postalCode;
 	private Boolean _approved;
+	private String _phoneNumber;
 	private long _columnBitmask;
 	private UserProfile _escapedModel;
 }

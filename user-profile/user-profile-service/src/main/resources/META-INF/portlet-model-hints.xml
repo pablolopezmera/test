@@ -54,5 +54,6 @@
 			<hint name="max-length">10</hint>
 		</field>
 		<field name="approved" type="Boolean" />
+		<field name="phoneNumber" type="String" />
 	</model>
 </model-hints>
