@@ -40,7 +40,7 @@ public class MyOrdersPortlet extends MVCPortlet {
         String screenName;
         try {
             screenName = PortalUtil.getUser(renderRequest).getScreenName();
-            List<PurchaseDto> orders = loadUserProfiles(screenName);
+            List<PurchaseDto> orders = loadUserOrders(screenName);
             Escaper escaper = new Escaper(ordersToJsonString(orders).toJSONString());
             String unescaped = escaper.unescape();
             _logger.info(unescaped);
@@ -75,7 +75,7 @@ public class MyOrdersPortlet extends MVCPortlet {
         super.doView(renderRequest, renderResponse);
     }
 
-    private List<PurchaseDto> loadUserProfiles(String screenName) {
+    private List<PurchaseDto> loadUserOrders(String screenName) {
         List<PurchaseDto> userList = new ArrayList<>();
         List<Purchase> orders = PurchaseLocalServiceUtil.findByscreenname(screenName);
         for (Purchase p : orders) {
