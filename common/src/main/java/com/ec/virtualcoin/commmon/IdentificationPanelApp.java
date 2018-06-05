@@ -22,12 +22,12 @@ public class IdentificationPanelApp extends BasePanelApp {
 
     @Override
     public String getPortletId() {
-        return "identification-portlet";
+        return "identification.portlet";
     }
 
     @Override
     @Reference(
-        target = "(javax.portlet.name=identification-portlet)",
+        target = "(javax.portlet.name=identification.portlet)",
         unbind = "-"
     )
     public void setPortlet(Portlet portlet) {
