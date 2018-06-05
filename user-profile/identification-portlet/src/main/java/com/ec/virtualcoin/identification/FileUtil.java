@@ -30,6 +30,7 @@ public class FileUtil {
         builder.append(imageType.name());
         builder.append(".");
         builder.append(df.format(dateUtil.getNow()));
+        builder.append(".");
         builder.append(extension);
         return builder.toString();
     }
@@ -43,7 +44,7 @@ public class FileUtil {
     
     public String getFileExtension(String source) {
         int lastIndexOf = source.lastIndexOf(".");
-        return lastIndexOf > 0?source.substring(lastIndexOf):"";
+        return lastIndexOf > 0?source.substring(lastIndexOf + 1):"";
     }
 
     public void createPendingFolders(String fullPath) {

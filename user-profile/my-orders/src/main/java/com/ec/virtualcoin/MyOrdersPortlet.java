@@ -23,11 +23,24 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import user.profile.model.Purchase;
 import user.profile.service.PurchaseLocalServiceUtil;
 
-@Component(immediate = true, property = { "com.liferay.portlet.display-category=category.sample",
-        "com.liferay.portlet.instanceable=true", "javax.portlet.display-name=my-orders Portlet",
-        "javax.portlet.init-param.template-path=/", "javax.portlet.init-param.view-template=/view.jsp",
-        "javax.portlet.resource-bundle=content.Language",
-        "javax.portlet.security-role-ref=power-user,user" }, service = Portlet.class)
+@Component(
+        immediate = true,
+        property = {
+            "com.liferay.portlet.add-default-resource=true",
+            "com.liferay.portlet.css-class-wrapper=portlet-controlpanel",
+            "com.liferay.portlet.display-category=category.hidden",
+            "com.liferay.portlet.preferences-owned-by-group=true",
+            "com.liferay.portlet.render-weight=100",
+            "javax.portlet.display-name=My Orders",
+            "javax.portlet.expiration-cache=0",
+            "javax.portlet.init-param.view-template=/view.jsp",
+            "javax.portlet.name=my_orders",
+            "javax.portlet.resource-bundle=content.Language",
+            "javax.portlet.security-role-ref=administrator",
+            "javax.portlet.supports.mime-type=text/html"
+        },
+        service = Portlet.class
+    )
 public class MyOrdersPortlet extends MVCPortlet {
 
     private static Logger _logger = LoggerFactory.getLogger(MyOrdersPortlet.class.getName());

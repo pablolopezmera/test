@@ -4,8 +4,6 @@
 
 <portlet:actionURL name="upload" var="uploadFileURL"></portlet:actionURL>
 
-<orm action="<%= uploadFileURL %>" enctype="multipart/form-data" />
-
 <aui:form name="myForm" enctype="multipart/form-data">
 
     <aui:input type="file" name="fileupload" id="fileupload" />
