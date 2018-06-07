@@ -73,6 +73,7 @@ public class UserProfileWrapper implements UserProfile,
 		attributes.put("homeNumber", getHomeNumber());
 		attributes.put("postalCode", getPostalCode());
 		attributes.put("approved", getApproved());
+		attributes.put("phoneNumber", getPhoneNumber());
 
 		return attributes;
 	}
@@ -173,6 +174,12 @@ public class UserProfileWrapper implements UserProfile,
 
 		if (approved != null) {
 			setApproved(approved);
+		}
+
+		String phoneNumber = (String)attributes.get("phoneNumber");
+
+		if (phoneNumber != null) {
+			setPhoneNumber(phoneNumber);
 		}
 	}
 
@@ -289,6 +296,16 @@ public class UserProfileWrapper implements UserProfile,
 	@Override
 	public java.lang.String getIdType() {
 		return _userProfile.getIdType();
+	}
+
+	/**
+	* Returns the phone number of this user profile.
+	*
+	* @return the phone number of this user profile
+	*/
+	@Override
+	public java.lang.String getPhoneNumber() {
+		return _userProfile.getPhoneNumber();
 	}
 
 	/**
@@ -510,6 +527,16 @@ public class UserProfileWrapper implements UserProfile,
 	@Override
 	public void setNew(boolean n) {
 		_userProfile.setNew(n);
+	}
+
+	/**
+	* Sets the phone number of this user profile.
+	*
+	* @param phoneNumber the phone number of this user profile
+	*/
+	@Override
+	public void setPhoneNumber(java.lang.String phoneNumber) {
+		_userProfile.setPhoneNumber(phoneNumber);
 	}
 
 	/**

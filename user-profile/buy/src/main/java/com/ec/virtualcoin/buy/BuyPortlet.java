@@ -24,11 +24,11 @@ import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ec.virtualcoin.buy.payment.FormatUtil;
 import com.ec.virtualcoin.buy.payment.client.AuthorizeCaptureRequest;
 import com.ec.virtualcoin.buy.payment.client.AuthorizeCaptureTransactionRequest;
 import com.ec.virtualcoin.buy.payment.client.EcorePayClient;
 import com.ec.virtualcoin.buy.payment.client.RequestType;
-import com.ec.virtualcoin.buy.payment.client.ShipTo;
 import com.ec.virtualcoin.buy.payment.jaxb.Response;
 import com.liferay.mail.kernel.model.MailMessage;
 import com.liferay.mail.kernel.service.MailServiceUtil;
@@ -36,6 +36,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -119,56 +120,70 @@ public class BuyPortlet extends MVCPortlet {
         sendMailConfirmationRequest(actionRequest, purchase);
         _logger.info("redireccionaaaaaaaaaaaaaa");
         response.setRenderParameter("jspPage","/mail_confirmation_sent.jsp"); 
-//        actionRequest.setAttribute("status", "MAIL_CONFIRMATION_SENT");
     }
 
     public void confirmOrder(ActionRequest actionRequest, ActionResponse response) throws Exception {
-        User user = (User) actionRequest.getAttribute(WebKeys.USER);
         _logger.info("Confirm order:");
         _logger.info(actionRequest.getParameter("pid"));
-        PurchasePK purchasePK = new PurchasePK();
-        purchasePK.setScreenname(user.getScreenName());
-        purchasePK.setHash(actionRequest.getParameter("pid"));
-        Purchase purchase = PurchaseLocalServiceUtil.fetchPurchase(purchasePK );
+        Purchase purchase = loadPurchase(actionRequest);
         purchase.setStatus(Status.CONFIRMED.name());
         PurchaseLocalServiceUtil.updatePurchase(purchase);
         _logger.info("orden confirmada");
+        actionRequest.setAttribute("pid", actionRequest.getParameter("pid"));
         response.setRenderParameter("jspPage","/payment.jsp"); 
+    }
+
+    private Purchase loadPurchase(ActionRequest actionRequest) {
+        User user = (User) actionRequest.getAttribute(WebKeys.USER);
+        String processId = actionRequest.getParameter("pid");
+        PurchasePK purchasePK = new PurchasePK();
+        purchasePK.setScreenname(user.getScreenName());
+        purchasePK.setHash(processId);
+        Purchase purchase = PurchaseLocalServiceUtil.fetchPurchase(purchasePK );
+        return purchase;
     }
 
     public void makePayment(ActionRequest actionRequest, ActionResponse response) throws Exception {
         _logger.info("Va a realizar el pago:");
+        _logger.info(actionRequest.getParameter("pid"));
+        _logger.info(actionRequest.getParameter("yearExpiration"));
+        String yearExpiration = actionRequest.getParameter("yearExpiration");
+        String monthExpiration = actionRequest.getParameter("monthExpiration");
+        String cvv = actionRequest.getParameter("cvv");
+        String cardNumber = actionRequest.getParameter("cardNumber");
+        cardNumber = cardNumber.replaceAll(" ", "");
+        Purchase purchase = loadPurchase(actionRequest);
+        User user = (User) actionRequest.getAttribute(WebKeys.USER);
+        UserProfile up = UserProfileLocalServiceUtil.fetchUserProfile(user.getScreenName());
         EcorePayClient cpc = new EcorePayClient();
-        ShipTo shipTo = new ShipTo.Builder()
-            .FirstName("Jane")
-            .LastName("Doe")
-            .Address("345 Boring Road")
-            .City("Dullsville")
-            .State("CA")
-            .PostCode((short) 12345)
-            .Country("US").build();
 
+        _logger.info(user.getFirstName());
+        _logger.info(user.getLastName());
+        _logger.info(up.getPostalCode());
         AuthorizeCaptureTransactionRequest transaction = new AuthorizeCaptureTransactionRequest.Builder()
-                .Reference("X53222389-20")
-                .Amount(2.40f)
-                .Currency("USD")
-                .Email("john_doe@example.com")
-                .IPAddress("192.168.1.1")
-                .Phone("+1 206 555 1212")
-                .FirstName("John")
-                .LastName("Doe")
-                .DOB(19810530)
-                .SSN((short) 3231)
-                .Address("123 Boring Road")
-                .City("Dullsville")
-                .State("CA")
-                .PostCode((short) 12345)
-                .Country("US")
-                .CardNumber(4111111111111111l)
-                .CardExpMonth((byte) 06)
-                .CardExpYear((short) 2018)
-                .CardCVV((byte) 123)
-                .ShipTo(shipTo).build();
+                .Reference(purchase.getScreenname().concat(purchase.getPrimaryKey().getHash()))
+                .Amount(Float.valueOf(purchase.getValue_from()))
+                .Currency(purchase.getCurr_from())
+                .Email(user.getEmailAddress())
+                .IPAddress(getRemoteAddress(actionRequest))
+                .Phone(up.getPhoneNumber())
+                .FirstName(user.getFirstName())
+                .LastName(user.getLastName())
+                .Address(up.getStreet1().concat(" - ").concat(up.getStreet2()))
+                .City(up.getCity())
+                .State(up.getProv())
+                .PostCode(Short.valueOf(up.getPostalCode()))
+                .Country(up.getCountry())
+                .CardNumber(Long.valueOf(cardNumber))
+                .CardExpMonth(Byte.valueOf(monthExpiration))
+                .CardExpYear(Short.valueOf(yearExpiration))
+                .CardCVV(Byte.valueOf(cvv))
+                .build();
+        
+        if (user.getBirthday() != null) {
+            FormatUtil formatUtil = new FormatUtil();
+            transaction.setDOB(formatUtil.formatDate(user.getBirthday()));
+        }
 
         AuthorizeCaptureRequest acr = new AuthorizeCaptureRequest(RequestType.AuthorizeCapture, 97709852, "TyawONMkSoidmMBV", transaction);
         
@@ -179,12 +194,17 @@ public class BuyPortlet extends MVCPortlet {
             actionRequest.setAttribute("success", true);
             _logger.info("pago exitoso, manda true");
         } else {
+            SessionErrors.add(actionRequest, "error-key");
             actionRequest.setAttribute("success", false);
             actionRequest.setAttribute("errorMessage", authorizeResponse.getDescription());
             _logger.info("pago errado, manda false");
         }
 
         response.setRenderParameter("jspPage","/payment_result.jsp"); 
+    }
+
+    private String getRemoteAddress(ActionRequest actionRequest) {
+        return PortalUtil.getHttpServletRequest(actionRequest).getRemoteAddr();
     }
 
     private Purchase registerPurchaseOrder(ActionRequest actionRequest) {
@@ -230,7 +250,7 @@ public class BuyPortlet extends MVCPortlet {
     }
 
     private boolean isCountryAllowed(String country) {
-        return "Ecuador".equals(country);
+        return "EC".equals(country);
     }
 
     private void sendMailConfirmationRequest(ActionRequest actionRequest, Purchase purchase) {

@@ -1203,6 +1203,7 @@ public class UserProfilePersistenceImpl extends BasePersistenceImpl<UserProfile>
 		userProfileImpl.setHomeNumber(userProfile.getHomeNumber());
 		userProfileImpl.setPostalCode(userProfile.getPostalCode());
 		userProfileImpl.setApproved(userProfile.getApproved());
+		userProfileImpl.setPhoneNumber(userProfile.getPhoneNumber());
 
 		return userProfileImpl;
 	}

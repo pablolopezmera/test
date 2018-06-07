@@ -208,6 +208,10 @@ public class AuthorizeCaptureTransactionRequest {
         return DOB;
     }
 
+    public void setDOB(int dob) {
+        DOB = dob;
+    }
+
     public short getSSN() {
         return SSN;
     }

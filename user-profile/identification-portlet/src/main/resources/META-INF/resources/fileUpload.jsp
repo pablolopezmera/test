@@ -3,9 +3,9 @@
 <portlet:defineObjects />
 
 <portlet:actionURL name="upload" var="uploadFileURL"></portlet:actionURL>
- 
-<aui:form action="<%= uploadFileURL %>" enctype="multipart/form-data" method="post">
 
+<aui:form name="myForm" enctype="multipart/form-data">
+ 
     <aui:input type="file" name="fileupload" id="fileupload" />
     
     <aui:button name="Save" value="upload.file" type="submit" />
@@ -22,15 +22,20 @@
  
 	<aui:script use="aui-base,aui-io-request">
 	    A.one('#<portlet:namespace/>Save').on('click', function(event) {
+	        console.log('subir imagen .....');
+            event.preventDefault();
 	        var A = AUI();
-	        var url = '<%=uploadFileURL.toString()%>';
+            var url = '<%=uploadFileURL%>';
+            var myForm = A.one("#<portlet:namespace/>myForm");
+            var ajaxURL = "<portlet:resourceURL id='upload'></portlet:resourceURL>";
 	        A.io.request(
 	            url,
 	            {
 	                method: 'POST',
-	                form: {id: '<portlet:namespace/>uploadFile'},
+	                form: {id: myForm, upload: true},
 	                on: {
-	                    success: function() {
+	                    complete: function() {
+                           console.log('refrescar y cerrar');
 	                        Liferay.Util.getOpener().refreshPortlet();
 	                        Liferay.Util.getOpener().closePopup();
 	                    }

@@ -118,16 +118,18 @@ public class EcorePayClient {
         
         ShipTo shipTo = transactionRequest.getShipTo();
         
-        com.ec.virtualcoin.buy.payment.jaxb.Request.Transaction.ShipTo st = new com.ec.virtualcoin.buy.payment.jaxb.Request.Transaction.ShipTo();
-                st.setAddress(shipTo.getAddress());
-                st.setCity(shipTo.getCity());
-                st.setCountry(shipTo.getCountry());
-                st.setFirstName(shipTo.getFirstName());
-                st.setLastName(shipTo.getLastName());
-                st.setPostCode(shipTo.getPostCode());
-                st.setState(shipTo.getState());
+        if (shipTo != null) {
+            com.ec.virtualcoin.buy.payment.jaxb.Request.Transaction.ShipTo st = new com.ec.virtualcoin.buy.payment.jaxb.Request.Transaction.ShipTo();
+            st.setAddress(shipTo.getAddress());
+            st.setCity(shipTo.getCity());
+            st.setCountry(shipTo.getCountry());
+            st.setFirstName(shipTo.getFirstName());
+            st.setLastName(shipTo.getLastName());
+            st.setPostCode(shipTo.getPostCode());
+            st.setState(shipTo.getState());
+            transaction.setShipTo(st);
+        }
         
-        transaction.setShipTo(st);
         transaction.setSSN(transactionRequest.getSSN());
         transaction.setState(transactionRequest.getState());
         

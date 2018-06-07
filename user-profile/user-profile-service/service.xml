@@ -26,6 +26,7 @@
         <column name="homeNumber" type="String" />
         <column name="postalCode" type="String" />
         <column name="approved" type="Boolean" />
+        <column name="phoneNumber" type="String" />
 
         <!-- Finder methods -->
 

@@ -33,13 +33,26 @@ import user.profile.service.UserProfileLocalServiceUtil;
 @Component(
 	immediate = true,
 	property = {
-		"com.liferay.portlet.display-category=category.sample",
-		"com.liferay.portlet.instanceable=true",
-		"javax.portlet.display-name=identification-portlet Portlet",
-		"javax.portlet.init-param.template-path=/",
-		"javax.portlet.init-param.view-template=/identification.jsp",
-		"javax.portlet.resource-bundle=content.Language",
-		"javax.portlet.security-role-ref=power-user,user"
+//		"com.liferay.portlet.display-category=category.sample",
+//		"com.liferay.portlet.instanceable=true",
+//		"javax.portlet.display-name=identification-portlet Portlet",
+//		"javax.portlet.init-param.template-path=/",
+//		"javax.portlet.init-param.view-template=/identification.jsp",
+//		"javax.portlet.resource-bundle=content.Language",
+//		"javax.portlet.security-role-ref=power-user,user"
+
+        "com.liferay.portlet.add-default-resource=true",
+        "com.liferay.portlet.css-class-wrapper=portlet-controlpanel",
+        "com.liferay.portlet.display-category=category.hidden",
+        "com.liferay.portlet.preferences-owned-by-group=true",
+        "com.liferay.portlet.render-weight=100",
+        "javax.portlet.display-name=Identification",
+        "javax.portlet.expiration-cache=0",
+        "javax.portlet.init-param.view-template=/identification.jsp",
+        "javax.portlet.name=identification_portlet",
+        "javax.portlet.resource-bundle=content.Language",
+        "javax.portlet.security-role-ref=administrator",
+        "javax.portlet.supports.mime-type=text/html"
 	},
 	service = Portlet.class
 )

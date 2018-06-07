@@ -83,7 +83,8 @@ public class ImageServlet extends HttpServlet {
             }
             BufferedImage bi = ImageIO.read(f);
             OutputStream out = response.getOutputStream();
-            ImageIO.write(bi, "jpg", out);
+            FileUtil fileUtil = new FileUtil();
+            ImageIO.write(bi, fileUtil.getFileExtension(f.getName()), out);
             out.close();
         } catch (PortalException | IOException e) {
             _log.error(e.getMessage());

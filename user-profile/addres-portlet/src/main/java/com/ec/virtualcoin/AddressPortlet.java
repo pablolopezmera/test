@@ -39,14 +39,29 @@ import user.profile.service.UserProfileLocalServiceUtil;
 @Component(
 	immediate = true,
 	property = {
-		"com.liferay.portlet.display-category=category.sample",
-		"com.liferay.portlet.instanceable=true",
-		"javax.portlet.display-name=address-portlet Portlet",
-		"javax.portlet.init-param.template-path=/",
-		"javax.portlet.init-param.view-template=/address.jsp",
-		"javax.portlet.resource-bundle=content.Language",
-		"javax.portlet.security-role-ref=power-user,user",
-		"mvc.command.name=upload"
+//		"com.liferay.portlet.display-category=category.sample",
+//		"com.liferay.portlet.instanceable=true",
+//		"javax.portlet.display-name=address-portlet Portlet",
+//		"javax.portlet.init-param.template-path=/",
+//		"javax.portlet.init-param.view-template=/address.jsp",
+//		"javax.portlet.resource-bundle=content.Language",
+//		"javax.portlet.security-role-ref=power-user,user",
+//		"mvc.command.name=upload"
+
+        "com.liferay.portlet.add-default-resource=true",
+        "com.liferay.portlet.css-class-wrapper=portlet-controlpanel",
+        "com.liferay.portlet.display-category=category.hidden",
+        "com.liferay.portlet.preferences-owned-by-group=true",
+        "com.liferay.portlet.render-weight=100",
+        "javax.portlet.display-name=My Address",
+        "javax.portlet.expiration-cache=0",
+        "javax.portlet.init-param.view-template=/address.jsp",
+        "javax.portlet.name=address",
+        "javax.portlet.resource-bundle=content.Language",
+        "javax.portlet.security-role-ref=administrator",
+        "javax.portlet.supports.mime-type=text/html",
+        "mvc.command.name=upload"
+	
 	},
 	service = Portlet.class
 )
@@ -86,6 +101,7 @@ public class AddressPortlet extends MVCPortlet {
             renderRequest.setAttribute("prov", up.getProv());
             renderRequest.setAttribute("street1", up.getStreet1());
             renderRequest.setAttribute("street2", up.getStreet2());
+            renderRequest.setAttribute("phoneNumber", up.getPhoneNumber());
         } catch (PortalException e) {
             e.printStackTrace();
         }
@@ -99,13 +115,6 @@ public class AddressPortlet extends MVCPortlet {
             throws Exception {
         _logger.info("Guardar la direccion:");
         UserProfile up = sessionManager.getUserProfile(request);
-        _logger.info(request.getParameter("city"));
-        _logger.info(request.getParameter("country"));
-        _logger.info(request.getParameter("homeNumber"));
-        _logger.info(request.getParameter("postalCode"));
-        _logger.info(request.getParameter("prov"));
-        _logger.info(request.getParameter("street1"));
-        _logger.info(request.getParameter("street2"));
         up.setCity(request.getParameter("city"));
         up.setCountry(request.getParameter("country"));
         up.setHomeNumber(request.getParameter("homeNumber"));
@@ -113,6 +122,7 @@ public class AddressPortlet extends MVCPortlet {
         up.setProv(request.getParameter("prov"));
         up.setStreet1(request.getParameter("street1"));
         up.setStreet2(request.getParameter("street2"));
+        up.setPhoneNumber(request.getParameter("phoneNumber"));
         up.setApproved(Boolean.FALSE);
         createOrUpdate(request);
         sendNotification(request);

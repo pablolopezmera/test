@@ -299,6 +299,21 @@ public interface UserProfileModel extends BaseModel<UserProfile> {
 	 */
 	public void setApproved(Boolean approved);
 
+	/**
+	 * Returns the phone number of this user profile.
+	 *
+	 * @return the phone number of this user profile
+	 */
+	@AutoEscape
+	public String getPhoneNumber();
+
+	/**
+	 * Sets the phone number of this user profile.
+	 *
+	 * @param phoneNumber the phone number of this user profile
+	 */
+	public void setPhoneNumber(String phoneNumber);
+
 	@Override
 	public boolean isNew();
 

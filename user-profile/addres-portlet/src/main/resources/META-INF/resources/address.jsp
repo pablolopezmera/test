@@ -1,6 +1,7 @@
 <%@ include file="/init.jsp"%>
 
 <%@ page import="com.liferay.portal.kernel.model.Country"%>
+<%@ page import="user.profile.model.UserProfile"%>
 <%@ page import="java.util.List"%>
 
 <%
@@ -12,6 +13,7 @@
 	String prov = (String) renderRequest.getAttribute("prov");
 	String street1 = (String) renderRequest.getAttribute("street1");
 	String street2 = (String) renderRequest.getAttribute("street1");
+	String phoneNumber = (String) renderRequest.getAttribute("phoneNumber");
 %>
 
 <portlet:renderURL var="uploadResidencia" windowState="<%=LiferayWindowState.POP_UP.toString() %>">
@@ -40,18 +42,34 @@
 				                <%for(int i = 0; i < countries.size(); i++){ 
 				                    Country c = countries.get(i);
 				                    boolean selected = false;
-				                    if(country.equals(c.getNameCurrentValue())){
+				                    if(country.equals(c.getA2())){
 				                        selected = true;
 				                    } %>
-				                    <aui:option label="<%=c.getNameCurrentValue() %>" value="<%=c.getNameCurrentValue() %>" selected="<%=selected %>" />
+				                    <aui:option label="<%=c.getNameCurrentValue() %>" value="<%=c.getA2() %>" selected="<%=selected %>" />
 				                <%} %>
 				            </aui:select>
-				            <aui:input label="user.prov" name="prov" value="${prov}" type="String" />
-				            <aui:input label="user.city" name="city" value="${city}" type="String" />
-				            <aui:input label="user.homeNumber" name="homeNumber" value="${homeNumber}" type="String" />
-				            <aui:input label="user.street1" name="street1" value="${street1}" type="String" />
-				            <aui:input label="user.street2" name="street2" value="${street2}" type="String" />
-				            <aui:input label="user.postalCode" name="postalCode" value="${postalCode}" type="String" />
+				            <aui:input label="user.prov" name="prov" value="${prov}" type="String">
+                                <aui:validator name="required" />
+				            </aui:input>
+				            <aui:input label="user.city" name="city" value="${city}" type="String" >
+                                <aui:validator name="required" />
+                            </aui:input>
+				            <aui:input label="user.homeNumber" name="homeNumber" value="${homeNumber}" type="String" >
+                                <aui:validator name="required" />
+                            </aui:input>
+				            <aui:input label="user.street1" name="street1" value="${street1}" type="String" >
+                                <aui:validator name="required" />
+                            </aui:input>
+				            <aui:input label="user.street2" name="street2" value="${street2}" type="String" >
+                                <aui:validator name="required" />
+                            </aui:input>
+                            <aui:input label="user.postalCode" name="postalCode" value="${postalCode}" type="String" >
+                                <aui:validator name="required" />
+                            </aui:input>
+                            <aui:input label="user.phoneNumber" name="phoneNumber" value="${phoneNumber}" type="String" >
+                                <aui:validator name="required" />
+                                <aui:validator name="number" />
+                            </aui:input>
                       </td>
                       <td valign="top">
 			            <table>

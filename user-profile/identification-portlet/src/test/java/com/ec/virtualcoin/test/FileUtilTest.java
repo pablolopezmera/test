@@ -31,7 +31,7 @@ public class FileUtilTest {
 
         String screenName = "test";
         String defaultFolder = "/usr/local";
-        String extension = ".jpg";
+        String extension = "jpg";
         String path = fileUtil.generateRoute(screenName, ImageType.ANVERSO, defaultFolder, extension);
         Assert.assertEquals("/usr/local/test/ANVERSO.2018-04-12-50-18.jpg", path);
     }
@@ -47,7 +47,7 @@ public class FileUtilTest {
         String string = "/home/pablo/profile/test/ANVERSO.png";
         FileUtil fileUtil = new FileUtil();
         String fileExtension = fileUtil.getFileExtension(string);
-        Assert.assertEquals(".png", fileExtension);
+        Assert.assertEquals("png", fileExtension);
     }
     
 }

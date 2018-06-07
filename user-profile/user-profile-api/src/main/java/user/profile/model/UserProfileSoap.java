@@ -49,6 +49,7 @@ public class UserProfileSoap implements Serializable {
 		soapModel.setHomeNumber(model.getHomeNumber());
 		soapModel.setPostalCode(model.getPostalCode());
 		soapModel.setApproved(model.getApproved());
+		soapModel.setPhoneNumber(model.getPhoneNumber());
 
 		return soapModel;
 	}
@@ -229,6 +230,14 @@ public class UserProfileSoap implements Serializable {
 		_approved = approved;
 	}
 
+	public String getPhoneNumber() {
+		return _phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		_phoneNumber = phoneNumber;
+	}
+
 	private String _uuid;
 	private String _userId;
 	private String _anversoId;
@@ -245,4 +254,5 @@ public class UserProfileSoap implements Serializable {
 	private String _homeNumber;
 	private String _postalCode;
 	private Boolean _approved;
+	private String _phoneNumber;
 }

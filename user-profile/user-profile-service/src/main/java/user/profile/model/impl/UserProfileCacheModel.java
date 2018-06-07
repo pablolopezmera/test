@@ -64,7 +64,7 @@ public class UserProfileCacheModel implements CacheModel<UserProfile>,
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(33);
+		StringBundler sb = new StringBundler(35);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -98,6 +98,8 @@ public class UserProfileCacheModel implements CacheModel<UserProfile>,
 		sb.append(postalCode);
 		sb.append(", approved=");
 		sb.append(approved);
+		sb.append(", phoneNumber=");
+		sb.append(phoneNumber);
 		sb.append("}");
 
 		return sb.toString();
@@ -214,6 +216,13 @@ public class UserProfileCacheModel implements CacheModel<UserProfile>,
 
 		userProfileImpl.setApproved(approved);
 
+		if (phoneNumber == null) {
+			userProfileImpl.setPhoneNumber(StringPool.BLANK);
+		}
+		else {
+			userProfileImpl.setPhoneNumber(phoneNumber);
+		}
+
 		userProfileImpl.resetOriginalValues();
 
 		return userProfileImpl;
@@ -238,6 +247,7 @@ public class UserProfileCacheModel implements CacheModel<UserProfile>,
 		postalCode = objectInput.readUTF();
 
 		approved = objectInput.readBoolean();
+		phoneNumber = objectInput.readUTF();
 	}
 
 	@Override
@@ -349,6 +359,13 @@ public class UserProfileCacheModel implements CacheModel<UserProfile>,
 		}
 
 		objectOutput.writeBoolean(approved);
+
+		if (phoneNumber == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(phoneNumber);
+		}
 	}
 
 	public String uuid;
@@ -367,4 +384,5 @@ public class UserProfileCacheModel implements CacheModel<UserProfile>,
 	public String homeNumber;
 	public String postalCode;
 	public boolean approved;
+	public String phoneNumber;
 }

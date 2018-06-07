@@ -37,5 +37,6 @@
 		<property name="homeNumber" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="postalCode" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="approved" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="phoneNumber" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>
 </hibernate-mapping>
