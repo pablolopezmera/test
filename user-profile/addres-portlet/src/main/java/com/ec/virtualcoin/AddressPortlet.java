@@ -114,9 +114,12 @@ public class AddressPortlet extends MVCPortlet {
     public void saveProfile(ActionRequest request, ActionResponse response)
             throws Exception {
         _logger.info("Guardar la direccion:");
+        String countryA2 = request.getParameter("country");
+        Country country = CountryServiceUtil.getCountryByA2(countryA2);
         UserProfile up = sessionManager.getUserProfile(request);
         up.setCity(request.getParameter("city"));
-        up.setCountry(request.getParameter("country"));
+        up.setCountry(countryA2);
+        up.setCountryDescription(country.getNameCurrentValue());
         up.setHomeNumber(request.getParameter("homeNumber"));
         up.setPostalCode(request.getParameter("postalCode"));
         up.setProv(request.getParameter("prov"));
