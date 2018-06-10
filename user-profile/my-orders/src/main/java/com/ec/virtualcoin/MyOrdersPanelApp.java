@@ -20,12 +20,12 @@ public class MyOrdersPanelApp extends BasePanelApp {
 
     @Override
     public String getPortletId() {
-        return "my_address";
+        return "my_orders";
     }
 
     @Override
     @Reference(
-        target = "(javax.portlet.name=my_address)",
+        target = "(javax.portlet.name=my_orders)",
         unbind = "-"
     )
     public void setPortlet(Portlet portlet) {
