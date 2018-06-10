@@ -30,6 +30,7 @@
 		<property name="idType" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="idNumber" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="country" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="countryDescription" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="prov" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="city" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="street1" type="com.liferay.portal.dao.orm.hibernate.StringType" />

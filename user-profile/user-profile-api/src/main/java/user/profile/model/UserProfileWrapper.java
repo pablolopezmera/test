@@ -66,6 +66,7 @@ public class UserProfileWrapper implements UserProfile,
 		attributes.put("idType", getIdType());
 		attributes.put("idNumber", getIdNumber());
 		attributes.put("country", getCountry());
+		attributes.put("countryDescription", getCountryDescription());
 		attributes.put("prov", getProv());
 		attributes.put("city", getCity());
 		attributes.put("street1", getStreet1());
@@ -132,6 +133,12 @@ public class UserProfileWrapper implements UserProfile,
 
 		if (country != null) {
 			setCountry(country);
+		}
+
+		String countryDescription = (String)attributes.get("countryDescription");
+
+		if (countryDescription != null) {
+			setCountryDescription(countryDescription);
 		}
 
 		String prov = (String)attributes.get("prov");
@@ -266,6 +273,16 @@ public class UserProfileWrapper implements UserProfile,
 	@Override
 	public java.lang.String getCountry() {
 		return _userProfile.getCountry();
+	}
+
+	/**
+	* Returns the country description of this user profile.
+	*
+	* @return the country description of this user profile
+	*/
+	@Override
+	public java.lang.String getCountryDescription() {
+		return _userProfile.getCountryDescription();
 	}
 
 	/**
@@ -476,6 +493,16 @@ public class UserProfileWrapper implements UserProfile,
 	@Override
 	public void setCountry(java.lang.String country) {
 		_userProfile.setCountry(country);
+	}
+
+	/**
+	* Sets the country description of this user profile.
+	*
+	* @param countryDescription the country description of this user profile
+	*/
+	@Override
+	public void setCountryDescription(java.lang.String countryDescription) {
+		_userProfile.setCountryDescription(countryDescription);
 	}
 
 	@Override

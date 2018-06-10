@@ -37,6 +37,7 @@
 		<field name="country" type="String">
 			<hint name="max-length">25</hint>
 		</field>
+		<field name="countryDescription" type="String" />
 		<field name="prov" type="String" />
 		<field name="city" type="String">
 			<hint name="max-length">25</hint>
