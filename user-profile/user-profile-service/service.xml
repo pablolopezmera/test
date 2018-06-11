@@ -19,6 +19,7 @@
         <column name="idType" type="String" />
         <column name="idNumber" type="String" />
         <column name="country" type="String" />
+        <column name="countryDescription" type="String" />
         <column name="prov" type="String" />
         <column name="city" type="String" />
         <column name="street1" type="String" />

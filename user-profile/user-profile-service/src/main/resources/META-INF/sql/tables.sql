@@ -22,6 +22,7 @@ create table UserProfile_UserProfile (
 	idType VARCHAR(10) null,
 	idNumber VARCHAR(20) null,
 	country VARCHAR(25) null,
+	countryDescription VARCHAR(75) null,
 	prov VARCHAR(75) null,
 	city VARCHAR(25) null,
 	street1 VARCHAR(30) null,

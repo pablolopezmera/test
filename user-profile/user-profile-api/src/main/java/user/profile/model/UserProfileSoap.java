@@ -42,6 +42,7 @@ public class UserProfileSoap implements Serializable {
 		soapModel.setIdType(model.getIdType());
 		soapModel.setIdNumber(model.getIdNumber());
 		soapModel.setCountry(model.getCountry());
+		soapModel.setCountryDescription(model.getCountryDescription());
 		soapModel.setProv(model.getProv());
 		soapModel.setCity(model.getCity());
 		soapModel.setStreet1(model.getStreet1());
@@ -174,6 +175,14 @@ public class UserProfileSoap implements Serializable {
 		_country = country;
 	}
 
+	public String getCountryDescription() {
+		return _countryDescription;
+	}
+
+	public void setCountryDescription(String countryDescription) {
+		_countryDescription = countryDescription;
+	}
+
 	public String getProv() {
 		return _prov;
 	}
@@ -247,6 +256,7 @@ public class UserProfileSoap implements Serializable {
 	private String _idType;
 	private String _idNumber;
 	private String _country;
+	private String _countryDescription;
 	private String _prov;
 	private String _city;
 	private String _street1;

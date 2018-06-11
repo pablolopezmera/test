@@ -196,6 +196,21 @@ public interface UserProfileModel extends BaseModel<UserProfile> {
 	public void setCountry(String country);
 
 	/**
+	 * Returns the country description of this user profile.
+	 *
+	 * @return the country description of this user profile
+	 */
+	@AutoEscape
+	public String getCountryDescription();
+
+	/**
+	 * Sets the country description of this user profile.
+	 *
+	 * @param countryDescription the country description of this user profile
+	 */
+	public void setCountryDescription(String countryDescription);
+
+	/**
 	 * Returns the prov of this user profile.
 	 *
 	 * @return the prov of this user profile

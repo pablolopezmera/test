@@ -1196,6 +1196,7 @@ public class UserProfilePersistenceImpl extends BasePersistenceImpl<UserProfile>
 		userProfileImpl.setIdType(userProfile.getIdType());
 		userProfileImpl.setIdNumber(userProfile.getIdNumber());
 		userProfileImpl.setCountry(userProfile.getCountry());
+		userProfileImpl.setCountryDescription(userProfile.getCountryDescription());
 		userProfileImpl.setProv(userProfile.getProv());
 		userProfileImpl.setCity(userProfile.getCity());
 		userProfileImpl.setStreet1(userProfile.getStreet1());

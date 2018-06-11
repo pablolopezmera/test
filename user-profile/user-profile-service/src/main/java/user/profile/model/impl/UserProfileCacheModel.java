@@ -64,7 +64,7 @@ public class UserProfileCacheModel implements CacheModel<UserProfile>,
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(35);
+		StringBundler sb = new StringBundler(37);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -84,6 +84,8 @@ public class UserProfileCacheModel implements CacheModel<UserProfile>,
 		sb.append(idNumber);
 		sb.append(", country=");
 		sb.append(country);
+		sb.append(", countryDescription=");
+		sb.append(countryDescription);
 		sb.append(", prov=");
 		sb.append(prov);
 		sb.append(", city=");
@@ -172,6 +174,13 @@ public class UserProfileCacheModel implements CacheModel<UserProfile>,
 			userProfileImpl.setCountry(country);
 		}
 
+		if (countryDescription == null) {
+			userProfileImpl.setCountryDescription(StringPool.BLANK);
+		}
+		else {
+			userProfileImpl.setCountryDescription(countryDescription);
+		}
+
 		if (prov == null) {
 			userProfileImpl.setProv(StringPool.BLANK);
 		}
@@ -239,6 +248,7 @@ public class UserProfileCacheModel implements CacheModel<UserProfile>,
 		idType = objectInput.readUTF();
 		idNumber = objectInput.readUTF();
 		country = objectInput.readUTF();
+		countryDescription = objectInput.readUTF();
 		prov = objectInput.readUTF();
 		city = objectInput.readUTF();
 		street1 = objectInput.readUTF();
@@ -316,6 +326,13 @@ public class UserProfileCacheModel implements CacheModel<UserProfile>,
 			objectOutput.writeUTF(country);
 		}
 
+		if (countryDescription == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(countryDescription);
+		}
+
 		if (prov == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
 		}
@@ -377,6 +394,7 @@ public class UserProfileCacheModel implements CacheModel<UserProfile>,
 	public String idType;
 	public String idNumber;
 	public String country;
+	public String countryDescription;
 	public String prov;
 	public String city;
 	public String street1;

@@ -77,6 +77,8 @@ public class BuyPortlet extends MVCPortlet {
             renderRequest.setAttribute("usdValue", value);
 
             if (!isCountryAllowed(userProfile.getCountry())) {
+                _logger.info("el pais: " + userProfile.getCountry());
+                renderRequest.setAttribute("country", userProfile.getCountryDescription());
                 renderRequest.setAttribute("status", "COUNTRY_NOT_ALLOWED");
             } else if (!userProfile.getApproved()) {
                 renderRequest.setAttribute("status", "PROFILE_NOT_APPROVED");

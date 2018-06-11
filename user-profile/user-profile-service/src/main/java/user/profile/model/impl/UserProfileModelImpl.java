@@ -71,6 +71,7 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 			{ "idType", Types.VARCHAR },
 			{ "idNumber", Types.VARCHAR },
 			{ "country", Types.VARCHAR },
+			{ "countryDescription", Types.VARCHAR },
 			{ "prov", Types.VARCHAR },
 			{ "city", Types.VARCHAR },
 			{ "street1", Types.VARCHAR },
@@ -92,6 +93,7 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 		TABLE_COLUMNS_MAP.put("idType", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("idNumber", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("country", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("countryDescription", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("prov", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("city", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("street1", Types.VARCHAR);
@@ -102,7 +104,7 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 		TABLE_COLUMNS_MAP.put("phoneNumber", Types.VARCHAR);
 	}
 
-	public static final String TABLE_SQL_CREATE = "create table UserProfile_UserProfile (uuid_ VARCHAR(75) null,userId VARCHAR(75) not null primary key,anversoId VARCHAR(255) null,reversoId VARCHAR(255) null,selfie VARCHAR(255) null,proofAddress VARCHAR(255) null,idType VARCHAR(10) null,idNumber VARCHAR(20) null,country VARCHAR(25) null,prov VARCHAR(75) null,city VARCHAR(25) null,street1 VARCHAR(30) null,street2 VARCHAR(30) null,homeNumber VARCHAR(10) null,postalCode VARCHAR(10) null,approved BOOLEAN,phoneNumber VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table UserProfile_UserProfile (uuid_ VARCHAR(75) null,userId VARCHAR(75) not null primary key,anversoId VARCHAR(255) null,reversoId VARCHAR(255) null,selfie VARCHAR(255) null,proofAddress VARCHAR(255) null,idType VARCHAR(10) null,idNumber VARCHAR(20) null,country VARCHAR(25) null,countryDescription VARCHAR(75) null,prov VARCHAR(75) null,city VARCHAR(25) null,street1 VARCHAR(30) null,street2 VARCHAR(30) null,homeNumber VARCHAR(10) null,postalCode VARCHAR(10) null,approved BOOLEAN,phoneNumber VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table UserProfile_UserProfile";
 	public static final String ORDER_BY_JPQL = " ORDER BY userProfile.userId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY UserProfile_UserProfile.userId ASC";
@@ -143,6 +145,7 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 		model.setIdType(soapModel.getIdType());
 		model.setIdNumber(soapModel.getIdNumber());
 		model.setCountry(soapModel.getCountry());
+		model.setCountryDescription(soapModel.getCountryDescription());
 		model.setProv(soapModel.getProv());
 		model.setCity(soapModel.getCity());
 		model.setStreet1(soapModel.getStreet1());
@@ -224,6 +227,7 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 		attributes.put("idType", getIdType());
 		attributes.put("idNumber", getIdNumber());
 		attributes.put("country", getCountry());
+		attributes.put("countryDescription", getCountryDescription());
 		attributes.put("prov", getProv());
 		attributes.put("city", getCity());
 		attributes.put("street1", getStreet1());
@@ -293,6 +297,12 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 
 		if (country != null) {
 			setCountry(country);
+		}
+
+		String countryDescription = (String)attributes.get("countryDescription");
+
+		if (countryDescription != null) {
+			setCountryDescription(countryDescription);
 		}
 
 		String prov = (String)attributes.get("prov");
@@ -508,6 +518,22 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 
 	@JSON
 	@Override
+	public String getCountryDescription() {
+		if (_countryDescription == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _countryDescription;
+		}
+	}
+
+	@Override
+	public void setCountryDescription(String countryDescription) {
+		_countryDescription = countryDescription;
+	}
+
+	@JSON
+	@Override
 	public String getProv() {
 		if (_prov == null) {
 			return StringPool.BLANK;
@@ -656,6 +682,7 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 		userProfileImpl.setIdType(getIdType());
 		userProfileImpl.setIdNumber(getIdNumber());
 		userProfileImpl.setCountry(getCountry());
+		userProfileImpl.setCountryDescription(getCountryDescription());
 		userProfileImpl.setProv(getProv());
 		userProfileImpl.setCity(getCity());
 		userProfileImpl.setStreet1(getStreet1());
@@ -801,6 +828,14 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 			userProfileCacheModel.country = null;
 		}
 
+		userProfileCacheModel.countryDescription = getCountryDescription();
+
+		String countryDescription = userProfileCacheModel.countryDescription;
+
+		if ((countryDescription != null) && (countryDescription.length() == 0)) {
+			userProfileCacheModel.countryDescription = null;
+		}
+
 		userProfileCacheModel.prov = getProv();
 
 		String prov = userProfileCacheModel.prov;
@@ -864,7 +899,7 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(35);
+		StringBundler sb = new StringBundler(37);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -884,6 +919,8 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 		sb.append(getIdNumber());
 		sb.append(", country=");
 		sb.append(getCountry());
+		sb.append(", countryDescription=");
+		sb.append(getCountryDescription());
 		sb.append(", prov=");
 		sb.append(getProv());
 		sb.append(", city=");
@@ -907,7 +944,7 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(55);
+		StringBundler sb = new StringBundler(58);
 
 		sb.append("<model><model-name>");
 		sb.append("user.profile.model.UserProfile");
@@ -948,6 +985,10 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 		sb.append(
 			"<column><column-name>country</column-name><column-value><![CDATA[");
 		sb.append(getCountry());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>countryDescription</column-name><column-value><![CDATA[");
+		sb.append(getCountryDescription());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>prov</column-name><column-value><![CDATA[");
@@ -1002,6 +1043,7 @@ public class UserProfileModelImpl extends BaseModelImpl<UserProfile>
 	private String _idType;
 	private String _idNumber;
 	private String _country;
+	private String _countryDescription;
 	private String _prov;
 	private String _city;
 	private String _street1;

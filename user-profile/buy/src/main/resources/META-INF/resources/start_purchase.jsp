@@ -6,6 +6,7 @@
     String ewallet = (String) renderRequest.getAttribute("ewallet");
     String pid = (String) renderRequest.getAttribute("pid");
     String status = (String) renderRequest.getAttribute("status");
+    String country = (String) renderRequest.getAttribute("country");
 %>
 
 <portlet:actionURL name="sendOrder" var="sendOrder" />
@@ -14,7 +15,8 @@
 <p>
 
 <c:if test="${ status == 'COUNTRY_NOT_ALLOWED'}">
-    <b><liferay-ui:message key="buy.country.not.allowed"/></b>
+    <liferay-ui:message key="buy.country.not.allowed" arguments="<%=country %>"/>
+    <br /><liferay-ui:message key="buy.update.profile.message" />
 </c:if>
 
 <c:if test="${ status == 'PROFILE_NOT_APPROVED'}">

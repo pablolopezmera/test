@@ -21,14 +21,6 @@ dependencies {
 	compileOnly group: "javax.servlet", name: "javax.servlet-api", version: "3.0.1"
 	compileOnly group: "jstl", name: "jstl", version: "1.2"
 	compileOnly group: "org.osgi", name: "org.osgi.compendium", version: "5.0.0"
-    compile group: "org.slf4j", name: "slf4j-api", version: "1.7.7"
-    compile group: "org.slf4j", name: "slf4j-simple", version: "1.7.7"
-    // https://mvnrepository.com/artifact/javax.mail/javax.mail-api
-    compileOnly group: 'javax.mail', name: 'javax.mail-api', version: '1.6.1'
-    testCompile 'junit:junit:4.12'
-    compileOnly project(":user-profile-api")
-    compile group: "biz.aQute.bnd", name: "biz.aQute.bndlib", version: "3.1.0"
-    compileOnly group: 'com.liferay', name: 'com.liferay.portal.configuration.metatype', version: '2.0.0'
 }
 
 repositories {
