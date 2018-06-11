@@ -90,8 +90,7 @@ public class BuyPortlet extends MVCPortlet {
             }
 
         } catch (PortalException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            _logger.error(e.getMessage());
         }
 
         super.doView(renderRequest, renderResponse);
