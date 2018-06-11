@@ -104,6 +104,7 @@ public class UsersAdminPortlet extends MVCPortlet {
                 UserProfile up = UserProfileLocalServiceUtil.getUserProfile(user.getScreenName());
                 userList.add(new UserProfileDto(user.getFirstName(), user.getLastName(), up.getIdType(), up.getIdNumber(), user.getScreenName(), up.getApproved()));
             } catch (PortalException e) {
+                _logger.error(e.getMessage());
                 e.printStackTrace();
             }
         }
