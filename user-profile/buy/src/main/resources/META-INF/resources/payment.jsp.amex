@@ -68,8 +68,9 @@ var portletNamespace = '<portlet:namespace/>';
                         </aui:select>
                     </div>
                     <div class="form-group" id="credit_cards">
-                        <img src="<%=request.getContextPath()%>/assets/images/new_visa_medium.gif" id="visa">
-                        <img src="<%=request.getContextPath()%>/assets/images/mc_vrt_opt_pos_73_2x.png" id="mastercard">
+                        <img src="<%=request.getContextPath()%>/assets/images/visa.jpg" id="visa">
+                        <img src="<%=request.getContextPath()%>/assets/images/mastercard.jpg" id="mastercard">
+                        <img src="<%=request.getContextPath()%>/assets/images/amex.jpg" id="amex">
                     </div>
                       <aui:button name="Buy" value="buy.confirm" type="submit" />
 <!-- 
@@ -84,6 +85,6 @@ var portletNamespace = '<portlet:namespace/>';
     </div>
     <script src="<%=request.getContextPath()%>/assets/js/jquery.min.js"></script>
     <script src="<%=request.getContextPath()%>/assets/js/bootstrap.min.js"></script>
-    <script src="<%=request.getContextPath()%>/assets/js/jquery.payform.js" charset="utf-8"></script>
+    <script src="<%=request.getContextPath()%>/assets/js/jquery.payform.min.js" charset="utf-8"></script>
     <script src="<%=request.getContextPath()%>/assets/js/script.js"></script>
 </aui:form>

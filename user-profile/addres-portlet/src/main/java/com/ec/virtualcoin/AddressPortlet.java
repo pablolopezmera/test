@@ -39,21 +39,11 @@ import user.profile.service.UserProfileLocalServiceUtil;
 @Component(
 	immediate = true,
 	property = {
-//		"com.liferay.portlet.display-category=category.sample",
-//		"com.liferay.portlet.instanceable=true",
-//		"javax.portlet.display-name=address-portlet Portlet",
-//		"javax.portlet.init-param.template-path=/",
-//		"javax.portlet.init-param.view-template=/address.jsp",
-//		"javax.portlet.resource-bundle=content.Language",
-//		"javax.portlet.security-role-ref=power-user,user",
-//		"mvc.command.name=upload"
-
         "com.liferay.portlet.add-default-resource=true",
         "com.liferay.portlet.css-class-wrapper=portlet-controlpanel",
         "com.liferay.portlet.display-category=category.hidden",
         "com.liferay.portlet.preferences-owned-by-group=true",
         "com.liferay.portlet.render-weight=100",
-        "javax.portlet.display-name=My Address",
         "javax.portlet.expiration-cache=0",
         "javax.portlet.init-param.view-template=/address.jsp",
         "javax.portlet.name=address",
@@ -61,7 +51,6 @@ import user.profile.service.UserProfileLocalServiceUtil;
         "javax.portlet.security-role-ref=administrator",
         "javax.portlet.supports.mime-type=text/html",
         "mvc.command.name=upload"
-	
 	},
 	service = Portlet.class
 )

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.xml.bind.JAXBException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.ec.virtualcoin.buy.payment.client.AuthorizeCaptureRequest;
@@ -16,6 +17,7 @@ import com.ec.virtualcoin.buy.payment.client.ShipTo;
 public class RequestTest {
 
     @Test
+    @Ignore
     public void shouldMakeSuccessPayment() throws JAXBException, IOException, PaymantInvocationException {
         EcorePayClient cpc = new EcorePayClient();
         ShipTo shipTo = new ShipTo.Builder()
@@ -56,6 +58,7 @@ public class RequestTest {
     }
 
     @Test
+    @Ignore
     public void shouldMakeSuccessPaymentNoShip() throws JAXBException, IOException, PaymantInvocationException {
         EcorePayClient cpc = new EcorePayClient();
 

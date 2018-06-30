@@ -54,10 +54,10 @@
 				            <aui:input label="user.city" name="city" value="${city}" type="String" >
                                 <aui:validator name="required" />
                             </aui:input>
-				            <aui:input label="user.homeNumber" name="homeNumber" value="${homeNumber}" type="String" >
+				            <aui:input label="user.street1" name="street1" value="${street1}" type="String" >
                                 <aui:validator name="required" />
                             </aui:input>
-				            <aui:input label="user.street1" name="street1" value="${street1}" type="String" >
+                            <aui:input label="user.homeNumber" name="homeNumber" value="${homeNumber}" type="String" >
                                 <aui:validator name="required" />
                             </aui:input>
 				            <aui:input label="user.street2" name="street2" value="${street2}" type="String" >

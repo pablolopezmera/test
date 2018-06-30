@@ -12,6 +12,7 @@ $(function() {
     var mastercard = $("#mastercard");
     var confirmButton = $('#' + portletNamespace + 'Buy');
     var visa = $("#visa");
+    var amex = $("#amex");
 
     // Use the payform library to format and validate
     // the payment fields.
@@ -22,8 +23,9 @@ $(function() {
 
     cardNumber.keyup(function() {
     	
-    	visa.addClass('transparent');
-    	mastercard.addClass('transparent');
+        amex.removeClass('transparent');
+        visa.removeClass('transparent');
+        mastercard.removeClass('transparent');
 
         if ($.payform.validateCardNumber(cardNumber.val()) == false) {
             cardNumberField.addClass('has-error');
@@ -33,9 +35,14 @@ $(function() {
         }
 
         if ($.payform.parseCardType(cardNumber.val()) == 'visa') {
-            visa.removeClass('transparent');
+            mastercard.addClass('transparent');
+            amex.addClass('transparent');
+        } else if ($.payform.parseCardType(cardNumber.val()) == 'amex') {
+            mastercard.addClass('transparent');
+            visa.addClass('transparent');
         } else if ($.payform.parseCardType(cardNumber.val()) == 'mastercard') {
-            mastercard.removeClass('transparent');
+            amex.addClass('transparent');
+            visa.addClass('transparent');
         }
     });
 

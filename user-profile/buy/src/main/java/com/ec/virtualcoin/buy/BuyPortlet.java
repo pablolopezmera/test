@@ -48,11 +48,17 @@ import user.profile.service.PurchaseLocalServiceUtil;
 import user.profile.service.UserProfileLocalServiceUtil;
 import user.profile.service.persistence.PurchasePK;
 
-@Component(immediate = true, property = { "com.liferay.portlet.display-category=category.sample",
-        "com.liferay.portlet.instanceable=true", "javax.portlet.display-name=buy Portlet",
-        "javax.portlet.init-param.template-path=/", "javax.portlet.init-param.view-template=/start_purchase.jsp",
-        "javax.portlet.resource-bundle=content.Language",
-        "javax.portlet.security-role-ref=power-user,user" }, service = Portlet.class)
+@Component(immediate = true, property = { 
+        "com.liferay.portlet.add-default-resource=true",
+        "com.liferay.portlet.css-class-wrapper=portlet-controlpanel",
+        "com.liferay.portlet.display-category=category.hidden",
+        "com.liferay.portlet.preferences-owned-by-group=true",
+        "com.liferay.portlet.render-weight=100",
+        "javax.portlet.expiration-cache=0",
+        "javax.portlet.init-param.view-template=/start_purchase.jsp",
+        "javax.portlet.name=buy",
+        "javax.portlet.resource-bundle=content.Language"
+}, service = Portlet.class)
 public class BuyPortlet extends MVCPortlet {
 
     private static Logger _logger = LoggerFactory.getLogger(BuyPortlet.class.getName());
@@ -292,7 +298,7 @@ public class BuyPortlet extends MVCPortlet {
         String completeURL = PortalUtil.getCurrentCompleteURL(
                 PortalUtil.getOriginalServletRequest(PortalUtil.getHttpServletRequest(actionRequest)));
         url.append(completeURL.substring(0, completeURL.indexOf("?") + 1));
-        // url.append(generateHash());
+        url.append("p_p_id=buy&");
         url.append("pid=");
         url.append(purchase.getHash());
         _logger.info(url.toString());
