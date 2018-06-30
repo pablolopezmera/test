@@ -68,15 +68,18 @@
 <aui:script use="aui-base">
 
     var usdToBtcCot;
+    var calcFrom = 'USD';
     
     var usdField = A.one('#<portlet:namespace/>usdValue');
     if (usdField != undefined) {
 	    A.one('#<portlet:namespace/>usdValue').on('keyup', function(event) {
+            calcFrom = 'USD';
 	        btc = convertToBtc(A.one('#<portlet:namespace/>usdValue').get('value'));
 	        A.one('#<portlet:namespace/>btcValue').set('value', btc);
 	    });
 
 	    A.one('#<portlet:namespace/>btcValue').on('keyup', function(event) {
+            calcFrom = 'BTC';
 	        usd = convertToUsd(A.one('#<portlet:namespace/>btcValue').get('value'));
 	        A.one('#<portlet:namespace/>usdValue').set('value', usd);
 	    });
@@ -92,28 +95,33 @@
 
     
     function convertToUsd(btc){
-       return btc * usdToBtcCot;
+        usd = btc * usdToBtcCot;
+        return usd.toFixed(4);
     }
     
         
     function updateCotization(data) {
-        usdToBtcCot = data.USD.last;
+        usdToBtcCot = data.usdPrice;
         usdField = A.one('#<portlet:namespace/>usdValue');
-        if (usdField != undefined){
-	        btc = convertToBtc(usdField.get('value'));
-	        A.one('#<portlet:namespace/>btcValue').set('value', btc);
+        if (calcFrom == 'USD'){
+            btc = convertToBtc(usdField.get('value'));
+            A.one('#<portlet:namespace />btcValue').set('value', btc);
+        }
+        if (calcFrom == 'BTC'){
+            usd = convertToUsd(btcField.get('value'));
+            A.one('#<portlet:namespace />usdValue').set('value', usd);
         }
     }
     
-	var btcCotizationRequest = A.io.request('https://blockchain.info/es/ticker', {
-	    dataType: 'json',
-		on: {
-		    success: function() {
-		          updateCotization(this.get('responseData'));
-		   }
-		}
-	
-	});
+    var btcCotizationRequest = A.io.request('/o/rest/quotation/btc', {
+        dataType: 'json',
+        on: {
+            success: function() {
+                updateCotization(this.get('responseData'));
+           }
+        }
+    
+    });
 
     function getBtcCotization(){
         btcCotizationRequest.start();
