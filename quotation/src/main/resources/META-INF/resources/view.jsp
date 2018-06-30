@@ -56,7 +56,8 @@
     }
 
     function convertToUsd(btc){
-       return btc * usdToBtcCot;
+        usd = btc * usdToBtcCot;
+        return usd.toFixed(4);
     }
 
     function updateCotization(data) {
