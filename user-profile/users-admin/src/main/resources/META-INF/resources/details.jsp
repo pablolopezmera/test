@@ -10,13 +10,13 @@
 <portlet:defineObjects />
 
 <portlet:actionURL name="approve" var="approveURL" >
-      <portlet:param name="screenname" value="${userProfile.userId}" />
+      <portlet:param name="screenname" value="<%=userProfile.getUserId()%>" />
 </portlet:actionURL>
 <portlet:actionURL name="deny" var="denyURL" >
-      <portlet:param name="screenname" value="${userProfile.userId}" />
+      <portlet:param name="screenname" value="<%=userProfile.getUserId()%>" />
 </portlet:actionURL>
 <portlet:actionURL name="cancel" var="cancelURL" >
-      <portlet:param name="screenname" value="${userProfile.userId}" />
+      <portlet:param name="screenname" value="<%=userProfile.getUserId()%>" />
 </portlet:actionURL>
 
 <aui:form method="post">
@@ -49,8 +49,16 @@
     </div>
 </div>
 
-<aui:button name="btnApprove" value="button.approve" onClick="<%=approveURL.toString()%>" />
-<aui:button name="btnDeny" value="button.deny" onClick="<%=denyURL.toString()%>" />
-<aui:button name="btnSave" value="button.back" onClick="<%=cancelURL.toString()%>" />
+<aui:button name="btnApprove" value="button.approve" onClick="change('${approveURL}')" />
+<aui:button name="btnDeny" value="button.deny" onClick="change('${denyURL}')" />
+<aui:button name="btnSave" value="button.back" onClick="change('${cancelURL}')" />
+
+<script type="text/javascript">
+  
+  function change(url){
+    document.location.href = url;
+  }
+
+</script>
 
 </aui:form>
