@@ -23,7 +23,6 @@ dependencies {
 	compileOnly group: "org.osgi", name: "org.osgi.compendium", version: "5.0.0"
     compile group: "org.slf4j", name: "slf4j-api", version: "1.7.7"
     compile group: "org.slf4j", name: "slf4j-simple", version: "1.7.7"
-    // https://mvnrepository.com/artifact/javax.mail/javax.mail-api
     compileOnly group: 'javax.mail', name: 'javax.mail-api', version: '1.6.1'
     testCompile 'junit:junit:4.12'
     compileOnly project(":user-profile-api")
