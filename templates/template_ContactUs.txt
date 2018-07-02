@@ -1,0 +1,32 @@
+<div class="iconLinks">
+
+	<div class="container-fluid-1280">
+
+		<div class="row">
+			<div class="col-xs-12">
+				<h2 class="h6 text-uppercase">${ModulesHeading.getData()}</h2>
+			</div>
+		</div>
+
+		<div class="row" id="footer-modules">
+			<#if ModuleMainText.getSiblings()?has_content>
+				<#assign counter=0>
+			    <#list ModuleMainText.getSiblings() as ModuleMainTexts>
+					<div class="col-sm-6">
+						<div class="${ModuleMainTexts.ModuleIcon.getData()} user-icon user-icon-xl"></div>
+						<div class="txt">
+							<h3><a href="${ModuleMainTexts.ModuleLink.getData()}" rel="external" target="_blank" title="">${ModuleMainTexts.getData()}</a></h3>
+							<#if ModuleMainTexts.ModuleSecondTextLine.getData()?? && ModuleMainTexts.ModuleSecondTextLine.getData() != "">
+								${ModuleMainTexts.ModuleSecondTextLine.getData()}
+							</#if>
+						</div>
+					</div>
+					<#if (counter % 2 == 1)>
+	    				<div class="clearfix visible-lg-block visible-md-block"></div>
+					</#if>
+					<#assign counter = counter + 1>
+				</#list>
+			</#if>
+		</div>
+	</div>
+</div>
