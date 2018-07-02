@@ -27,7 +27,7 @@ public class CoinmarketClient {
         HttpGet request = new HttpGet(url);
         HttpResponse response = httpClient.execute(request);
 
-        _logger.info("Response Code : " + response.getStatusLine().getStatusCode());
+        _logger.debug("Response Code : " + response.getStatusLine().getStatusCode());
         
         String result = EntityUtils.toString(response.getEntity());
 
