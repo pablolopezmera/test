@@ -61,7 +61,6 @@
     }
 
     function updateCotization(data) {
-        console.log(data);
         usdToBtcCot = data.usdPrice;
         usdField = A.one('#<portlet:namespace />usdValue');
         if (calcFrom == 'USD'){
