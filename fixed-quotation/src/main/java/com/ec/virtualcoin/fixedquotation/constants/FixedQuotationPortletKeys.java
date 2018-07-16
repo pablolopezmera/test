@@ -19,8 +19,8 @@ package com.ec.virtualcoin.fixedquotation.constants;
 /**
  * @author Liferay
  */
-public class BladeMessagePortletKeys {
+public class FixedQuotationPortletKeys {
 
-	public static final String BLADE_MESSAGE_PORTLET = "BladeMessagePortlet";
+	public static final String FIXED_QUOTATION_PORTLET = "FixedQuotationPortlet";
 
 }

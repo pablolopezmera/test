@@ -17,66 +17,55 @@
 package com.ec.virtualcoin.fixedquotation;
 
 import java.io.IOException;
-import java.util.Map;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Modified;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ec.virtualcoin.fixedquotation.constants.BladeMessagePortletKeys;
-import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
+import com.ec.virtualcoin.fixedquotation.constants.FixedQuotationPortletKeys;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
 /**
  * @author Liferay
  */
 @Component(
-	configurationPid = "com.liferay.blade.samples.configurationaction.MessageDisplayConfiguration",
+    configurationPid = "com.ec.virtualcoin.fixedquotation.FixedQuotationConfiguration",
 	immediate = true,
 	property = {
 		"com.liferay.portlet.display-category=category.sample",
 		"com.liferay.portlet.instanceable=true",
-		"javax.portlet.display-name=Blade Message Portlet",
+		"javax.portlet.display-name=Fixed Quotation Portlet",
 		"javax.portlet.init-param.config-template=/configuration.jsp",
 		"javax.portlet.init-param.template-path=/",
 		"javax.portlet.init-param.view-template=/view.jsp",
-		"javax.portlet.name=" + BladeMessagePortletKeys.BLADE_MESSAGE_PORTLET,
+		"javax.portlet.name=" + FixedQuotationPortletKeys.FIXED_QUOTATION_PORTLET,
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user"
 	},
 	service = Portlet.class
 )
-public class BladeMessagePortlet extends MVCPortlet {
+public class FixedQuotationPortlet extends MVCPortlet {
 
-    private static Logger _logger = LoggerFactory.getLogger(BladeMessagePortlet.class.getName());
-    private volatile MessageDisplayConfiguration configuration;
+    private static Logger _logger = LoggerFactory.getLogger(FixedQuotationPortlet.class.getName());
 
 	@Override
-	public void doView(
-			RenderRequest renderRequest, RenderResponse renderResponse)
+	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
 		throws IOException, PortletException {
 
-	    _logger.info("Blade Message Portlet render: " + configuration.usdAmount());
-
-		renderRequest.setAttribute("usdAmount", configuration.usdAmount());
+	    _logger.info(renderRequest.getParameter("usdAmount"));
+	    
+        String usdAmount = renderRequest.getParameter("usdAmount") == null ? "200": renderRequest.getParameter("usdAmount");
+        
+        _logger.info("usdAmount: " + usdAmount);
+	    
+        renderRequest.setAttribute("usdAmount", usdAmount);
 
 		super.doView(renderRequest, renderResponse);
 	}
-
-	@Activate
-	@Modified
-	protected void activate(Map<Object, Object> properties) {
-		configuration = ConfigurableUtil.createConfigurable(
-			MessageDisplayConfiguration.class, properties);
-	}
-
-
 
 }
