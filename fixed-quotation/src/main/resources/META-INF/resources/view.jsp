@@ -1,8 +1,5 @@
 <%@ include file="/init.jsp" %>
 
-<%
-    String usdAmount = (String) renderRequest.getAttribute("usdAmount");
-%>
 
 <style>
 <!--
@@ -46,15 +43,13 @@
     xhr.onreadystatechange = function() {//Call a function when the state changes.
         if(this.readyState == XMLHttpRequest.DONE && this.status == 200) {
             // Request finished. Do processing here.
-            console.log('felicidad');
-            console.log(this.response);
             <portlet:namespace/>updateCotization(JSON.parse(this.response));
         }
     }
     xhr.send();
     
     function <portlet:namespace/>updateCotization(data) {
-        usdPrice = data.usdPrice;
+        usdPrice = data.finalPrice;
         btc = <portlet:namespace/>convertToBtc(usdPrice);
         btcDiv = document.getElementById('<portlet:namespace/>btcAmount');
         btcDiv.innerHTML = btc;

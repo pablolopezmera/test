@@ -2,4 +2,3 @@ Bundle-Name: fixed-quotation
 Bundle-SymbolicName: fixed.quotation
 Bundle-Version: 1.0.0
 -sources: true
--metatype: *
