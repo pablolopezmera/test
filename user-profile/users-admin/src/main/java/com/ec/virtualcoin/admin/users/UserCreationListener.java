@@ -9,6 +9,7 @@ import org.osgi.service.component.annotations.Modified;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ec.virtualcoin.config.CoinaturalConfiguration;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.exception.ModelListenerException;
 import com.liferay.portal.kernel.model.BaseModelListener;
@@ -21,7 +22,7 @@ import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import user.profile.model.UserProfile;
 import user.profile.service.UserProfileLocalServiceUtil;
 
-@Component(immediate = true, service = ModelListener.class, configurationPid = "com.ec.virtualcoin.admin.users.CoinaturalConfiguration")
+@Component(immediate = true, service = ModelListener.class, configurationPid = "com.ec.virtualcoin.config.CoinaturalConfiguration")
 public class UserCreationListener extends BaseModelListener<User> {
 
     private volatile CoinaturalConfiguration _configuration;
@@ -50,6 +51,7 @@ public class UserCreationListener extends BaseModelListener<User> {
     @Activate
     @Modified
     protected void activate(Map<String, Object> properties) {
+        _logger.info("Se activa o modifica la configuracion..." + properties);
         _configuration = ConfigurableUtil.createConfigurable(CoinaturalConfiguration.class, properties);
     }
 

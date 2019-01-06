@@ -28,7 +28,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import user.profile.model.UserProfile;
 import user.profile.service.UserProfileLocalServiceUtil;
 
-@Component(immediate = true, property = { "com.liferay.portlet.display-category=category.sample",
+@Component(immediate = true, property = { "com.liferay.portlet.display-category=Coinatural",
         "com.liferay.portlet.instanceable=true", "javax.portlet.display-name=users-admin Portlet",
         "javax.portlet.init-param.template-path=/", "javax.portlet.init-param.view-template=/view.jsp",
         "javax.portlet.resource-bundle=content.Language",
