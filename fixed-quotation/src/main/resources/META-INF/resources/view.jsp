@@ -1,31 +1,40 @@
 <%@ include file="/init.jsp" %>
 
-
-<style>
-<!--
-.usd-quotation {
-    font-size: 150%;
-}
-.btc-quotation {
-    font-size: 200%;
-}
-.buy-button {
-    font-size: 300%;
-}
--->
-</style>
-
-<table>
-  <tr>
-    <th class="usd-quotation">$${usdAmount}</th>
-  </tr>
-  <tr>
-    <td><div class="btc-quotation" id="<portlet:namespace/>btcAmount" /></td>
-  </tr>
-  <tr>
-    <td><a class="buy-button" href="http://localhost:8080/group/control_panel/manage?p_p_id=buy&p_p_lifecycle=0&p_p_state=maximized&p_p_auth=fqnvTYbt&value=${usdAmount}">Buy now</a></td>
-  </tr>
-</table>
+    <div class="divTable">
+        <div class="divTableBody">
+            <div class="firstRow">
+                <div class="divTableRow">
+                    <p id="firstRowParagraph">
+                        Buy<br />
+                        <b>$${usdAmountFormatted}</b>
+                    </p>
+                </div>
+            </div>
+            <div class="secondRow">
+                <div class="divTableRow">
+                    <p id="secondRowParagraph"></p>
+                </div>
+            </div>
+            <div class="thirdRow">
+                <div class="divTableRow">
+                    <p id="thirdRowParagraph"></p>
+                </div>
+            </div>
+            <div class="fourthRow">
+                <div class="divTableRow">
+                    <div id="fourthRowParagraph">
+                       <table width="100%">
+                           <tr><td colspan="2" align="center">You Get</td></tr>
+                           <tr><td align="center" height="30" id="<portlet:namespace/>btcAmount"></td><td style="color: red">BTC</td></tr>
+                           <tr><td align="center" colspan="2" height="40">
+                            <a class="buy-button" href="/group/control_panel/manage?p_p_id=buy&p_p_lifecycle=0&p_p_state=maximized&p_p_auth=fqnvTYbt&value=${usdAmount}">Buy now</a>
+                           </td></tr>
+                       </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <script>
 

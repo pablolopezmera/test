@@ -17,6 +17,8 @@
 package com.ec.virtualcoin.fixedquotation;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Map;
 
 import javax.portlet.Portlet;
@@ -51,7 +53,8 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 		"javax.portlet.init-param.view-template=/view.jsp",
 		"javax.portlet.name=" + FixedQuotationPortletKeys.FIXED_QUOTATION_PORTLET,
 		"javax.portlet.resource-bundle=content.Language",
-		"javax.portlet.security-role-ref=power-user,user"
+		"javax.portlet.security-role-ref=power-user,user",
+		"com.liferay.portlet.header-portlet-css=/style.css"
 	},
 	service = Portlet.class
 )
@@ -64,17 +67,25 @@ public class FixedQuotationPortlet extends MVCPortlet {
 	@Override
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
 		throws IOException, PortletException {
-
-        _logger.info(String.valueOf(_fixedConfiguration.usdAmount().toString()));
-        
+	    
         PortletPreferences preferences = renderRequest.getPreferences();
         
-        renderRequest.setAttribute("usdAmount", preferences.getValue("usdAmount", _fixedConfiguration.usdAmount()));
+        String usdAmount = preferences.getValue("usdAmount", _fixedConfiguration.usdAmount());
+        
+        renderRequest.setAttribute("usdAmount", usdAmount);
+        renderRequest.setAttribute("usdAmountFormatted", format(usdAmount));
 
 		super.doView(renderRequest, renderResponse);
 	}
 	
-	@Activate
+	private String format(String usdAmount) {
+	    NumberFormat formatter;
+         
+        formatter = new DecimalFormat("00.00");
+        return formatter.format(Float.valueOf(usdAmount));
+    }
+
+    @Activate
     @Modified
     protected void activate(Map<Object, Object> properties) {
         _fixedConfiguration = ConfigurableUtil.createConfigurable(FixedConfiguration.class, properties);
