@@ -46,7 +46,30 @@ class="upper-modules"
 class="secondary-background-color"
 
 # Proyectos
-Se deben desplegar los siguientes proyectos
-- quotation: Presenta la pantalla de cotización de btc actual, requiere del proyecto common
-- fixed-quotation: Presenta una pantalla de cotizaciones fijadas, se puede configurar con valores predeterminados en configuración del portlet
-- buy: Permite a un usuario registrado comprar btc, se presenta en el menu izquierdo del perfil del usuario
+Desplegar los siguientes proyectos:
+- user-profile:
+	- address.portlet-1.0.0.jar
+	- buy-1.0.0.jar
+	- com.ec.virtualcoin.commmon-1.0.0.jar
+	- user.profile.api-1.0.0.jar
+	- user.profile.service-1.0.0.jar
+	- users.admin-1.0.0.jar
+	- identification.portlet-1.0.0.jar
+	- quotation-1.0.0.jar
+- create-account
+	- com.liferay.blade.module.jsp.override-1.0.0.jar
+- fixed.quotation-1.0.0.jar
+- language.override-1.0.0.jar
+- my-account-override
+	- com.liferay.users.admin.web.ext-1.0.0.jar
+	- users.admin.web.my.account-1.0.4.jar
+
+
+# Server Login Details
+Cloud Package: SSD Cloud 3
+Hostname: hwsrv-467588.hostwindsdns.com
+Main IP: 23.254.167.100
+Secondary IPs: 2607:5500:3000:e70::2
+Username: root 
+Password: SMj2Xt6bsg9R
+SSH Port: 22
