@@ -2,7 +2,7 @@ Bundle-Name: common
 Bundle-SymbolicName: com.ec.virtualcoin.commmon
 Bundle-Version: 1.0.0
 Export-Package:\
-com.ec.virtualcoin.config
+com.ec.virtualcoin.config,com.ec.virtualcoin.common
 Include-Resource:\
 @httpclient-4.5.jar,\
 @httpcore-4.4.1.jar,\

@@ -2,6 +2,7 @@ package com.ec.virtualcoin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import javax.mail.internet.AddressException;
@@ -19,6 +20,8 @@ import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ec.virtualcoin.common.ImageType;
+import com.ec.virtualcoin.common.SessionManager;
 import com.liferay.mail.kernel.model.MailMessage;
 import com.liferay.mail.kernel.service.MailServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -91,6 +94,7 @@ public class AddressPortlet extends MVCPortlet {
             renderRequest.setAttribute("street1", up.getStreet1());
             renderRequest.setAttribute("street2", up.getStreet2());
             renderRequest.setAttribute("phoneNumber", up.getPhoneNumber());
+            renderRequest.setAttribute("dateTimeSecond", new Date().toString());
         } catch (PortalException e) {
             e.printStackTrace();
         }

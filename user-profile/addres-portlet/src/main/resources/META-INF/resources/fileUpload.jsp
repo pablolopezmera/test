@@ -36,7 +36,7 @@
 	                on: {
 	                    complete: function() {
 	                       console.log('refrescar y cerrar');
-	                        Liferay.Util.getOpener().refreshPortlet();
+                            Liferay.Util.getOpener().refeshImage();
 	                        Liferay.Util.getOpener().closePopup();
 	                    }
 	                }

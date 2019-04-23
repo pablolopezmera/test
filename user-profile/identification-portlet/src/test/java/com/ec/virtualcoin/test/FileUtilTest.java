@@ -8,9 +8,9 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.Whitebox;
 
+import com.ec.virtualcoin.common.ImageType;
 import com.ec.virtualcoin.identification.DateUtil;
 import com.ec.virtualcoin.identification.FileUtil;
-import com.ec.virtualcoin.identification.ImageType;
 
 public class FileUtilTest {
     

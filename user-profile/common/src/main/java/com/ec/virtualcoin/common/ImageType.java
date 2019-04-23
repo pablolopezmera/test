@@ -1,4 +1,4 @@
-package com.ec.virtualcoin;
+package com.ec.virtualcoin.common;
 
 public enum ImageType {
     

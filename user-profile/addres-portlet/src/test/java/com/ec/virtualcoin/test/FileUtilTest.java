@@ -10,7 +10,7 @@ import org.mockito.internal.util.reflection.Whitebox;
 
 import com.ec.virtualcoin.DateUtil;
 import com.ec.virtualcoin.FileUtil;
-import com.ec.virtualcoin.ImageType;
+import com.ec.virtualcoin.common.ImageType;
 
 public class FileUtilTest {
     

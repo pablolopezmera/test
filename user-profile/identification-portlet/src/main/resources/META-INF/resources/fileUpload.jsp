@@ -6,7 +6,7 @@
 
 <aui:form name="myForm" enctype="multipart/form-data">
  
-    <aui:input type="file" name="fileupload" id="fileupload" />
+    <aui:input type="file" name="fileupload" />
     
     <aui:button name="Save" value="upload.file" type="submit" />
     
@@ -32,11 +32,11 @@
 	            url,
 	            {
 	                method: 'POST',
-	                form: {id: myForm, upload: true},
+	                form: {id: myForm, upload: true },
 	                on: {
 	                    complete: function() {
                            console.log('refrescar y cerrar');
-	                        Liferay.Util.getOpener().refreshPortlet();
+                            Liferay.Util.getOpener().refeshImage();
 	                        Liferay.Util.getOpener().closePopup();
 	                    }
 	                }

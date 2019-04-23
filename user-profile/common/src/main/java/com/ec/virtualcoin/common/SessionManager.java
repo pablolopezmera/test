@@ -1,4 +1,4 @@
-package com.ec.virtualcoin;
+package com.ec.virtualcoin.common;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.RenderRequest;
@@ -23,15 +23,13 @@ public class SessionManager {
 
         _logger.info("Inicia profile in session");
         User user = PortalUtil.getUser(renderRequest);
-        _logger.info(user.getScreenName());
         if (getUserProfile(renderRequest) == null) {
-            UserProfile userProfile = UserProfileLocalServiceUtil.fetchUserProfile(user.getScreenName());
-            if (userProfile == null) {
-                _logger.info("El usuario no existe, se pone como nuevo");
-                userProfile = UserProfileLocalServiceUtil.createUserProfile(user.getScreenName());
-                getSession(renderRequest).setAttribute("documentsProfileIsNew", true);
+            UserProfile UserProfile = UserProfileLocalServiceUtil.fetchUserProfile(user.getScreenName());
+            if (UserProfile == null) {
+                UserProfile = UserProfileLocalServiceUtil.createUserProfile(user.getScreenName());
+                getSession(renderRequest).setAttribute("UserProfileIsNew", true);
             }
-            getSession(renderRequest).setAttribute("documentsProfile", userProfile);
+            getSession(renderRequest).setAttribute("UserProfile", UserProfile);
             _logger.info("puestooooo");
         }
 
@@ -39,24 +37,24 @@ public class SessionManager {
     }
 
     public UserProfile getUserProfile(RenderRequest renderRequest) {
-        return (UserProfile) getSession(renderRequest).getAttribute("documentsProfile");
+        return (UserProfile) getSession(renderRequest).getAttribute("UserProfile");
     }
 
     public void setDocumentFilePath(String filePath, ImageType imageType, ActionRequest request) {
-        UserProfile documentsProfile  = getUserProfile(request);
+        UserProfile UserProfile  = getUserProfile(request);
         _logger.info(imageType + " actualizado a: " + filePath);
         switch (imageType) {
         case ANVERSO:
-           documentsProfile.setAnversoId(filePath);
+           UserProfile.setAnversoId(filePath);
             break;
         case REVERSO:
-            documentsProfile.setReversoId(filePath);
+            UserProfile.setReversoId(filePath);
             break;
         case SELFIE:
-            documentsProfile.setSelfie(filePath);
+            UserProfile.setSelfie(filePath);
             break;
         case RESIDENCIA:
-            documentsProfile.setProofAddress(filePath);
+            UserProfile.setProofAddress(filePath);
             break;
         default:
             break;
@@ -64,32 +62,32 @@ public class SessionManager {
     }
 
     public String getDocumentFilePath(ImageType imageType, ActionRequest request) {
-        UserProfile documentsProfile  = getUserProfile(request);
-        return getDocumentFilePath(documentsProfile, imageType);
+        UserProfile UserProfile  = getUserProfile(request);
+        return getDocumentFilePath(UserProfile, imageType);
     }
 
     public String getDocumentFilePath(ImageType imageType, HttpServletRequest request) {
-        UserProfile documentsProfile  = getDocumentsProfile(request);
-        return getDocumentFilePath(documentsProfile, imageType);
+        UserProfile UserProfile  = getUserProfile(request);
+        return getDocumentFilePath(UserProfile, imageType);
     }
     
-    public String getDocumentFilePath(UserProfile documentsProfile, ImageType imageType) {
+    public String getDocumentFilePath(UserProfile UserProfile, ImageType imageType) {
         switch (imageType) {
         case ANVERSO:
-           return documentsProfile.getAnversoId();
+           return UserProfile.getAnversoId();
         case REVERSO:
-            return documentsProfile.getReversoId();
+            return UserProfile.getReversoId();
         case SELFIE:
-            return documentsProfile.getSelfie();
+            return UserProfile.getSelfie();
         case RESIDENCIA:
-            return documentsProfile.getProofAddress();
+            return UserProfile.getProofAddress();
         default:
             return null;
         }
     }
 
     public UserProfile getUserProfile(ActionRequest request) {
-        return (UserProfile) getSession(request).getAttribute("documentsProfile");
+        return (UserProfile) getSession(request).getAttribute("UserProfile");
     }
 
     private HttpSession getSession(ActionRequest actionRequest) {
@@ -109,12 +107,12 @@ public class SessionManager {
     public boolean userHasProfile(ActionRequest request) {
         _logger.info("Holaaaaaaaaaa");
         _logger.info(getSession(request).toString());
-        Object documentsProfileIsNew = getSession(request).getAttribute("documentsProfileIsNew");
-        return documentsProfileIsNew != null && (boolean) getSession(request).getAttribute("documentsProfileIsNew");
+        Object UserProfileIsNew = getSession(request).getAttribute("UserProfileIsNew");
+        return UserProfileIsNew != null && (boolean) getSession(request).getAttribute("UserProfileIsNew");
     }
 
-    public UserProfile getDocumentsProfile(HttpServletRequest request) {
-        return (UserProfile) getSession(request).getAttribute("documentsProfile");
+    public UserProfile getUserProfile(HttpServletRequest request) {
+        return (UserProfile) getSession(request).getAttribute("UserProfile");
     }
 
     private HttpSession getSession(HttpServletRequest request) {

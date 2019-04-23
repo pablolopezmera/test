@@ -2,6 +2,7 @@ package com.ec.virtualcoin.identification;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -16,6 +17,8 @@ import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ec.virtualcoin.common.ImageType;
+import com.ec.virtualcoin.common.SessionManager;
 import com.liferay.mail.kernel.model.MailMessage;
 import com.liferay.mail.kernel.service.MailServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -43,7 +46,8 @@ import user.profile.service.UserProfileLocalServiceUtil;
         "javax.portlet.name=identification",
         "javax.portlet.resource-bundle=content.Language",
         "javax.portlet.security-role-ref=administrator",
-        "javax.portlet.supports.mime-type=text/html"
+        "javax.portlet.supports.mime-type=text/html",
+        "javax.portlet.init-param.add-process-action-success-action=false"
 	},
 	service = Portlet.class
 )
@@ -53,29 +57,23 @@ public class IdentificationPortlet extends MVCPortlet {
 
     private final static int ONE_GB = 1073741824;
     
-    private final static String baseDir = "/tmp/uploaded/";
-    
     private final static String fileInputName = "fileupload";
     
     private ImageType imageType;
     
-    private String anversoUrl;
-    
-    private String reversoUrl;
-    
-    private String selfieUrl;
-    
     private SessionManager sessionManager = new SessionManager();
 
-    
-    
-    @Override
-    public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
-            throws IOException, PortletException {
-        _logger.info("Do viewwwwwwwwwwwwwwwwwwwww");
-        super.doView(renderRequest, renderResponse);
-    }
-    
+//    @Override
+//    public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
+//            throws IOException, PortletException {
+//        _logger.info("Do viewwwwwwwwwwwwwwwwwwwww");
+//        if (renderRequest.getParameter("actualDialog") != null) {
+//            _logger.info("Parametro img: " + renderRequest.getParameter("actualDialog"));
+//            imageType = ImageType.valueOf(renderRequest.getParameter("actualDialog"));
+//        }
+//        super.doView(renderRequest, renderResponse);
+//    }
+//
     @Override
     public void render(RenderRequest renderRequest, RenderResponse arg1) throws IOException, PortletException {
         try {
@@ -85,15 +83,23 @@ public class IdentificationPortlet extends MVCPortlet {
             _logger.info("Idnumber: " + up.getIdNumber());
             renderRequest.setAttribute("idType", up.getIdType());
             renderRequest.setAttribute("idNumber", up.getIdNumber());
-
+            renderRequest.setAttribute("dateTimeSecond", new Date().toString());
         } catch (PortalException e) {
             e.printStackTrace();
         }
-        _logger.info("Valor que tiene es: " + renderRequest.getAttribute("anversoFile"));
-        if (renderRequest.getParameter("img") != null) {
-            imageType = ImageType.valueOf(renderRequest.getParameter("img"));
-        }
+//        _logger.info("Valor que tiene es: " + renderRequest.getAttribute("anversoFile"));
+//        if (renderRequest.getParameter("img") != null) {
+//            _logger.info("Parametro img: " + renderRequest.getParameter("img"));
+//            imageType = ImageType.valueOf(renderRequest.getParameter("img"));
+//        }
         super.render(renderRequest, arg1);
+    }
+    
+    public void setChangingImage(ActionRequest actionRequest, ActionResponse actionResponse) {
+        if (actionRequest.getParameter("imgType") != null) {
+            _logger.info("setChangingImage imgType: " + actionRequest.getParameter("imgType"));
+            imageType = ImageType.valueOf(actionRequest.getParameter("imgType"));
+        }
     }
 
     public void saveProfile(ActionRequest request, ActionResponse response)
@@ -112,22 +118,23 @@ public class IdentificationPortlet extends MVCPortlet {
     public void upload(ActionRequest request, ActionResponse response)
             throws Exception {
         
-        _logger.info("Subir archivo para: " + imageType);
+        _logger.debug("Subir archivo para: " + imageType);
+        _logger.debug("parametro actualDialog: " + request.getParameter("actualDialog"));
  
         UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(request);
         
         long sizeInBytes = uploadRequest.getSize(fileInputName);
-        _logger.info("File size: " + sizeInBytes);
-        _logger.info("File name: " + uploadRequest.getFileName(fileInputName));
+        _logger.debug("File size: " + sizeInBytes);
+        _logger.debug("File name: " + uploadRequest.getFileName(fileInputName));
  
-        if (uploadRequest.getSize(fileInputName) == 0) {
+        if (sizeInBytes == 0) {
             throw new Exception("Received file is 0 bytes!");
         }
  
         // Get the uploaded file as a file.
         File uploadedFile = uploadRequest.getFile(fileInputName);
         
-        _logger.info(uploadedFile.getAbsolutePath());
+        _logger.debug(uploadedFile.getAbsolutePath());
  
         FileUtil fileUtil = new FileUtil();
         
@@ -141,8 +148,9 @@ public class IdentificationPortlet extends MVCPortlet {
         fileUtil.copyFile(uploadedFile.getAbsolutePath(), targetFilePath);
         sessionManager.setDocumentFilePath(targetFilePath, imageType, request);
         
+        
         _logger.info("Se pone en request:" + targetFilePath);
-        request.setAttribute("anversoFile",targetFilePath);
+//        request.setAttribute("anversoFile",targetFilePath);
         
         response.setRenderParameter("jspPage", "/fileUpload.jsp");
     }

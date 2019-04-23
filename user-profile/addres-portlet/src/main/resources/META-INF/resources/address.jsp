@@ -14,6 +14,7 @@
 	String street1 = (String) renderRequest.getAttribute("street1");
 	String street2 = (String) renderRequest.getAttribute("street1");
 	String phoneNumber = (String) renderRequest.getAttribute("phoneNumber");
+    String dateTimeSecond = (String) renderRequest.getAttribute("dateTimeSecond");
 %>
 
 <portlet:renderURL var="uploadResidencia" windowState="<%=LiferayWindowState.POP_UP.toString() %>">
@@ -73,11 +74,20 @@
                       </td>
                       <td valign="top">
 			            <table>
-			                <tr>
-			                    <td colspan="2"><img id="RESIDENCIAImg"
-			                        src="/o/address/image?imageType=RESIDENCIA" width="250"
-			                        height="150" /></td>
-			                </tr>
+                            <tr>
+                                <td colspan="2" align="center"><liferay-ui:message key="mensaje.carga.direccion"/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><img id="RESIDENCIAImg"
+                                    src="/o/address/image?imageType=RESIDENCIA&a=<%=dateTimeSecond%>" width="250"
+                                    height="150" /></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">&nbsp;</td>
+                            </tr>
 			                <tr>
 			                    <td align="center"><aui:button name="btnResidencia"
 			                            type="button" value="change" /></td>
@@ -101,7 +111,7 @@
 
 
 <br />
-<aui:button name="Save" value="Save" />
+<aui:button type="submit" />
 	
 </aui:form>
 
@@ -132,20 +142,6 @@
        );
     }
 
-    A.one('#<portlet:namespace/>Save').on('click', function(event) {
-        var A = AUI();
-        var url = '<%=saveProfile%>';
-        A.io.request(
-            url,
-            {
-                method: 'POST',
-                form: {id: '<portlet:namespace/>addresForm'},
-                on: { success: function() { refreshPortlet();}}
-            }
-       );
-
-    });
-    
     function openDialog(dialogType, title, uri){
           Liferay.Util.openWindow({
                dialog: {centered: true, height: 300, modal: true, width: 400},
@@ -163,25 +159,14 @@
 	         Liferay.fire('closeWindow', {id:'<portlet:namespace/>' + actualDialog});
                  },['aui-base','liferay-util-window'] );
 
-    Liferay.provide(window, 'refreshPortlet', function() {
-        var curPortlet = '#p_p_id<portlet:namespace/>';
-        console.log(curPortlet);
-        Liferay.Portlet.refresh(curPortlet);
-        setTimeout(function(){ 
-            refeshImage('RESIDENCIAImg'); 
-            }, 500);
-        
-    },
-    ['aui-dialog','aui-dialog-iframe']
-    );
-    
-    function refeshImage(imageName){
+    Liferay.provide(window, 'refeshImage', function(imageName) {
+        if (!imageName) imageName = actualDialog + 'Img';
         console.log('refrescar...');
         console.log(imageName);
         img = document.getElementById(imageName);
         console.log(img);
         var d=new Date();
         img.src = img.src + '&a=' +d.getTime();
-    }
+    });
 
 </aui:script>

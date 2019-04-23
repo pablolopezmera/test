@@ -33,6 +33,9 @@ import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ec.virtualcoin.common.ImageType;
+import com.ec.virtualcoin.common.SessionManager;
+
 /**
  * @author Liferay
  */
@@ -63,10 +66,12 @@ public class ImageServlet extends HttpServlet {
             String isAdmin = (String) request.getParameter("isAdmin");
             String pathToWeb = "";
             
+            ImageType imageType = null;
+            
             if (isAdmin != null && "true".equals(isAdmin)) {
                 pathToWeb = (String) request.getParameter("imageLocation");
             } else {
-                ImageType imageType = ImageType.valueOf((String) request.getParameter("imageType"));
+                imageType = ImageType.valueOf((String) request.getParameter("imageType"));
                 pathToWeb = sessionManager.getDocumentFilePath(imageType, request);
             }
 
@@ -76,7 +81,7 @@ public class ImageServlet extends HttpServlet {
             File f = new File(pathToWeb);
             if (!f.exists()) {
                 _log.info("Archivo no existe: ".concat(pathToWeb));
-                printDefaultFileImage(response);
+                printDefaultFileImage(response, imageType);
                 return;
             }
             BufferedImage bi = ImageIO.read(f);
@@ -90,8 +95,9 @@ public class ImageServlet extends HttpServlet {
         }
     }
 
-    private void printDefaultFileImage(HttpServletResponse response) throws IOException {
-        InputStream resourceAsStream = ImageServlet.class.getResourceAsStream("/content/id-card-illustration.jpg");
+    private void printDefaultFileImage(HttpServletResponse response, ImageType imageType) throws IOException {
+        String fileName = String.format("/content/%s.jpg", imageType);
+        InputStream resourceAsStream = ImageServlet.class.getResourceAsStream(fileName);
         byte[] buffer = new byte[8 * 1024];
         int bytesRead;
         OutputStream out = response.getOutputStream();
