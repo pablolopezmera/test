@@ -35,6 +35,14 @@ Rest Extender, en Context paths agregar /rest
 En "Control Panel / Configuration / Custom fields / Site" agregar los siguientes campos de texto:
 - notification.address.from
 - notification.address.to
+- notification.confirmation.request
+- notification.approved.subject
+
+En "Control Panel / Configuration / Custom fields / Site" dar permisos de lectura al rol User:
+- notification.address.from
+- notification.address.to
+- notification.confirmation.request
+- notification.approved.subject
 
 En "Control Panel / System Settings / Other / Coinatural Configuration" 
 - Campo Site name poner el nombre del sitio, ejm: Coinatural
@@ -56,6 +64,7 @@ Desplegar los siguientes proyectos:
 	- users.admin-1.0.0.jar
 	- identification.portlet-1.0.0.jar
 	- quotation-1.0.0.jar
+	- my.orders-1.0.0.jar
 - create-account
 	- com.liferay.blade.module.jsp.override-1.0.0.jar
 - fixed.quotation-1.0.0.jar
