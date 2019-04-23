@@ -31,7 +31,6 @@ import user.profile.service.PurchaseLocalServiceUtil;
             "com.liferay.portlet.display-category=category.hidden",
             "com.liferay.portlet.preferences-owned-by-group=true",
             "com.liferay.portlet.render-weight=100",
-            "javax.portlet.display-name=My Orders",
             "javax.portlet.expiration-cache=0",
             "javax.portlet.init-param.view-template=/view.jsp",
             "javax.portlet.name=my_orders",
@@ -48,16 +47,14 @@ public class MyOrdersPortlet extends MVCPortlet {
     @Override
     public void render(RenderRequest renderRequest, RenderResponse renderResponse)
             throws IOException, PortletException {
-        System.out.println("---------------------------------------------");
-        _logger.info("renderrrrrrrrrr");
         String screenName;
         try {
             screenName = PortalUtil.getUser(renderRequest).getScreenName();
             List<PurchaseDto> orders = loadUserOrders(screenName);
             Escaper escaper = new Escaper(ordersToJsonString(orders).toJSONString());
             String unescaped = escaper.unescape();
-            _logger.info(unescaped);
-            _logger.info("size: " + orders.size());
+            _logger.debug(unescaped);
+            _logger.debug("size: " + orders.size());
             renderRequest.setAttribute("orders", unescaped);
             super.render(renderRequest, renderResponse);
         } catch (PortalException e) {
@@ -80,20 +77,12 @@ public class MyOrdersPortlet extends MVCPortlet {
         return resultsArray;
     }
 
-    @Override
-    public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
-            throws IOException, PortletException {
-        // TODO Auto-generated method stub
-        _logger.info("do viewwwwwwwwwwwwwwwwwww");
-        super.doView(renderRequest, renderResponse);
-    }
-
     private List<PurchaseDto> loadUserOrders(String screenName) {
         List<PurchaseDto> userList = new ArrayList<>();
         List<Purchase> orders = PurchaseLocalServiceUtil.findByscreenname(screenName);
         for (Purchase p : orders) {
             userList.add(new PurchaseDto(p.getCurr_from(), p.getCurr_to(), p.getDate_time(), p.getEwallet(),
-                    p.getValue_from(), p.getValue_to()));
+                    p.getValue_from(), p.getValue_to(), p.getStatus()));
         }
         _logger.info("Users: " + orders.size());
         return userList;

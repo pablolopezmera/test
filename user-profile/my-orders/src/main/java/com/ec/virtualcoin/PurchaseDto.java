@@ -4,11 +4,11 @@ import java.util.Date;
 
 public class PurchaseDto {
 
-    private String curr_from, curr_to, ewallet, value_from, value_to;
+    private String curr_from, curr_to, ewallet, value_from, value_to, status;
     private Date date_time;
 
     public PurchaseDto(String curr_from, String curr_to, Date date_time, String ewallet, String value_from,
-            String value_to) {
+            String value_to, String status) {
         super();
         this.curr_from = curr_from;
         this.curr_to = curr_to;
@@ -16,6 +16,7 @@ public class PurchaseDto {
         this.ewallet = ewallet;
         this.value_from = value_from;
         this.value_to = value_to;
+        this.status = status;
     }
 
     public String getCurr_from() {
@@ -64,6 +65,10 @@ public class PurchaseDto {
 
     public void setDate_time(Date date_time) {
         this.date_time = date_time;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
 }

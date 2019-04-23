@@ -23,7 +23,8 @@ YUI().use(
       {key:'value_from', label:'<liferay-ui:message key="label.value.from"/>'},
       {key:'curr_to', label:'<liferay-ui:message key="label.currency.to"/>'},
       {key:'value_to', label:'<liferay-ui:message key="label.value.to"/>'},
-      {key:'ewallet', label:'<liferay-ui:message key="label.ewallet"/>'}
+      {key:'ewallet', label:'<liferay-ui:message key="label.ewallet"/>'},
+      {key:'status', label:'<liferay-ui:message key="label.status"/>'}
       ];
 
     var data = <%=HtmlUtil.unescape(orders)%> ;
