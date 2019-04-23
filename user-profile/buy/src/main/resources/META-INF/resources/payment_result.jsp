@@ -5,6 +5,8 @@
     String errorMessage = (String) renderRequest.getAttribute("errorMessage");
 %>
 
+<br /><br />
+
 <c:if test="${ success == true }">
     <p><liferay-ui:message key="buy.payment.success"/></p>
 </c:if>

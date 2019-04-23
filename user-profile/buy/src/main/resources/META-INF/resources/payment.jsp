@@ -46,7 +46,7 @@ var portletNamespace = '<portlet:namespace/>';
                         </aui:input>
                     </div>
                     <div class="form-group" id="expiration-date">
-                         <aui:select name="monthExpiration" label="expiration.date">
+                         <aui:select name="monthExpiration" label="expiration.month">
                             <aui:option value="01">January</aui:option>
                             <aui:option value="02">February </aui:option>
                             <aui:option value="03">March</aui:option>
@@ -60,7 +60,7 @@ var portletNamespace = '<portlet:namespace/>';
                             <aui:option value="11">November</aui:option>
                             <aui:option value="12">December</aui:option>
                         </aui:select>
-                         <aui:select name="yearExpiration" label="expiration.date">
+                         <aui:select name="yearExpiration" label="expiration.year">
                             <aui:option value="2018">2018</aui:option>
                             <aui:option value="2019">2019</aui:option>
                             <aui:option value="2020">2020</aui:option>

@@ -147,6 +147,13 @@ public class AuthorizeCaptureTransactionRequest {
         public AuthorizeCaptureTransactionRequest build() {
             return new AuthorizeCaptureTransactionRequest(this);
         }
+
+        public Builder PostCode(String postCode) {
+            if (postCode!=null && !postCode.isEmpty()) {
+                this.PostCode = Short.valueOf(postCode);
+            }
+            return this;
+        }
     }
 
     private AuthorizeCaptureTransactionRequest(Builder builder) {

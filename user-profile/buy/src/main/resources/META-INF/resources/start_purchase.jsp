@@ -27,17 +27,6 @@
     <liferay-ui:message key="buy.mail.confirmation.sent"/>
 </c:if>
 
-<c:if test="${ status == 'CONFIRMATION'}">
-  <aui:form name="confirmForm" id="confirmForm" action="<%= confirmOrder %>" method="post">
-      <aui:input type="hidden" name="pid" value="${pid}" />
-	    <liferay-ui:message key="confirm.your.order"/><br />
-	    <liferay-ui:message key="buy.usd"/>:${usdValue}<br />
-	    <liferay-ui:message key="buy.btc"/>:${btcValue}<br />
-	    <liferay-ui:message key="buy.ewallet"/>:${ewallet}<br />
-      <aui:button name="Buy" value="buy.confirm" type="submit" />
-    </aui:form>
-</c:if>
-
 <c:if test="${ status == 'START_PURCHASE'}">
   <aui:form name="buyForm" id="buyForm" action="<%= sendOrder %>" method="post">
       <aui:input id="usdValue" label="buy.usd" name="usdValue" value="${usdValue}" >
@@ -102,12 +91,13 @@
         
     function updateCotization(data) {
         usdToBtcCot = data.usdPrice;
-        usdField = A.one('#<portlet:namespace/>usdValue');
         if (calcFrom == 'USD'){
+            usdField = A.one('#<portlet:namespace/>usdValue');
             btc = convertToBtc(usdField.get('value'));
             A.one('#<portlet:namespace />btcValue').set('value', btc);
         }
         if (calcFrom == 'BTC'){
+            btcField = A.one('#<portlet:namespace/>btcValue');
             usd = convertToUsd(btcField.get('value'));
             A.one('#<portlet:namespace />usdValue').set('value', usd);
         }

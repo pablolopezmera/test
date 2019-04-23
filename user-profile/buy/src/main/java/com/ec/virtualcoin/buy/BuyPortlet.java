@@ -57,7 +57,8 @@ import user.profile.service.persistence.PurchasePK;
         "javax.portlet.expiration-cache=0",
         "javax.portlet.init-param.view-template=/start_purchase.jsp",
         "javax.portlet.name=buy",
-        "javax.portlet.resource-bundle=content.Language"
+        "javax.portlet.resource-bundle=content.Language",
+        "javax.portlet.init-param.add-process-action-success-action=false"
 }, service = Portlet.class)
 public class BuyPortlet extends MVCPortlet {
 
@@ -88,9 +89,6 @@ public class BuyPortlet extends MVCPortlet {
                 renderRequest.setAttribute("status", "COUNTRY_NOT_ALLOWED");
             } else if (!userProfile.getApproved()) {
                 renderRequest.setAttribute("status", "PROFILE_NOT_APPROVED");
-            } else  if (pid != null && !pid.isEmpty() && isValidPid(pid)) {
-                loadPurchaseOrderData(pid, renderRequest);
-                renderRequest.setAttribute("status", "CONFIRMATION");
             } else {
                 renderRequest.setAttribute("status", "START_PURCHASE");
             }
@@ -124,20 +122,25 @@ public class BuyPortlet extends MVCPortlet {
         _logger.info(actionRequest.getParameter("btcValue"));
         _logger.info(actionRequest.getParameter("ewallet"));
         Purchase purchase = registerPurchaseOrder(actionRequest);
-        sendMailConfirmationRequest(actionRequest, purchase);
-        _logger.info("redireccionaaaaaaaaaaaaaa");
-        response.setRenderParameter("jspPage","/mail_confirmation_sent.jsp"); 
+        actionRequest.setAttribute("usdValue", purchase.getValue_from());
+        actionRequest.setAttribute("btcValue", purchase.getValue_to());
+        actionRequest.setAttribute("ewallet", purchase.getEwallet());
+        actionRequest.setAttribute("pid", purchase.getPrimaryKey().hash);
+//        sendMailConfirmationRequest(actionRequest, purchase);
+        response.setRenderParameter("jspPage","/confirmation.jsp"); 
     }
 
     public void confirmOrder(ActionRequest actionRequest, ActionResponse response) throws Exception {
         _logger.info("Confirm order:");
         _logger.info(actionRequest.getParameter("pid"));
         Purchase purchase = loadPurchase(actionRequest);
-        purchase.setStatus(Status.CONFIRMED.name());
-        PurchaseLocalServiceUtil.updatePurchase(purchase);
-        _logger.info("orden confirmada");
-        actionRequest.setAttribute("pid", actionRequest.getParameter("pid"));
-        response.setRenderParameter("jspPage","/payment.jsp"); 
+        if (purchase.getStatus().equals(Status.ORDERED.name()) || purchase.getStatus().equals(Status.CONFIRMED.name())) {
+            purchase.setStatus(Status.CONFIRMED.name());
+            PurchaseLocalServiceUtil.updatePurchase(purchase);
+            _logger.info("orden confirmada");
+            actionRequest.setAttribute("pid", actionRequest.getParameter("pid"));
+            response.setRenderParameter("jspPage","/payment.jsp"); 
+        }
     }
 
     private Purchase loadPurchase(ActionRequest actionRequest) {
@@ -161,26 +164,27 @@ public class BuyPortlet extends MVCPortlet {
         cardNumber = cardNumber.replaceAll(" ", "");
         Purchase purchase = loadPurchase(actionRequest);
         User user = (User) actionRequest.getAttribute(WebKeys.USER);
-        UserProfile up = UserProfileLocalServiceUtil.fetchUserProfile(user.getScreenName());
+        UserProfile uProfile = UserProfileLocalServiceUtil.fetchUserProfile(user.getScreenName());
         EcorePayClient cpc = new EcorePayClient();
 
         _logger.info(user.getFirstName());
         _logger.info(user.getLastName());
-        _logger.info(up.getPostalCode());
+        _logger.info(uProfile.getPostalCode());
+        _logger.info("valor: " + purchase.getValue_from());
         AuthorizeCaptureTransactionRequest transaction = new AuthorizeCaptureTransactionRequest.Builder()
                 .Reference(purchase.getScreenname().concat(purchase.getPrimaryKey().getHash()))
                 .Amount(Float.valueOf(purchase.getValue_from()))
                 .Currency(purchase.getCurr_from())
                 .Email(user.getEmailAddress())
                 .IPAddress(getRemoteAddress(actionRequest))
-                .Phone(up.getPhoneNumber())
+                .Phone(uProfile.getPhoneNumber())
                 .FirstName(user.getFirstName())
                 .LastName(user.getLastName())
-                .Address(up.getStreet1().concat(" - ").concat(up.getStreet2()))
-                .City(up.getCity())
-                .State(up.getProv())
-                .PostCode(Short.valueOf(up.getPostalCode()))
-                .Country(up.getCountry())
+                .Address(uProfile.getStreet1().concat(" - ").concat(uProfile.getStreet2()))
+                .City(uProfile.getCity())
+                .State(uProfile.getProv())
+                .PostCode(uProfile.getPostalCode())
+                .Country(uProfile.getCountry())
                 .CardNumber(Long.valueOf(cardNumber))
                 .CardExpMonth(Byte.valueOf(monthExpiration))
                 .CardExpYear(Short.valueOf(yearExpiration))
@@ -192,12 +196,14 @@ public class BuyPortlet extends MVCPortlet {
             transaction.setDOB(formatUtil.formatDate(user.getBirthday()));
         }
 
+        // TODO: Poner los datos de accountId y accountAuth
         AuthorizeCaptureRequest acr = new AuthorizeCaptureRequest(RequestType.AuthorizeCapture, 97709852, "TyawONMkSoidmMBV", transaction);
         
         Response authorizeResponse = cpc.authorizeCapture(acr);
         
         _logger.info(String.valueOf(authorizeResponse.getResponseCode()));
         if (authorizeResponse.getResponseCode() == 100) {
+            markOrderAsPaid(actionRequest);
             actionRequest.setAttribute("success", true);
             _logger.info("pago exitoso, manda true");
         } else {
@@ -208,6 +214,14 @@ public class BuyPortlet extends MVCPortlet {
         }
 
         response.setRenderParameter("jspPage","/payment_result.jsp"); 
+    }
+
+    private void markOrderAsPaid(ActionRequest actionRequest) {
+        _logger.info("Mark order as paid:");
+        _logger.info(actionRequest.getParameter("pid"));
+        Purchase purchase = loadPurchase(actionRequest);
+        purchase.setStatus(Status.PAID.name());
+        PurchaseLocalServiceUtil.updatePurchase(purchase);
     }
 
     private String getRemoteAddress(ActionRequest actionRequest) {
@@ -265,9 +279,7 @@ public class BuyPortlet extends MVCPortlet {
         ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
         Group siteGroup = themeDisplay.getSiteGroup();
         String mailFrom = (String) siteGroup.getExpandoBridge().getAttribute("notification.address.from");
-
-        InternetAddress fromAddress = null;
-        InternetAddress toAddress = null;
+        String subject = (String) siteGroup.getExpandoBridge().getAttribute("notification.confirmation.request");
 
         String name = user.getFirstName().concat(" ").concat(user.getLastName());
         String link = buildLink(actionRequest, purchase);
@@ -276,18 +288,17 @@ public class BuyPortlet extends MVCPortlet {
                 new String[] { name, purchase.getValue_from(), purchase.getValue_to(), purchase.getEwallet(), link });
 
         try {
-            fromAddress = new InternetAddress(mailFrom);
-            toAddress = new InternetAddress("onlypableins@gmail.com");
+            InternetAddress fromAddress = new InternetAddress(mailFrom);
+            InternetAddress  toAddress = new InternetAddress(user.getEmailAddress());
             MailMessage mailMessage = new MailMessage();
             mailMessage.setTo(toAddress);
             mailMessage.setFrom(fromAddress);
-            mailMessage.setSubject("Send mail by Using Template");
+            mailMessage.setSubject(subject);
             mailMessage.setBody(body);
             mailMessage.setHTMLFormat(true);
             MailServiceUtil.sendEmail(mailMessage);
-            System.out.println("Send mail by Using Tempelate");
+            _logger.debug("Sent mail by Using Template");
         } catch (AddressException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -315,8 +326,8 @@ public class BuyPortlet extends MVCPortlet {
             while ((c = reader.read()) != -1) {
                 textBuilder.append((char) c);
             }
-            _logger.info("el body");
-            _logger.info(textBuilder.toString());
+            _logger.debug("el body");
+            _logger.debug(textBuilder.toString());
         } catch (IOException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
