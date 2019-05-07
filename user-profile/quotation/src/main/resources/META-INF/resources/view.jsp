@@ -93,7 +93,7 @@
         usd = document.getElementById('<portlet:namespace />usdValue');
         console.log(usd.value);
         // location.href = '/group/virtualcoin/buy?value=' + usd.value;
-        location.href = 'http://localhost:8080/group/control_panel/manage?p_p_id=buy&p_p_lifecycle=0&p_p_state=maximized&p_p_auth=fqnvTYbt&value=' + usd.value;
+        location.href = '/group/control_panel/manage?p_p_id=buy&p_p_lifecycle=0&p_p_state=maximized&p_p_auth=fqnvTYbt&value=' + usd.value;
     });
 
 </aui:script>
