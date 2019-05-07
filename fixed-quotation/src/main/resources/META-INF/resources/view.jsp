@@ -2,7 +2,7 @@
 
     <div class="divTable">
         <div class="divTableBody">
-            <div class="firstRow">
+            <div class="firstRow" align="center">
                 <div class="divTableRow">
                     <p id="firstRowParagraph">
                         Buy<br />
@@ -10,17 +10,17 @@
                     </p>
                 </div>
             </div>
-            <div class="secondRow">
+            <div class="secondRow" align="center">
                 <div class="divTableRow">
                     <p id="secondRowParagraph"></p>
                 </div>
             </div>
-            <div class="thirdRow">
+            <div class="thirdRow" align="center">
                 <div class="divTableRow">
                     <p id="thirdRowParagraph"></p>
                 </div>
             </div>
-            <div class="fourthRow">
+            <div class="fourthRow" align="center">
                 <div class="divTableRow">
                     <div id="fourthRowParagraph">
                        <table width="100%">
