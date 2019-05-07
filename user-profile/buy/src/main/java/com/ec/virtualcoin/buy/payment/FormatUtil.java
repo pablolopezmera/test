@@ -11,5 +11,12 @@ public class FormatUtil {
         return Integer.valueOf(format.format(birthday));
     }
 
+    public String maxLength(String string, int maxLength) {
+        if (string !=null && string.length() > maxLength) {
+            return string.substring(0, maxLength);
+        }
+        return string;
+    }
+
     
 }

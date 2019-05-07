@@ -1,5 +1,5 @@
 package com.ec.virtualcoin.buy;
 
 public enum Status {
-    ORDERED, TIMED_OUT, CONFIRMED, PAID
+    INIT, TRANSACTION_FAILED, PAID
 }

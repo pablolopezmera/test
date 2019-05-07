@@ -6,7 +6,7 @@ public class ShipTo {
     private String Address;
     private String City;
     private String State;
-    private short PostCode;
+    private String PostCode;
     private String Country;
 
     public String getFirstName() {
@@ -49,11 +49,11 @@ public class ShipTo {
         State = state;
     }
 
-    public short getPostCode() {
+    public String getPostCode() {
         return PostCode;
     }
 
-    public void setPostCode(short postCode) {
+    public void setPostCode(String postCode) {
         PostCode = postCode;
     }
 
@@ -71,7 +71,7 @@ public class ShipTo {
         private String Address;
         private String City;
         private String State;
-        private short PostCode;
+        private String PostCode;
         private String Country;
 
         public Builder FirstName(String FirstName) {
@@ -99,7 +99,7 @@ public class ShipTo {
             return this;
         }
 
-        public Builder PostCode(short PostCode) {
+        public Builder PostCode(String PostCode) {
             this.PostCode = PostCode;
             return this;
         }

@@ -10,7 +10,7 @@
 <portlet:actionURL name="sendOrder" var="sendOrder" />
 <portlet:actionURL name="confirmOrder" var="confirmOrder" />
 
-<p>
+<div class="container" style="width:70%; margin-top: 50px;">
 
   <aui:form name="confirmForm" id="confirmForm" action="<%= confirmOrder %>" method="post">
       <aui:input type="hidden" name="pid" value="${pid}" />
@@ -21,4 +21,4 @@
       <aui:button name="Buy" value="buy.confirm" type="submit" />
     </aui:form>
 	
-</p>
+</div>

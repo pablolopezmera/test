@@ -28,7 +28,7 @@ public class RequestTest {
             .Address("345 Boring Road")
             .City("Dullsville")
             .State("CA")
-            .PostCode((short) 12345)
+            .PostCode("FL12345DS")
             .Country("US").build();
 
         AuthorizeCaptureTransactionRequest transaction = new AuthorizeCaptureTransactionRequest.Builder()
@@ -45,12 +45,12 @@ public class RequestTest {
                 .Address("123 Boring Road")
                 .City("Dullsville")
                 .State("CA")
-                .PostCode((short) 12345)
+                .PostCode("FL12345")
                 .Country("US")
                 .CardNumber(4111111111111111l)
                 .CardExpMonth((byte) 06)
                 .CardExpYear((short) 2020)
-                .CardCVV((byte) 123)
+                .CardCVV((short) 999)
                 .ShipTo(shipTo).build();
 
         AuthorizeCaptureRequest acr = new AuthorizeCaptureRequest(RequestType.AuthorizeCapture, 97709852, "TyawONMkSoidmMBV", transaction);
@@ -71,7 +71,7 @@ public class RequestTest {
           .Address("345 Boring Road")
           .City("Dullsville")
           .State("CA")
-          .PostCode((short) 12345)
+          .PostCode("FL123458")
           .Country("US").build();
 
       AuthorizeCaptureTransactionRequest transaction = new AuthorizeCaptureTransactionRequest.Builder()
@@ -93,7 +93,7 @@ public class RequestTest {
               .CardNumber(4111111111111111l)
               .CardExpMonth((byte) 06)
               .CardExpYear((short) 2020)
-              .CardCVV((byte) 123)
+              .CardCVV((short) 999)
               .ShipTo(shipTo).build();
 
       AuthorizeCaptureRequest acr = new AuthorizeCaptureRequest(RequestType.AuthorizeCapture, 97709852, "TyawONMkSoidmMBV", transaction);
@@ -108,7 +108,7 @@ public class RequestTest {
 
 
     @Test
-//    @Ignore
+    @Ignore
     public void shouldMakeSuccessPaymentNoShip() throws JAXBException, IOException, PaymantInvocationException {
         EcorePayClient cpc = new EcorePayClient();
 
@@ -128,35 +128,14 @@ public class RequestTest {
                 .Address("123 Boring Road")
                 .City("Dullsville")
                 .State("CA")
-                .PostCode((short) 12345)
+                .PostCode("FL12345")
                 .Country("US")
                 .CardNumber(4111111111111111l)
                 .CardExpMonth((byte) 06)
                 .CardExpYear((short) 2020)
-                .CardCVV((byte) 123)
+                .CardCVV((short) 999)
                 .build();
 
-//        AuthorizeCaptureTransactionRequest transaction = new AuthorizeCaptureTransactionRequest.Builder()
-//                .Reference(purchase.getScreenname().concat(purchase.getPrimaryKey().getHash()))
-//                .Amount(Float.valueOf(purchase.getValue_from()))
-//                .Currency(purchase.getCurr_from())
-//                .Email(user.getEmailAddress())
-//                .IPAddress(getRemoteAddress(actionRequest))
-//                .Phone(uProfile.getPhoneNumber())
-//                .FirstName(user.getFirstName())
-//                .LastName(user.getLastName())
-//                .Address(uProfile.getStreet1().concat(" - ").concat(uProfile.getStreet2()))
-//                .City(uProfile.getCity())
-//                .State(uProfile.getProv())
-//                .PostCode(uProfile.getPostalCode())
-//                .Country(uProfile.getCountry())
-//                .CardNumber(Long.valueOf(cardNumber))
-//                .CardExpMonth(Byte.valueOf(monthExpiration))
-//                .CardExpYear(Short.valueOf(yearExpiration))
-//                .CardCVV(Byte.valueOf(cvv))
-//                .build();
-//
-        
         AuthorizeCaptureRequest acr = new AuthorizeCaptureRequest(RequestType.AuthorizeCapture, 97709852, "TyawONMkSoidmMBV", transaction);
         
         Response authorizeCapture = cpc.authorizeCapture(acr);
@@ -166,5 +145,41 @@ public class RequestTest {
         System.out.println(authorizeCapture.getResponseCode());
         Assert.assertEquals(100, authorizeCapture.getResponseCode());
     }
+
+    @Test
+  @Ignore
+  public void shouldMakeSuccessPaymentOswaldo() throws JAXBException, IOException, PaymantInvocationException {
+      EcorePayClient cpc = new EcorePayClient();
+
+      AuthorizeCaptureTransactionRequest transaction = new AuthorizeCaptureTransactionRequest.Builder()
+              .Reference("1234567890123456789012345678901234567890123456789012345678901234")
+              .Amount(1234.0f)
+              .Currency("USD")
+              .Email("oswaldo.maldonado.orrego@gmail.com")
+              .IPAddress("191.99.138.4")
+              .Phone("0999811567")
+              .FirstName("Oswaldo")
+              .LastName("Maldonado")
+              .Address("CIPRESES - HELECHOS")
+              .City("QUITO")
+              .State("PICHINCHA")
+              .PostCode("170513")
+              .Country("EC")
+              .CardNumber(5555555555554444l)
+              .CardExpMonth(Byte.valueOf("1"))
+              .CardExpYear(Short.valueOf("2021"))
+              .CardCVV(Short.valueOf("1234"))
+              .build();
+
+//      FormatUtil formatUtil = new FormatUtil();
+//      transaction.setDOB(formatUtil.formatDate(new GregorianCalendar(1966, 7, 12).getTime()));
+      
+      AuthorizeCaptureRequest acr = new AuthorizeCaptureRequest(RequestType.AuthorizeCapture, 97709852, "TyawONMkSoidmMBV", transaction);
+      
+      Response authorizeCapture = cpc.authorizeCapture(acr);
+      
+      Assert.assertEquals(100, authorizeCapture.getResponseCode());
+  }
+    
 
 }

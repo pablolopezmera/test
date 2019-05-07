@@ -60,11 +60,20 @@ var portletNamespace = '<portlet:namespace/>';
                             <aui:option value="11">November</aui:option>
                             <aui:option value="12">December</aui:option>
                         </aui:select>
-                         <aui:select name="yearExpiration" label="expiration.year">
+                        <aui:select name="yearExpiration" label="expiration.year">
                             <aui:option value="2018">2018</aui:option>
                             <aui:option value="2019">2019</aui:option>
                             <aui:option value="2020">2020</aui:option>
                             <aui:option value="2021">2021</aui:option>
+                            <aui:option value="2021">2022</aui:option>
+                            <aui:option value="2021">2023</aui:option>
+                            <aui:option value="2021">2024</aui:option>
+                            <aui:option value="2021">2025</aui:option>
+                            <aui:option value="2021">2026</aui:option>
+                            <aui:option value="2021">2027</aui:option>
+                            <aui:option value="2021">2028</aui:option>
+                            <aui:option value="2021">2029</aui:option>
+                            <aui:option value="2021">2030</aui:option>
                         </aui:select>
                     </div>
                     <div class="form-group" id="credit_cards">

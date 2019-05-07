@@ -5,14 +5,15 @@
     String errorMessage = (String) renderRequest.getAttribute("errorMessage");
 %>
 
-<br /><br />
+<div class="container" style="width:70%; margin-top: 50px;">
 
 <c:if test="${ success == true }">
-    <p><liferay-ui:message key="buy.payment.success"/></p>
+    <div class="row" class="col-md-12"><liferay-ui:message key="buy.payment.success"/></div>
 </c:if>
 
 <c:if test="${ success == false }">
-    <p><liferay-ui:message key="buy.payment.fail"/></p>
-    <%=errorMessage%>
+    <div class="row" class="col-md-12"><liferay-ui:message key="buy.payment.fail"/></div>
+    <div class="row" class="col-md-12"><%=errorMessage%></div>
 </c:if>
 
+</div>

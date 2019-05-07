@@ -300,7 +300,7 @@ public class Request {
         @XmlElement(name = "State", required = true)
         protected String state;
         @XmlElement(name = "PostCode")
-        protected short postCode;
+        protected String postCode;
         @XmlElement(name = "Country", required = true)
         protected String country;
         @XmlElement(name = "CardNumber")
@@ -310,7 +310,7 @@ public class Request {
         @XmlElement(name = "CardExpYear")
         protected short cardExpYear;
         @XmlElement(name = "CardCVV")
-        protected byte cardCVV;
+        protected short cardCVV;
         @XmlElement(name = "ShipTo", required = true)
         protected Request.Transaction.ShipTo shipTo;
         @XmlElement(required = true)
@@ -609,7 +609,7 @@ public class Request {
          * Gets the value of the postCode property.
          * 
          */
-        public short getPostCode() {
+        public String getPostCode() {
             return postCode;
         }
 
@@ -617,7 +617,7 @@ public class Request {
          * Sets the value of the postCode property.
          * 
          */
-        public void setPostCode(short value) {
+        public void setPostCode(String value) {
             this.postCode = value;
         }
 
@@ -697,7 +697,7 @@ public class Request {
          * Gets the value of the cardCVV property.
          * 
          */
-        public byte getCardCVV() {
+        public short getCardCVV() {
             return cardCVV;
         }
 
@@ -705,7 +705,7 @@ public class Request {
          * Sets the value of the cardCVV property.
          * 
          */
-        public void setCardCVV(byte value) {
+        public void setCardCVV(short value) {
             this.cardCVV = value;
         }
 
@@ -806,7 +806,7 @@ public class Request {
             @XmlElement(name = "State", required = true)
             protected String state;
             @XmlElement(name = "PostCode")
-            protected short postCode;
+            protected String postCode;
             @XmlElement(name = "Country", required = true)
             protected String country;
 
@@ -934,7 +934,7 @@ public class Request {
              * Gets the value of the postCode property.
              * 
              */
-            public short getPostCode() {
+            public String getPostCode() {
                 return postCode;
             }
 
@@ -942,7 +942,7 @@ public class Request {
              * Sets the value of the postCode property.
              * 
              */
-            public void setPostCode(short value) {
+            public void setPostCode(String value) {
                 this.postCode = value;
             }
 

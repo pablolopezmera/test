@@ -14,12 +14,12 @@ public class AuthorizeCaptureTransactionRequest {
     private String Address;
     private String City;
     private String State;
-    private short PostCode;
+    private String PostCode;
     private String Country;
     private long CardNumber;
     private byte CardExpMonth;
     private short CardExpYear;
-    private byte CardCVV;
+    private Short CardCVV;
     private ShipTo ShipTo;
 
     public static class Builder {
@@ -36,12 +36,12 @@ public class AuthorizeCaptureTransactionRequest {
         private String Address;
         private String City;
         private String State;
-        private short PostCode;
+        private String PostCode;
         private String Country;
         private long CardNumber;
         private byte CardExpMonth;
         private short CardExpYear;
-        private byte CardCVV;
+        private Short CardCVV;
         private ShipTo ShipTo;
 
         public Builder Reference(String Reference) {
@@ -109,7 +109,7 @@ public class AuthorizeCaptureTransactionRequest {
             return this;
         }
 
-        public Builder PostCode(short PostCode) {
+        public Builder PostCode(String PostCode) {
             this.PostCode = PostCode;
             return this;
         }
@@ -134,7 +134,7 @@ public class AuthorizeCaptureTransactionRequest {
             return this;
         }
 
-        public Builder CardCVV(byte CardCVV) {
+        public Builder CardCVV(Short CardCVV) {
             this.CardCVV = CardCVV;
             return this;
         }
@@ -148,12 +148,6 @@ public class AuthorizeCaptureTransactionRequest {
             return new AuthorizeCaptureTransactionRequest(this);
         }
 
-        public Builder PostCode(String postCode) {
-            if (postCode!=null && !postCode.isEmpty()) {
-                this.PostCode = Short.valueOf(postCode);
-            }
-            return this;
-        }
     }
 
     private AuthorizeCaptureTransactionRequest(Builder builder) {
@@ -235,7 +229,7 @@ public class AuthorizeCaptureTransactionRequest {
         return State;
     }
 
-    public short getPostCode() {
+    public String getPostCode() {
         return PostCode;
     }
 
@@ -255,11 +249,24 @@ public class AuthorizeCaptureTransactionRequest {
         return CardExpYear;
     }
 
-    public byte getCardCVV() {
+    public short getCardCVV() {
         return CardCVV;
     }
 
     public ShipTo getShipTo() {
         return ShipTo;
     }
+
+    @Override
+    public String toString() {
+        return "AuthorizeCaptureTransactionRequest [Reference=" + Reference + ", Amount=" + Amount + ", Currency="
+                + Currency + ", Email=" + Email + ", IPAddress=" + IPAddress + ", Phone=" + Phone + ", FirstName="
+                + FirstName + ", LastName=" + LastName + ", DOB=" + DOB + ", SSN=" + SSN + ", Address=" + Address
+                + ", City=" + City + ", State=" + State + ", PostCode=" + PostCode + ", Country=" + Country
+                + ", CardNumber=" + CardNumber + ", CardExpMonth=" + CardExpMonth + ", CardExpYear=" + CardExpYear
+                + ", CardCVV=" + CardCVV + ", ShipTo=" + ShipTo + "]";
+    }
+
+
+
 }

@@ -12,6 +12,7 @@ import java.util.Calendar;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.management.AttributeNotFoundException;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.Portlet;
@@ -30,14 +31,13 @@ import com.ec.virtualcoin.buy.payment.client.AuthorizeCaptureTransactionRequest;
 import com.ec.virtualcoin.buy.payment.client.EcorePayClient;
 import com.ec.virtualcoin.buy.payment.client.RequestType;
 import com.ec.virtualcoin.buy.payment.jaxb.Response;
+import com.ec.virtualcoin.common.CustomFieldUtil;
 import com.liferay.mail.kernel.model.MailMessage;
 import com.liferay.mail.kernel.service.MailServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.servlet.SessionErrors;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -100,33 +100,20 @@ public class BuyPortlet extends MVCPortlet {
         super.doView(renderRequest, renderResponse);
     }
 
-    private void loadPurchaseOrderData(String pid, RenderRequest renderRequest) {
-        User user = (User) renderRequest.getAttribute(WebKeys.USER);
-        PurchasePK purchasePK = new PurchasePK();
-        purchasePK.setScreenname(user.getScreenName());
-        purchasePK.setHash(pid);
-        Purchase purchase = PurchaseLocalServiceUtil.fetchPurchase(purchasePK);
-        renderRequest.setAttribute("usdValue", purchase.getValue_from());
-        renderRequest.setAttribute("btcValue", purchase.getValue_to());
-        renderRequest.setAttribute("ewallet", purchase.getEwallet());
-        renderRequest.setAttribute("pid", pid);
-    }
-
-    private boolean isValidPid(String pid) {
-        return true;
-    }
-
     public void sendOrder(ActionRequest actionRequest, ActionResponse response) throws Exception {
         _logger.info("Buy request:");
         _logger.info(actionRequest.getParameter("usdValue"));
         _logger.info(actionRequest.getParameter("btcValue"));
         _logger.info(actionRequest.getParameter("ewallet"));
+        if (!BTCAddrValidator.validate(actionRequest.getParameter("ewallet"))) {
+            SessionErrors.add(actionRequest, "not.valid.wallet.addres");
+            return;
+        }
         Purchase purchase = registerPurchaseOrder(actionRequest);
         actionRequest.setAttribute("usdValue", purchase.getValue_from());
         actionRequest.setAttribute("btcValue", purchase.getValue_to());
         actionRequest.setAttribute("ewallet", purchase.getEwallet());
         actionRequest.setAttribute("pid", purchase.getPrimaryKey().hash);
-//        sendMailConfirmationRequest(actionRequest, purchase);
         response.setRenderParameter("jspPage","/confirmation.jsp"); 
     }
 
@@ -134,9 +121,7 @@ public class BuyPortlet extends MVCPortlet {
         _logger.info("Confirm order:");
         _logger.info(actionRequest.getParameter("pid"));
         Purchase purchase = loadPurchase(actionRequest);
-        if (purchase.getStatus().equals(Status.ORDERED.name()) || purchase.getStatus().equals(Status.CONFIRMED.name())) {
-            purchase.setStatus(Status.CONFIRMED.name());
-            PurchaseLocalServiceUtil.updatePurchase(purchase);
+        if (purchase.getStatus().equals(Status.INIT.name())) {
             _logger.info("orden confirmada");
             actionRequest.setAttribute("pid", actionRequest.getParameter("pid"));
             response.setRenderParameter("jspPage","/payment.jsp"); 
@@ -154,6 +139,7 @@ public class BuyPortlet extends MVCPortlet {
     }
 
     public void makePayment(ActionRequest actionRequest, ActionResponse response) throws Exception {
+        FormatUtil formatUtil = new FormatUtil();
         _logger.info("Va a realizar el pago:");
         _logger.info(actionRequest.getParameter("pid"));
         _logger.info(actionRequest.getParameter("yearExpiration"));
@@ -172,7 +158,7 @@ public class BuyPortlet extends MVCPortlet {
         _logger.info(uProfile.getPostalCode());
         _logger.info("valor: " + purchase.getValue_from());
         AuthorizeCaptureTransactionRequest transaction = new AuthorizeCaptureTransactionRequest.Builder()
-                .Reference(purchase.getScreenname().concat(purchase.getPrimaryKey().getHash()))
+                .Reference(formatUtil.maxLength(purchase.getPrimaryKey().getHash().concat(purchase.getScreenname()), 64))
                 .Amount(Float.valueOf(purchase.getValue_from()))
                 .Currency(purchase.getCurr_from())
                 .Email(user.getEmailAddress())
@@ -188,13 +174,14 @@ public class BuyPortlet extends MVCPortlet {
                 .CardNumber(Long.valueOf(cardNumber))
                 .CardExpMonth(Byte.valueOf(monthExpiration))
                 .CardExpYear(Short.valueOf(yearExpiration))
-                .CardCVV(Byte.valueOf(cvv))
+                .CardCVV(Short.valueOf(cvv))
                 .build();
         
         if (user.getBirthday() != null) {
-            FormatUtil formatUtil = new FormatUtil();
             transaction.setDOB(formatUtil.formatDate(user.getBirthday()));
         }
+        
+        _logger.info(transaction.toString());
 
         // TODO: Poner los datos de accountId y accountAuth
         AuthorizeCaptureRequest acr = new AuthorizeCaptureRequest(RequestType.AuthorizeCapture, 97709852, "TyawONMkSoidmMBV", transaction);
@@ -204,9 +191,11 @@ public class BuyPortlet extends MVCPortlet {
         _logger.info(String.valueOf(authorizeResponse.getResponseCode()));
         if (authorizeResponse.getResponseCode() == 100) {
             markOrderAsPaid(actionRequest);
+            sendPurchaseConfirmation(actionRequest, purchase);
             actionRequest.setAttribute("success", true);
             _logger.info("pago exitoso, manda true");
         } else {
+            markOrderAsFailed(actionRequest);
             SessionErrors.add(actionRequest, "error-key");
             actionRequest.setAttribute("success", false);
             actionRequest.setAttribute("errorMessage", authorizeResponse.getDescription());
@@ -221,6 +210,14 @@ public class BuyPortlet extends MVCPortlet {
         _logger.info(actionRequest.getParameter("pid"));
         Purchase purchase = loadPurchase(actionRequest);
         purchase.setStatus(Status.PAID.name());
+        PurchaseLocalServiceUtil.updatePurchase(purchase);
+    }
+
+    private void markOrderAsFailed(ActionRequest actionRequest) {
+        _logger.info("Mark order as failed:");
+        _logger.info(actionRequest.getParameter("pid"));
+        Purchase purchase = loadPurchase(actionRequest);
+        purchase.setStatus(Status.TRANSACTION_FAILED.name());
         PurchaseLocalServiceUtil.updatePurchase(purchase);
     }
 
@@ -244,7 +241,7 @@ public class BuyPortlet extends MVCPortlet {
         purchase.setCurr_to(CryptoCurrency.BTC.name());
         purchase.setValue_to(btc);
         purchase.setEwallet(ewallet);
-        purchase.setStatus(Status.ORDERED.name());
+        purchase.setStatus(Status.INIT.name());
         purchase.setScreenname(user.getScreenName());
         purchase.setHash(buildHash(purchase));
 
@@ -274,20 +271,21 @@ public class BuyPortlet extends MVCPortlet {
         return "EC".equals(country);
     }
 
-    private void sendMailConfirmationRequest(ActionRequest actionRequest, Purchase purchase) {
+    private void sendPurchaseConfirmation(ActionRequest actionRequest, Purchase purchase) {
+        CustomFieldUtil cfu = new CustomFieldUtil();
+        
         User user = (User) actionRequest.getAttribute(WebKeys.USER);
-        ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-        Group siteGroup = themeDisplay.getSiteGroup();
-        String mailFrom = (String) siteGroup.getExpandoBridge().getAttribute("notification.address.from");
-        String subject = (String) siteGroup.getExpandoBridge().getAttribute("notification.confirmation.request");
-
-        String name = user.getFirstName().concat(" ").concat(user.getLastName());
-        String link = buildLink(actionRequest, purchase);
-        String body = StringUtil.replace(getBodyTemplate().toString(),
-                new String[] { "[$NAME$]", "[$USD$]", "[$BTC$]", "[$EWALLET$]", "[$LINK$]" },
-                new String[] { name, purchase.getValue_from(), purchase.getValue_to(), purchase.getEwallet(), link });
-
+        
         try {
+            String mailFrom = cfu.getSiteAttribute(actionRequest, "notification.address.from");
+            String subject = cfu.getSiteAttribute(actionRequest, "notification.purchase.confirmation");
+    
+            String name = user.getFirstName().concat(" ").concat(user.getLastName());
+            String link = buildLink(actionRequest, purchase);
+            String body = StringUtil.replace(getPurchaseConfirmationTemplate().toString(),
+            new String[] { "[$NAME$]", "[$USD$]", "[$BTC$]", "[$EWALLET$]", "[$LINK$]" },
+            new String[] { name, purchase.getValue_from(), purchase.getValue_to(), purchase.getEwallet(), link });
+
             InternetAddress fromAddress = new InternetAddress(mailFrom);
             InternetAddress  toAddress = new InternetAddress(user.getEmailAddress());
             MailMessage mailMessage = new MailMessage();
@@ -297,8 +295,7 @@ public class BuyPortlet extends MVCPortlet {
             mailMessage.setBody(body);
             mailMessage.setHTMLFormat(true);
             MailServiceUtil.sendEmail(mailMessage);
-            _logger.debug("Sent mail by Using Template");
-        } catch (AddressException e) {
+        } catch (AddressException | AttributeNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -309,16 +306,14 @@ public class BuyPortlet extends MVCPortlet {
         String completeURL = PortalUtil.getCurrentCompleteURL(
                 PortalUtil.getOriginalServletRequest(PortalUtil.getHttpServletRequest(actionRequest)));
         url.append(completeURL.substring(0, completeURL.indexOf("?") + 1));
-        url.append("p_p_id=buy&");
-        url.append("pid=");
-        url.append(purchase.getHash());
+        url.append("p_p_id=my_orders");
         _logger.info(url.toString());
         return url.toString();
     }
 
-    private StringBuilder getBodyTemplate() {
+    private StringBuilder getPurchaseConfirmationTemplate() {
         InputStream resourceAsStream = this.getClass().getClassLoader()
-                .getResourceAsStream("/content/confirmation-request.tmpl");
+                .getResourceAsStream("/content/purchase-confirmation.tmpl");
         StringBuilder textBuilder = new StringBuilder();
         try (Reader reader = new BufferedReader(
                 new InputStreamReader(resourceAsStream, Charset.forName(StandardCharsets.UTF_8.name())))) {
