@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.service.CountryServiceUtil;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
@@ -120,8 +121,21 @@ public class AddressPortlet extends MVCPortlet {
         up.setStreet2(request.getParameter("street2"));
         up.setPhoneNumber(request.getParameter("phoneNumber"));
         up.setApproved(Boolean.FALSE);
-        createOrUpdate(request);
-        sendNotification(request);
+        
+        if (residenciaUploaded(request)) {
+            createOrUpdate(request);
+            sendNotification(request);
+        } else {
+            _logger.info("Se va por error y pongo varios errores");
+            SessionErrors.add(request, "message.residencia.not.uploaded");
+        }
+
+        
+    }
+
+    private boolean residenciaUploaded(ActionRequest request) {
+        String address = sessionManager.getDocumentFilePath(ImageType.RESIDENCIA, request);
+        return address != null && !address.isEmpty();
     }
 
     public void display(ActionRequest req, ActionResponse res) {

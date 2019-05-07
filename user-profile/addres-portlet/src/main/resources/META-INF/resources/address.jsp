@@ -17,6 +17,8 @@
     String dateTimeSecond = (String) renderRequest.getAttribute("dateTimeSecond");
 %>
 
+<liferay-ui:error key="message.residencia.not.uploaded" message="message.residencia.not.uploaded" />
+
 <portlet:renderURL var="uploadResidencia" windowState="<%=LiferayWindowState.POP_UP.toString() %>">
     <portlet:param name="mvcPath" value="/fileUpload.jsp" />
     <portlet:param name="img" value="RESIDENCIA" />
@@ -111,8 +113,7 @@
 
 
 <br />
-<aui:button type="submit" />
-	
+<div class="row" class="col-md-12" align="center"><aui:button type="submit" /></div>
 </aui:form>
 
 <aui:script use="aui-base,liferay-util-window,aui-io-request">
