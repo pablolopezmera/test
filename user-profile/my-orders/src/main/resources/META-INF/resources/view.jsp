@@ -12,13 +12,13 @@ YUI().use(
   'aui-datatable','datatable-sort','liferay-portlet-url',   
   function(Y) {
   
-    function toDate(o) {
+    function toDateTime(o) {
         d = new Date(o.data.date_time);
-        return d.getFullYear() + "-" + ("00" + (d.getMonth() + 1)).slice(-2) + "-" + ("00" + (d.getDate())).slice(-2); 
+        return d.toLocaleString(); 
     }
     
     var columns = [
-      {key:'date_time', formatter: toDate, label:'<liferay-ui:message key="label.date.time"/>'},
+      {key:'date_time', formatter: toDateTime, label:'<liferay-ui:message key="label.date.time"/>'},
       {key:'curr_from', label:'<liferay-ui:message key="label.currency.from"/>'},
       {key:'value_from', label:'<liferay-ui:message key="label.value.from"/>'},
       {key:'curr_to', label:'<liferay-ui:message key="label.currency.to"/>'},
