@@ -58,20 +58,19 @@ public class ImageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 
         try {
-            _log.info("paremeterssssssssss");
-            _log.info((String) request.getParameter("isAdmin"));
-            _log.info((String) request.getParameter("imageType"));
-            _log.info((String) request.getParameter("imageLocation"));
+            _log.debug("paremeterssssssssss");
+            _log.debug((String) request.getParameter("isAdmin"));
+            _log.debug((String) request.getParameter("imageType"));
+            _log.debug((String) request.getParameter("imageLocation"));
             
             String isAdmin = (String) request.getParameter("isAdmin");
             String pathToWeb = "";
             
-            ImageType imageType = null;
+            ImageType imageType = ImageType.valueOf((String) request.getParameter("imageType"));
             
             if (isAdmin != null && "true".equals(isAdmin)) {
                 pathToWeb = (String) request.getParameter("imageLocation");
             } else {
-                imageType = ImageType.valueOf((String) request.getParameter("imageType"));
                 pathToWeb = sessionManager.getDocumentFilePath(imageType, request);
             }
 
@@ -97,6 +96,7 @@ public class ImageServlet extends HttpServlet {
 
     private void printDefaultFileImage(HttpServletResponse response, ImageType imageType) throws IOException {
         String fileName = String.format("/content/%s.jpg", imageType);
+        _log.info(fileName);
         InputStream resourceAsStream = ImageServlet.class.getResourceAsStream(fileName);
         byte[] buffer = new byte[8 * 1024];
         int bytesRead;

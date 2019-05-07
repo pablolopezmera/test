@@ -6,7 +6,7 @@
 
 <aui:form name="myForm" enctype="multipart/form-data">
  
-    <aui:input type="file" name="fileupload" />
+    <aui:input type="file" name="fileupload" accept="image/x-png,image/gif,image/jpeg" />
     
     <aui:button name="Save" value="upload.file" type="submit" />
     

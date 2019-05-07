@@ -9,6 +9,10 @@
 
 <portlet:defineObjects />
 
+<liferay-ui:error key="message.anverso.not.uploaded" message="message.anverso.not.uploaded" />
+<liferay-ui:error key="message.reverso.not.uploaded" message="message.reverso.not.uploaded" />
+<liferay-ui:error key="message.selfie.not.uploaded" message="message.selfie.not.uploaded" />
+
 <portlet:renderURL var="uploadAnverso" windowState="<%=LiferayWindowState.POP_UP.toString() %>">
     <portlet:param name="mvcPath" value="/fileUpload.jsp" />
     <portlet:param name="img" value="ANVERSO" />
@@ -54,13 +58,13 @@
                 <tbody>
                     <tr>
                       <td align="center">
-			             <aui:select name="idType" label="id.type">
+			             <aui:select name="idType" label="id.type" required="true">
 			               <aui:option label="select..." value="" />
 			               <aui:option label="id.type.passport" value="Passport" selected="<%=idType.equals("Passport") %>" />
 			               <aui:option label="id.type.id" value="Id" selected="<%=idType.equals("Id") %>" />
 			               <aui:option label="id.type.driverlicense" value="License" selected="<%=idType.equals("License") %>" />
 			             </aui:select>
-			             <aui:input label="id.number" name="idNumber" value="${idNumber}" type="String" />
+			             <aui:input label="id.number" name="idNumber" value="${idNumber}" type="String" required="true" />
                       </td>
                       <td align="center">
 			              <table>
@@ -103,7 +107,7 @@
         </div>
     </div>
 <br /><br />
-    <div class="row" class="col-md-12" align="center"><aui:button name="Save" value="Save" /></div>
+    <div class="row" class="col-md-12" align="center"><aui:button type="submit" /></div>
 </div>
 	
 	
@@ -167,19 +171,6 @@
        );
     }
 
-    A.one('#<portlet:namespace/>Save').on('click', function(event) {
-        var A = AUI();
-        var url = '<%=saveProfile%>';
-        A.io.request(
-            url,
-            {
-                method: 'POST',
-                form: {id: '<portlet:namespace/>identificationForm'},
-                on: { success: function() { refreshPortlet();}}
-            }
-       );
-    });
-    
     function openDialog(actualDialog, title, uri, uriSet){
         setImageTypeInSession(uriSet);
           Liferay.Util.openWindow({
