@@ -6,7 +6,6 @@
 2.- Desplegar el lpkg en /Control Panel/Apps/App Manager/Upload
 3.- Ir a /Control Panel/Sites/Site Templates
 --> Seleccionar Westeros Bank Theme ... Manage
---> Quitar Search en show-main-search opción no-screen
 --> En Navigation/Pages eliminar las páginas del tema
 
 #Sitio
@@ -14,8 +13,9 @@
 --> /Control Panel/Sites/Sites/
 2.- Asignar el mismo tema para las páginas privadas
 --> /Control Panel/Sites/Sites/Coinatural
---> Cambiar Tema
 --> Quitar Search en show-main-search opción no-screen
+
+
 
 #Páginas privadas
 1.- Administración de usuarios, portlet Coinatural / users-admin 
@@ -27,25 +27,33 @@
 --> /Coinatural/Navigation/Public Pages/Configure/Look and Feel/Logo
 
 #Configuración
-1.- Crear contexto para servicios Rest
+## 1.- Crear contexto para servicios Rest
 --> /Control Panel/Configuration/System Settings/Foundation
 CXF Endpoints, en Context Path agregar /rest
 Rest Extender, en Context paths agregar /rest
 
-En "Control Panel / Configuration / Custom fields / Site" agregar los siguientes campos de texto:
+## En "Control Panel / Configuration / Custom fields / Site" agregar los siguientes campos de texto:
 - notification.address.from
 - notification.address.to
 - notification.confirmation.request
 - notification.approved.subject
+- notification.purchase.confirmation
 
-En "Control Panel / Configuration / Custom fields / Site" dar permisos de lectura al rol User:
+## En "Control Panel / Configuration / Custom fields / Site" dar permisos de lectura al rol User:
 - notification.address.from
 - notification.address.to
 - notification.confirmation.request
 - notification.approved.subject
+- notification.purchase.confirmation
 
-En "Control Panel / System Settings / Other / Coinatural Configuration" 
+## En "Control Panel / System Settings / Other / Coinatural Configuration" 
 - Campo Site name poner el nombre del sitio, ejm: Coinatural
+
+## Esconder la opción de búsqueda
+On the search input click on Options / Permissions
+2) Disable view for every role you want (guest, user and site member is a minimum I think)
+3) In your portal-ext.properties add the following line :
+layout.show.portlet.access.denied=false
 
 #App Sitio Privado
 
