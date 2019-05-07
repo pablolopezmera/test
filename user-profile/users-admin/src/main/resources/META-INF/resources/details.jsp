@@ -4,7 +4,7 @@
 
 <%
 	UserProfile userProfile = (UserProfile) renderRequest.getAttribute("userProfile");
-	String countryName = (String) renderRequest.getAttribute("countryName");
+    String email = (String) renderRequest.getAttribute("email");
 %>
 
 
@@ -36,30 +36,31 @@
     </div>
     <div class="row">
         <div class="col-md-4"><img name="anversoImg" id="ANVERSOImg"
-                                        src="/o/profile/image?isAdmin=true&imageLocation=<%=userProfile.getAnversoId()%>"
+                                        src="/o/profile/image?imageType=ANVERSO&isAdmin=true&imageLocation=<%=userProfile.getAnversoId()%>"
                                         width="250" height="150" /></div>
         <div class="col-md-4"><img name="reversoImg" id="ANVERSOImg"
-                                        src="/o/profile/image?isAdmin=true&imageLocation=<%=userProfile.getReversoId()%>"
+                                        src="/o/profile/image?imageType=REVERSO&isAdmin=true&imageLocation=<%=userProfile.getReversoId()%>"
                                         width="250" height="150" /></div>
         <div class="col-md-4"><img name="selfieImg" id="ANVERSOImg"
-                                        src="/o/profile/image?isAdmin=true&imageLocation=<%=userProfile.getSelfie()%>"
+                                        src="/o/profile/image?imageType=SELFIE&isAdmin=true&imageLocation=<%=userProfile.getSelfie()%>"
                                         width="250" height="150" /></div>
     </div>
     <div class="row"><div class="column">&nbsp;</div></div>
     <div class="row"><b><div class="column"><liferay-ui:message key="user.address" /></b></div></div>
     <div class="row">
         <div class="col-md-6">
-	        <b><liferay-ui:message key="user.country"/>:</b>&nbsp;<%=countryName%><br />
+	        <b><liferay-ui:message key="user.country"/>:</b>&nbsp;<%=userProfile.getCountryDescription()%><br />
 	        <b><liferay-ui:message key="user.prov"/>:</b>&nbsp;<%=userProfile.getProv()%><br />
 	        <b><liferay-ui:message key="user.city"/>:</b>&nbsp;<%=userProfile.getCity()%><br />
 	        <b><liferay-ui:message key="user.street1"/>:</b>&nbsp;<%=userProfile.getStreet1()%><br />
 	        <b><liferay-ui:message key="user.homeNumber"/>:</b>&nbsp;<%=userProfile.getHomeNumber()%><br />
 	        <b><liferay-ui:message key="user.street2"/>:</b>&nbsp;<%=userProfile.getStreet2()%><br />
 	        <b><liferay-ui:message key="user.postalCode"/>:</b>&nbsp;<%=userProfile.getPostalCode()%><br />
-	        <b><liferay-ui:message key="user.phoneNumber"/>:</b>&nbsp;<%=userProfile.getPhoneNumber()%><br />
+            <b><liferay-ui:message key="user.phoneNumber"/>:</b>&nbsp;<%=userProfile.getPhoneNumber()%><br />
+            <b><liferay-ui:message key="user.email"/>:</b>&nbsp;<%=email%><br />
         </div>
         <div class="col-md-6"><img id="RESIDENCIAImg"
-                               src="/o/profile/image?isAdmin=true&imageLocation=<%=userProfile.getProofAddress()%>" width="250"
+                               src="/o/profile/image?imageType=RESIDENCIA&isAdmin=true&imageLocation=<%=userProfile.getProofAddress()%>" width="250"
                                height="150" /></div>
     </div>
     <div class="row"><div class="column">&nbsp;</div></div>

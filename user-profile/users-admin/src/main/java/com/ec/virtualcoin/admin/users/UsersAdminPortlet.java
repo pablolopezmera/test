@@ -30,11 +30,10 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONSerializer;
-import com.liferay.portal.kernel.model.Country;
 import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
-import com.liferay.portal.kernel.service.CountryServiceUtil;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -72,26 +71,16 @@ public class UsersAdminPortlet extends MVCPortlet {
     @Override
     public void render(RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException {
         String screename = renderRequest.getParameter("screenname");
-        _logger.info("renderrrrrrrrrr");
+        User loggedUser = (User) renderRequest.getAttribute(WebKeys.USER);
         _logger.info(screename);
         if (screename != null && !screename.isEmpty()) {
             UserProfile userProfile = UserProfileLocalServiceUtil.fetchUserProfile(screename);
             renderRequest.setAttribute("userProfile", userProfile);
-            renderRequest.setAttribute("countryName", findCountryName(userProfile.getCountry()));
+            renderRequest.setAttribute("email", findDestinationUser(loggedUser, userProfile.getUserId()).getEmailAddress());
         }
         super.render(renderRequest, renderResponse);
     }
     
-    private String findCountryName(String countryA2) {
-        String countryName = "";
-        if (countryA2!=null && !countryA2.isEmpty()) {
-            Country country = CountryServiceUtil.fetchCountryByA2(countryA2);
-            countryName = country.getName();
-        }
-        return countryName;
-    }
-
-
     @ProcessAction(name="approve")
     public void approve(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException {
         String screename = ParamUtil.get(actionRequest, "screenname", "");
@@ -104,22 +93,23 @@ public class UsersAdminPortlet extends MVCPortlet {
     }
 
     private void sendApprovedMailConfirmation(ActionRequest actionRequest, UserProfile userProfile) {
-        User user = (User) actionRequest.getAttribute(WebKeys.USER);
+        
+        User loggedUser = (User) actionRequest.getAttribute(WebKeys.USER);
+        User destinationUser = findDestinationUser(loggedUser, userProfile.getUserId());
+        
         ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
         Group siteGroup = themeDisplay.getSiteGroup();
         String mailFrom = (String) siteGroup.getExpandoBridge().getAttribute("notification.address.from");
         String subject = (String) siteGroup.getExpandoBridge().getAttribute("notification.approved.subject");
 
         String link = buildLink(actionRequest);
-        String name = user.getFirstName().concat(" ").concat(user.getLastName());
+        String name = destinationUser.getFirstName().concat(" ").concat(destinationUser.getLastName());
         String body = StringUtil.replace(getBodyTemplate().toString(),
                 new String[] { "[$NAME$]", "[$LINK$]" },
                 new String[] { name, link });
 
         try {
             InternetAddress fromAddress = new InternetAddress(mailFrom);
-            _logger.debug(String.format("company: %s userid: %s",  user.getCompanyId(), userProfile.getUserId()));
-            User destinationUser = UserLocalServiceUtil.fetchUserByScreenName(user.getCompanyId(), userProfile.getUserId());
             InternetAddress  toAddress = new InternetAddress(destinationUser.getEmailAddress());
             MailMessage mailMessage = new MailMessage();
             mailMessage.setTo(toAddress);
@@ -142,7 +132,6 @@ public class UsersAdminPortlet extends MVCPortlet {
     @ProcessAction(name="approve")
     public void deny(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException {
         String screename = ParamUtil.get(actionRequest, "screenname", "");
-        _logger.debug("denyyyyyyyyyyyyyyyyy");
         _logger.debug(screename);
         UserProfile userProfile = UserProfileLocalServiceUtil.fetchUserProfile(screename);
         userProfile.setApproved(Boolean.FALSE);
@@ -152,7 +141,6 @@ public class UsersAdminPortlet extends MVCPortlet {
     @ProcessAction(name="approve")
     public void cancel(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException {
         String screename = ParamUtil.get(actionRequest, "screenname", "");
-        _logger.debug("cancellllllllllllll");
         _logger.debug(screename);
     }
     
@@ -162,8 +150,11 @@ public class UsersAdminPortlet extends MVCPortlet {
         List<User> users = UserLocalServiceUtil.getUsers(0, countUser);
         for (User user : users) {
             try {
-                UserProfile up = UserProfileLocalServiceUtil.getUserProfile(user.getScreenName());
-                userList.add(new UserProfileDto(user.getFirstName(), user.getLastName(), up.getIdType(), up.getIdNumber(), user.getScreenName(), up.getApproved()));
+                if (!isAdminOrGuestUser(user)) {
+                    _logger.info(UserProfileLocalServiceUtil.class.getName());
+                    UserProfile up = UserProfileLocalServiceUtil.getUserProfile(user.getScreenName());
+                    userList.add(new UserProfileDto(user.getFirstName(), user.getLastName(), up.getIdType(), up.getIdNumber(), user.getScreenName(), up.getApproved()));
+                }
             } catch (PortalException e) {
                 _logger.error(e.getMessage());
                 e.printStackTrace();
@@ -172,6 +163,18 @@ public class UsersAdminPortlet extends MVCPortlet {
         _logger.info("Users: " + users.size());
         return userList;
     }
+
+    private boolean isAdminOrGuestUser(User user) {
+        boolean isAdminOrGuest = false;
+        List<Role> roles = user.getRoles();
+        for (Role role : roles) {
+            if ("Administrator".equals(role.getName()) || "Power User".equals(role.getName()) || "Guest".equals(role.getName())) {
+                isAdminOrGuest = true;
+            }
+        }
+        return isAdminOrGuest;
+    }
+
 
     public JSONArray usersToJsonString(List<UserProfileDto> users) {
 
@@ -216,5 +219,8 @@ public class UsersAdminPortlet extends MVCPortlet {
         return url.toString();
     }
 
+    private User findDestinationUser(User user, String userId) {
+        return UserLocalServiceUtil.fetchUserByScreenName(user.getCompanyId(), userId);
+    }
 
 }
