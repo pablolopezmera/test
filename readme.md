@@ -80,13 +80,6 @@ Desplegar los siguientes proyectos:
 - my-account-override
 	- com.liferay.users.admin.web.ext-1.0.0.jar
 	- users.admin.web.my.account-1.0.4.jar
+- MyCustomLoginPortlet
+	- mycustomloginportlet-1.0.0.jar
 
-
-# Server Login Details
-Cloud Package: SSD Cloud 3
-Hostname: hwsrv-467588.hostwindsdns.com
-Main IP: 23.254.167.100
-Secondary IPs: 2607:5500:3000:e70::2
-Username: root 
-Password: SMj2Xt6bsg9R
-SSH Port: 22
